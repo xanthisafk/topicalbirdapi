@@ -43,7 +43,7 @@ authentication, authorization, and role-based access control powered by ASP.NET 
 | **Framework** | ASP.NET Core 8.0 |
 | **ORM** | Entity Framework Core |
 | **Auth** | ASP.NET Identity (Guid keys) |
-| **Database** | PostgreSQL (Any EF Core compatible databse. Configure in `program.cs` |
+| **Database** | PostgreSQL (Any EF Core compatible databse. Configure in `program.cs`) |
 | **Language** | C# |
 | **Response Format** | JSON |
 
