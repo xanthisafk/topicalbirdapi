@@ -1,0 +1,1 @@
+wwwroot\content\assets\defaults\pp_256.png

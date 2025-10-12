@@ -1,0 +1,6 @@
+@TopicalBirdAPI_HostAddress = http://localhost:5189
+
+GET {{TopicalBirdAPI_HostAddress}}/posts/
+Accept: application/json
+
+###
