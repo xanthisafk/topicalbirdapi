@@ -56,9 +56,11 @@ namespace TopicalBirdAPI
 
             app.MapControllers();
 
+            // Allow file hosting
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
+            // Use Identity for User management
             app.MapIdentityApi<Users>();
 
             app.Run();

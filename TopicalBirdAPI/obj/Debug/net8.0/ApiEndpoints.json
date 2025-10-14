@@ -13,9 +13,14 @@
         "IsRequired": true
       },
       {
-        "Name": "comment",
-        "Type": "TopicalBirdAPI.DTO.CreateCommentRequest",
-        "IsRequired": true
+        "Name": "PostId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "Content",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -34,9 +39,14 @@
         "IsRequired": true
       },
       {
-        "Name": "commentDto",
-        "Type": "TopicalBirdAPI.DTO.CreateCommentRequest",
-        "IsRequired": true
+        "Name": "PostId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "Content",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -75,33 +85,28 @@
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.NestController",
-    "Method": "GetAllNests",
+    "Method": "GetPaginatedNests",
     "RelativePath": "api/Nest",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TopicalBirdAPI.Controllers.NestController",
-    "Method": "CreateNest",
-    "RelativePath": "api/Nest",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
     "Parameters": [
       {
-        "Name": "dto",
-        "Type": "TopicalBirdAPI.Controllers.CreateNestDto",
-        "IsRequired": true
+        "Name": "pageNo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.NestController",
-    "Method": "GetNestById",
+    "Method": "GetSingleNestById",
     "RelativePath": "api/Nest/{id}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -129,16 +134,93 @@
         "IsRequired": true
       },
       {
-        "Name": "dto",
-        "Type": "TopicalBirdAPI.Controllers.UpdateNestDto",
-        "IsRequired": true
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "DisplayName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Icon",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.NestController",
-    "Method": "GetNestByTitle",
+    "Method": "GetMyNests",
+    "RelativePath": "api/Nest/me",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.NestController",
+    "Method": "CreateSingleNest",
+    "RelativePath": "api/Nest/new",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "DisplayName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Icon",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.NestController",
+    "Method": "SearchByQuery",
+    "RelativePath": "api/Nest/search/{query}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "query",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "pageNo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.NestController",
+    "Method": "GetSingleNestByTitle",
     "RelativePath": "api/Nest/title/{title}",
     "HttpMethod": "GET",
     "IsController": true,
@@ -259,23 +341,12 @@
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
-    "Method": "UpdateUser",
-    "RelativePath": "api/Users/{id}",
-    "HttpMethod": "PUT",
+    "Method": "GetAllUsers",
+    "RelativePath": "api/Users",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "dto",
-        "Type": "TopicalBirdAPI.Controllers.UpdateUserDto",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -297,7 +368,7 @@
   {
     "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
     "Method": "GetByEmail",
-    "RelativePath": "api/Users/email/{email}",
+    "RelativePath": "api/Users/get/email/{email}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -313,8 +384,34 @@
   {
     "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
     "Method": "GetUserById",
-    "RelativePath": "api/Users/id/{id}",
+    "RelativePath": "api/Users/get/id/{id}",
     "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
+    "Method": "GetCurrentUser",
+    "RelativePath": "api/Users/me",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
+    "Method": "PromoteToAdmin",
+    "RelativePath": "api/Users/promote/{id}",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -338,6 +435,32 @@
         "Name": "id",
         "Type": "System.Guid",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
+    "Method": "UpdateUser",
+    "RelativePath": "api/Users/update/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "DisplayName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Icon",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

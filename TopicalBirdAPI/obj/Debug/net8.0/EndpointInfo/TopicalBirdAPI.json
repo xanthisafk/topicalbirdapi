@@ -46,19 +46,31 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCommentRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCommentRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCommentRequest"
+                "required": [
+                  "Content"
+                ],
+                "type": "object",
+                "properties": {
+                  "PostId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "Content": {
+                    "maxLength": 10000,
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "PostId": {
+                  "style": "form"
+                },
+                "Content": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -88,19 +100,31 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCommentRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCommentRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCommentRequest"
+                "required": [
+                  "Content"
+                ],
+                "type": "object",
+                "properties": {
+                  "PostId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "Content": {
+                    "maxLength": 10000,
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "PostId": {
+                  "style": "form"
+                },
+                "Content": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -135,40 +159,83 @@
         }
       }
     },
-    "/api/Nest": {
+    "/api/Nest/search/{query}": {
       "get": {
         "tags": [
           "Nest"
+        ],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
         ],
         "responses": {
           "200": {
             "description": "OK"
           }
         }
-      },
-      "post": {
+      }
+    },
+    "/api/Nest": {
+      "get": {
         "tags": [
           "Nest"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateNestDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateNestDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateNestDto"
-              }
+        "parameters": [
+          {
+            "name": "pageNo",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
             }
           }
-        },
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Nest/me": {
+      "get": {
+        "tags": [
+          "Nest"
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -215,19 +282,34 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateNestDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateNestDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateNestDto"
+                "type": "object",
+                "properties": {
+                  "Description": {
+                    "maxLength": 500,
+                    "type": "string"
+                  },
+                  "DisplayName": {
+                    "maxLength": 50,
+                    "type": "string"
+                  },
+                  "Icon": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Description": {
+                  "style": "form"
+                },
+                "DisplayName": {
+                  "style": "form"
+                },
+                "Icon": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -254,6 +336,61 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Nest/new": {
+      "post": {
+        "tags": [
+          "Nest"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "Title"
+                ],
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "maxLength": 500,
+                    "type": "string"
+                  },
+                  "DisplayName": {
+                    "maxLength": 50,
+                    "type": "string"
+                  },
+                  "Icon": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "DisplayName": {
+                  "style": "form"
+                },
+                "Icon": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -761,7 +898,19 @@
         }
       }
     },
-    "/api/Users/id/{id}": {
+    "/api/Users/me": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Users/get/id/{id}": {
       "get": {
         "tags": [
           "Users"
@@ -784,7 +933,7 @@
         }
       }
     },
-    "/api/Users/email/{email}": {
+    "/api/Users/get/email/{email}": {
       "get": {
         "tags": [
           "Users"
@@ -806,7 +955,7 @@
         }
       }
     },
-    "/api/Users/{id}": {
+    "/api/Users/update/{id}": {
       "put": {
         "tags": [
           "Users"
@@ -824,19 +973,25 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
+                "type": "object",
+                "properties": {
+                  "DisplayName": {
+                    "type": "string"
+                  },
+                  "Icon": {
+                    "type": "string"
+                  }
+                }
+              },
+              "encoding": {
+                "DisplayName": {
+                  "style": "form"
+                },
+                "Icon": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -886,6 +1041,41 @@
               "format": "uuid"
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Users/promote/{id}": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Users": {
+      "get": {
+        "tags": [
+          "Users"
         ],
         "responses": {
           "200": {
@@ -958,42 +1148,6 @@
           },
           "isDeleted": {
             "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateCommentRequest": {
-        "required": [
-          "content"
-        ],
-        "type": "object",
-        "properties": {
-          "postId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "content": {
-            "maxLength": 10000,
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateNestDto": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "displayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "icon": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1169,14 +1323,17 @@
             "type": "string",
             "nullable": true
           },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
           "icon": {
             "type": "string",
             "nullable": true
           },
           "moderatorId": {
             "type": "string",
-            "format": "uuid",
-            "nullable": true
+            "format": "uuid"
           },
           "moderator": {
             "$ref": "#/components/schemas/Users"
@@ -1184,6 +1341,13 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Posts"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1416,50 +1580,6 @@
         },
         "additionalProperties": false
       },
-      "UpdateNestDto": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "nullable": true
-          },
-          "displayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "icon": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateUserDto": {
-        "type": "object",
-        "properties": {
-          "displayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "icon": {
-            "type": "string",
-            "nullable": true
-          },
-          "isAdmin": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "isBanned": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "username": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "Users": {
         "type": "object",
         "properties": {
@@ -1537,6 +1657,20 @@
           "createdAt": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Posts"
+            },
+            "nullable": true
+          },
+          "nests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Nest"
+            },
             "nullable": true
           }
         },

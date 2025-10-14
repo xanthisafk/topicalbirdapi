@@ -85,7 +85,7 @@ namespace TopicalBirdAPI.Controllers
         // PUT api/users/{id}
         [HttpPut("update/{id:guid}")]
         [Authorize]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest dto)
+        public async Task<IActionResult> UpdateUser(Guid id, [FromForm] UpdateUserRequest dto)
         {
             var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             if (currentUser == null)

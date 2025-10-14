@@ -30,7 +30,7 @@ namespace TopicalBirdAPI.Data
             // Posts -> Author
             builder.Entity<Posts>()
                 .HasOne(p => p.Author)
-                .WithMany()
+                .WithMany(u => u.Posts)
                 .HasForeignKey(p => p.AuthorId)
                 .OnDelete(DeleteBehavior.SetNull);
 
@@ -40,6 +40,13 @@ namespace TopicalBirdAPI.Data
                 .WithMany(n => n.Posts)
                 .HasForeignKey(p => p.NestId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            // Nest -> Moderator
+            builder.Entity<Nest>()
+                .HasOne(n => n.Moderator)
+                .WithMany(u => u.Nests)
+                .HasForeignKey(n => n.ModeratorId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Comment -> Post
             builder.Entity<Comment>()

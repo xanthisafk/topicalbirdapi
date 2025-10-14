@@ -13,20 +13,20 @@ namespace TopicalBirdAPI.Models
         public string Title { get; set; }
 
         [Column("display_name")]
-        public string? DisplayName { get; set; }
+        public string? DisplayName { get; set; } = string.Empty;
 
         [Column("description")]
-        public string? Description { get; set; }
+        public string? Description { get; set; } = string.Empty;
 
         [Column("icon")]
-        public string? Icon { get; set; } = "/content/assets/defaults/nest_256.png";
+        public string Icon { get; set; } = "/content/assets/defaults/nest_256.png";
 
 
         [ForeignKey("Moderator")]
         [Column("moderator_id")]
-        public Guid? ModeratorId { get; set; }
+        public Guid ModeratorId { get; set; }
 
-        public Users? Moderator { get; set; }
+        public Users Moderator { get; set; }
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;

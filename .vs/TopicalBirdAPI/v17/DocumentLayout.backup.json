@@ -7,20 +7,32 @@
       "RelativeMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|solutionrelative:topicalbirdapi\\controllers\\nestcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|f:\\projects\\topicalbird\\topicalbirdapi\\topicalbirdapi\\models\\posts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|solutionrelative:topicalbirdapi\\models\\posts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|f:\\projects\\topicalbird\\topicalbirdapi\\topicalbirdapi\\dto\\nestresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|solutionrelative:topicalbirdapi\\dto\\nestresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|f:\\projects\\topicalbird\\topicalbirdapi\\topicalbirdapi\\models\\nest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|solutionrelative:topicalbirdapi\\models\\nest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|f:\\projects\\topicalbird\\topicalbirdapi\\topicalbirdapi\\dto\\createnestrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|solutionrelative:topicalbirdapi\\dto\\createnestrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|f:\\projects\\topicalbird\\topicalbirdapi\\topicalbirdapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|solutionrelative:topicalbirdapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Migrations\\20251014084647_NestsComplete.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:TopicalBirdAPI\\Migrations\\20251014084647_NestsComplete.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|f:\\projects\\topicalbird\\topicalbirdapi\\topicalbirdapi\\models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|solutionrelative:topicalbirdapi\\models\\users.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|f:\\projects\\topicalbird\\topicalbirdapi\\topicalbirdapi\\dto\\updatenestrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|solutionrelative:topicalbirdapi\\dto\\updatenestrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|f:\\projects\\topicalbird\\topicalbirdapi\\topicalbirdapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|solutionrelative:topicalbirdapi\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|f:\\projects\\topicalbird\\topicalbirdapi\\topicalbirdapi\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{76F51F3F-1A17-4151-821B-2B422F2057DA}|TopicalBirdAPI\\TopicalBirdAPI.csproj|solutionrelative:topicalbirdapi\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,59 +42,104 @@
       "DocumentGroups": [
         {
           "DockedWidth": 329,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 9,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Program.cs",
+              "RelativeDocumentMoniker": "TopicalBirdAPI\\Program.cs",
+              "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Program.cs",
+              "RelativeToolTip": "TopicalBirdAPI\\Program.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAwwD4AAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T08:47:02.016Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Data\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "TopicalBirdAPI\\Data\\AppDbContext.cs",
-              "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Data\\AppDbContext.cs",
-              "RelativeToolTip": "TopicalBirdAPI\\Data\\AppDbContext.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAIwCkAAAAyAAAAAAAAAA==",
+              "Title": "20251014084647_NestsComplete.cs",
+              "DocumentMoniker": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Migrations\\20251014084647_NestsComplete.cs",
+              "RelativeDocumentMoniker": "TopicalBirdAPI\\Migrations\\20251014084647_NestsComplete.cs",
+              "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Migrations\\20251014084647_NestsComplete.cs",
+              "RelativeToolTip": "TopicalBirdAPI\\Migrations\\20251014084647_NestsComplete.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-12T21:22:51.876Z",
+              "WhenOpened": "2025-10-14T08:46:47.768Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Posts.cs",
-              "DocumentMoniker": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Models\\Posts.cs",
-              "RelativeDocumentMoniker": "TopicalBirdAPI\\Models\\Posts.cs",
-              "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Models\\Posts.cs",
-              "RelativeToolTip": "TopicalBirdAPI\\Models\\Posts.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAYAAAARAAAAAAAAAA==",
+              "Title": "NestResponse.cs",
+              "DocumentMoniker": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\DTO\\NestResponse.cs",
+              "RelativeDocumentMoniker": "TopicalBirdAPI\\DTO\\NestResponse.cs",
+              "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\DTO\\NestResponse.cs",
+              "RelativeToolTip": "TopicalBirdAPI\\DTO\\NestResponse.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAYwB8AAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-12T21:18:54.888Z",
+              "WhenOpened": "2025-10-13T16:54:24.309Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UpdateNestRequest.cs",
+              "DocumentMoniker": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\DTO\\UpdateNestRequest.cs",
+              "RelativeDocumentMoniker": "TopicalBirdAPI\\DTO\\UpdateNestRequest.cs",
+              "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\DTO\\UpdateNestRequest.cs",
+              "RelativeToolTip": "TopicalBirdAPI\\DTO\\UpdateNestRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-13T16:54:17.34Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Users.cs",
+              "DocumentMoniker": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Models\\Users.cs",
+              "RelativeDocumentMoniker": "TopicalBirdAPI\\Models\\Users.cs",
+              "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Models\\Users.cs",
+              "RelativeToolTip": "TopicalBirdAPI\\Models\\Users.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-13T15:55:10.721Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Nest.cs",
-              "DocumentMoniker": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Models\\Nest.cs",
-              "RelativeDocumentMoniker": "TopicalBirdAPI\\Models\\Nest.cs",
-              "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Models\\Nest.cs",
-              "RelativeToolTip": "TopicalBirdAPI\\Models\\Nest.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAQwCEAAAAdAAAAAAAAAA==",
+              "Title": "CreateNestRequest.cs",
+              "DocumentMoniker": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\DTO\\CreateNestRequest.cs",
+              "RelativeDocumentMoniker": "TopicalBirdAPI\\DTO\\CreateNestRequest.cs",
+              "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\DTO\\CreateNestRequest.cs",
+              "RelativeToolTip": "TopicalBirdAPI\\DTO\\CreateNestRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-12T21:09:44.034Z",
+              "WhenOpened": "2025-10-13T15:13:48.996Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "UsersController.cs",
               "DocumentMoniker": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Controllers\\UsersController.cs",
               "RelativeDocumentMoniker": "TopicalBirdAPI\\Controllers\\UsersController.cs",
               "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Controllers\\UsersController.cs",
               "RelativeToolTip": "TopicalBirdAPI\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAJ8AAAAAAAAAAIAwwLIAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-12T21:09:40.382Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-12T21:09:40.382Z"
             },
             {
               "$type": "Document",
@@ -92,18 +149,10 @@
               "RelativeDocumentMoniker": "TopicalBirdAPI\\Controllers\\NestController.cs",
               "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Controllers\\NestController.cs",
               "RelativeToolTip": "TopicalBirdAPI\\Controllers\\NestController.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAIwCsAAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAAB4BAAAAAAAAAAAwwDYBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-12T21:08:44.433Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             }
           ]
         }

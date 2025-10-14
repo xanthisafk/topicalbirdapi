@@ -29,7 +29,9 @@ namespace TopicalBirdAPI.Controllers
         {
             var postExists = await _context.Posts.AnyAsync(p => p.Id == postId);
             if (!postExists)
+            {
                 return NotFound(new { message = ErrorMessages.PostNotFound });
+            }
 
             var comments = await _context.Comments
                 .Where(c => c.PostId == postId && !c.IsDeleted)
@@ -54,7 +56,7 @@ namespace TopicalBirdAPI.Controllers
 
         [HttpPost("add/{postId:guid}")]
         [Authorize]
-        public async Task<IActionResult> CreateComment(Guid postId, [FromBody] CreateCommentRequest comment)
+        public async Task<IActionResult> CreateComment(Guid postId, [FromForm] CreateCommentRequest comment)
         {
 
             if (!ModelState.IsValid)
@@ -100,7 +102,7 @@ namespace TopicalBirdAPI.Controllers
 
         [HttpPut("edit/{commentId:guid}")]
         [Authorize]
-        public async Task<IActionResult> UpdateCommentContent(Guid commentId, [FromBody] CreateCommentRequest commentDto)
+        public async Task<IActionResult> UpdateCommentContent(Guid commentId, [FromForm] CreateCommentRequest commentDto)
         {
             if (!ModelState.IsValid)
             {
