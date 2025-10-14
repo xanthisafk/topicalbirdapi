@@ -142,3 +142,4 @@ F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\bin\Debug\net8.0\zh-Hant\M
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\bin\Debug\net8.0\TopicalBirdAPI.staticwebassets.runtime.json
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\TopicalBirdAPI.sourcelink.json
+F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\bin\Debug\net8.0\SixLabors.ImageSharp.dll

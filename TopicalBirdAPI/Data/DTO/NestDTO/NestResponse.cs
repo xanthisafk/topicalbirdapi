@@ -1,6 +1,7 @@
-﻿using TopicalBirdAPI.Models;
+﻿using TopicalBirdAPI.Data.DTO.UsersDTO;
+using TopicalBirdAPI.Models;
 
-namespace TopicalBirdAPI.DTO
+namespace TopicalBirdAPI.Data.DTO.NestDTO
 {
     public class NestResponse
     {
@@ -13,9 +14,10 @@ namespace TopicalBirdAPI.DTO
         public UserResponse Moderator { get; set; }
         public ICollection<Posts> Posts { get; set; } // Todo: replace with PostResponse when working on PostsController
 
-        public static NestResponse FromNest(Nest nest)
+        public static NestResponse FromNest(Nest nest, bool includePosts = false, bool admin = false)
         {
-            return new NestResponse
+
+            var res = new NestResponse
             {
                 Id = nest.Id,
                 Icon = nest.Icon,
@@ -23,14 +25,11 @@ namespace TopicalBirdAPI.DTO
                 DisplayName = nest.DisplayName,
                 CreatedAt = nest.CreatedAt,
                 Title = nest.Title,
-                Moderator = new UserResponse
-                {
-                    Id = nest.Moderator.Id,
-                    DisplayName = nest.Moderator.DisplayName,
-                    Icon = nest.Moderator.Icon
-                },
-                Posts = nest.Posts
+                Moderator = UserResponse.FromUser(nest.Moderator, admin),
+                Posts = includePosts ? nest.Posts : null
             };
+
+            return res;
         }
     }
 }

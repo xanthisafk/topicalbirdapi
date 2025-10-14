@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TopicalBirdAPI.Data;
-using TopicalBirdAPI.DTO;
+using TopicalBirdAPI.Data.DTO.PostDTO;
 using TopicalBirdAPI.Models;
 
 namespace TopicalBirdAPI.Controllers

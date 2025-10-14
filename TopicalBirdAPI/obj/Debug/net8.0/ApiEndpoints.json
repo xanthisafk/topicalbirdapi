@@ -158,7 +158,13 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "withPosts",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -317,7 +323,7 @@
       },
       {
         "Name": "MediaItems",
-        "Type": "System.Collections.Generic.List\u00601[[TopicalBirdAPI.DTO.CreatePostMediaItem, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[TopicalBirdAPI.Data.DTO.PostDTO.CreatePostMediaItem, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "IsRequired": false
       }
     ],
@@ -399,12 +405,90 @@
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
+    "Method": "GetByUsername",
+    "RelativePath": "api/Users/get/username/{username}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
+    "Method": "LogInToTopicalbird",
+    "RelativePath": "api/Users/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "RememberMe",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
+    "Method": "LogOutFromTopicalbird",
+    "RelativePath": "api/Users/logout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
     "Method": "GetCurrentUser",
     "RelativePath": "api/Users/me",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
+    "Method": "LogOutFromTopicalbird",
+    "RelativePath": "api/Users/password",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "OldPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "NewPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ConfirmNewPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -419,6 +503,58 @@
         "Name": "id",
         "Type": "System.Guid",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
+    "Method": "RegisterToTopicalbird",
+    "RelativePath": "api/Users/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Handle",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "DisplayName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Icon",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
+    "Method": "GetBySearch",
+    "RelativePath": "api/Users/search",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "query",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -458,313 +594,16 @@
         "IsRequired": false
       },
       {
-        "Name": "Icon",
+        "Name": "Handle",
         "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Icon",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__1\u00601[[TopicalBirdAPI.Models.Users, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__1_3",
-    "RelativePath": "confirmEmail",
-    "HttpMethod": "GET",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "code",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "changedEmail",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ],
-    "EndpointName": "MapIdentityApi-/confirmEmail"
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__DisplayClass1_0\u00601[[TopicalBirdAPI.Models.Users, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__6",
-    "RelativePath": "forgotPassword",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "resetRequest",
-        "Type": "Microsoft.AspNetCore.Identity.Data.ForgotPasswordRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Http.HttpValidationProblemDetails",
-        "MediaTypes": [
-          "application/problem\u002Bjson"
-        ],
-        "StatusCode": 400
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__1\u00601[[TopicalBirdAPI.Models.Users, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__1_1",
-    "RelativePath": "login",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "login",
-        "Type": "Microsoft.AspNetCore.Identity.Data.LoginRequest",
-        "IsRequired": false
-      },
-      {
-        "Name": "useCookies",
-        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      },
-      {
-        "Name": "useSessionCookies",
-        "Type": "System.Nullable\u00601[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "Microsoft.AspNetCore.Authentication.BearerToken.AccessTokenResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__1\u00601[[TopicalBirdAPI.Models.Users, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__1_8",
-    "RelativePath": "manage/2fa",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "tfaRequest",
-        "Type": "Microsoft.AspNetCore.Identity.Data.TwoFactorRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "Microsoft.AspNetCore.Identity.Data.TwoFactorResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Http.HttpValidationProblemDetails",
-        "MediaTypes": [
-          "application/problem\u002Bjson"
-        ],
-        "StatusCode": 400
-      },
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 404
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__1\u00601[[TopicalBirdAPI.Models.Users, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__1_9",
-    "RelativePath": "manage/info",
-    "HttpMethod": "GET",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "Microsoft.AspNetCore.Identity.Data.InfoResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Http.HttpValidationProblemDetails",
-        "MediaTypes": [
-          "application/problem\u002Bjson"
-        ],
-        "StatusCode": 400
-      },
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 404
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__DisplayClass1_0\u00601[[TopicalBirdAPI.Models.Users, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__10",
-    "RelativePath": "manage/info",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "infoRequest",
-        "Type": "Microsoft.AspNetCore.Identity.Data.InfoRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "Microsoft.AspNetCore.Identity.Data.InfoResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Http.HttpValidationProblemDetails",
-        "MediaTypes": [
-          "application/problem\u002Bjson"
-        ],
-        "StatusCode": 400
-      },
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 404
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__DisplayClass1_0\u00601[[TopicalBirdAPI.Models.Users, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__2",
-    "RelativePath": "refresh",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "refreshRequest",
-        "Type": "Microsoft.AspNetCore.Identity.Data.RefreshRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "Microsoft.AspNetCore.Authentication.BearerToken.AccessTokenResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__DisplayClass1_0\u00601[[TopicalBirdAPI.Models.Users, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__0",
-    "RelativePath": "register",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "registration",
-        "Type": "Microsoft.AspNetCore.Identity.Data.RegisterRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Http.HttpValidationProblemDetails",
-        "MediaTypes": [
-          "application/problem\u002Bjson"
-        ],
-        "StatusCode": 400
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__DisplayClass1_0\u00601[[TopicalBirdAPI.Models.Users, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__5",
-    "RelativePath": "resendConfirmationEmail",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "resendRequest",
-        "Type": "Microsoft.AspNetCore.Identity.Data.ResendConfirmationEmailRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Microsoft.AspNetCore.Routing.IdentityApiEndpointRouteBuilderExtensions\u002B\u003C\u003Ec__1\u00601[[TopicalBirdAPI.Models.Users, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-    "Method": "\u003CMapIdentityApi\u003Eb__1_7",
-    "RelativePath": "resetPassword",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "resetRequest",
-        "Type": "Microsoft.AspNetCore.Identity.Data.ResetPasswordRequest",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Http.HttpValidationProblemDetails",
-        "MediaTypes": [
-          "application/problem\u002Bjson"
-        ],
-        "StatusCode": 400
-      }
-    ]
   }
 ]

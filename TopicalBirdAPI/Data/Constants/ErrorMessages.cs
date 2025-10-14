@@ -1,4 +1,4 @@
-﻿namespace TopicalBirdAPI.Constants
+﻿namespace TopicalBirdAPI.Data.Constants
 {
     
     public static class ErrorMessages
@@ -7,6 +7,9 @@
         public const string UnauthorizedAction = "You need to be logged in to perform this action.";
         public const string UnauthorizedUserNotFound = "User not found.";
         public const string ForbiddenAction = "You do not have permission to perform this action.";
+        public const string InvalidCredentials = "Email or password was incorrect.";
+        public const string InvalidPassword = "Given password is invalid.";
+        public const string UserMalformedPassword = "Password must be at least 8 characters long, contain a mix of uppercase and lowercase letters, at least one number, and at least one special symbol.";
 
         // Comments
         public const string CommentNotFound = "Comment not found.";
@@ -27,6 +30,10 @@
         public const string UserBanned = "This user is banned.";
         public const string UserAlreadyUnbanned = "This user is not banned.";
         public const string UserAlreadyAdmin = "This user is already an admin.";
+        public const string UserEmailConflict = "This email is already in use.";
+        public const string UserHandleConflict = "This handle is already taken.";
+        public const string UserCantCreate = "Unable to create a new user.";
+        public const string UserHandleChange = "Cannot change username.";
 
         // Votes
         public const string VoteAlreadyExists = "You have already voted on this post.";
@@ -54,5 +61,8 @@
         public const string InvalidRequest = "Invalid request data.";
         public const string InternalServerError = "An unexpected error occurred. Please try again later.";
         public const string ResourceConflict = "The request conflicts with existing resource.";
+        public const string NotImplemented = "The feature is not yet implemented.";
+        public const string DeprecationWarning = "This feature is scheduled for deprecation in a future release. Please consult the API documentation for migration paths.";
+        public const string DeprecatedError = "Error: This feature has been removed and is no longer supported. Please check the API documentation for the replacement feature.";
     }
 }

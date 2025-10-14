@@ -61,7 +61,8 @@ namespace TopicalBirdAPI
             app.UseStaticFiles();
 
             // Use Identity for User management
-            app.MapIdentityApi<Users>();
+            // app.MapIdentityApi<Users>();
+
 
             app.Run();
         }

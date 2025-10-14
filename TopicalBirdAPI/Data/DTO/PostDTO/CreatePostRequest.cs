@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TopicalBirdAPI.DTO
+namespace TopicalBirdAPI.Data.DTO.PostDTO
 {
     public class CreatePostRequest
     {

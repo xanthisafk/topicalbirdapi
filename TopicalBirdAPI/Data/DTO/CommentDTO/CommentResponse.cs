@@ -1,6 +1,6 @@
 ﻿using TopicalBirdAPI.Models;
 
-namespace TopicalBirdAPI.DTO
+namespace TopicalBirdAPI.Data.DTO.CommentDTO
 {
     public class CommentResponse
     {

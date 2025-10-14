@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TopicalBirdAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b5acd9db41f26cd5ca91c4be9827b995f11c41bc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4bcc5a6ce091ce170afe627a3407d49e07c20bef")]
 [assembly: System.Reflection.AssemblyProductAttribute("TopicalBirdAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TopicalBirdAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

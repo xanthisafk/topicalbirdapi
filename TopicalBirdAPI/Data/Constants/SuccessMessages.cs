@@ -1,7 +1,10 @@
-﻿namespace TopicalBirdAPI.Constants
+﻿namespace TopicalBirdAPI.Data.Constants
 {
     public static class SuccessMessages
     {
+        //Auth
+        public const string PasswordChanged = "The password was changed successfully.";
+
         // Comments
         public const string CommentCreated = "Comment created successfully.";
         public const string CommentUpdated = "Comment updated successfully.";
@@ -18,6 +21,8 @@
         public const string NestDeleted = "Nest deleted successfully.";
 
         // Users
+        public const string UserSignIn = "Logged in successfully.";
+        public const string UserSignOut = "Logged out successfully.";
         public const string UserCreated = "User created successfully.";
         public const string UserUpdated = "User updated successfully.";
         public const string UserDeleted = "User deleted successfully.";

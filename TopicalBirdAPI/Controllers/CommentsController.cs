@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TopicalBirdAPI.Constants;
 using TopicalBirdAPI.Data;
-using TopicalBirdAPI.DTO;
+using TopicalBirdAPI.Data.Constants;
+using TopicalBirdAPI.Data.DTO.CommentDTO;
 using TopicalBirdAPI.Helpers;
 using TopicalBirdAPI.Models;
 

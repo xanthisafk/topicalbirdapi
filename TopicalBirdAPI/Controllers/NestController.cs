@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TopicalBirdAPI.Constants;
 using TopicalBirdAPI.Data;
-using TopicalBirdAPI.DTO;
+using TopicalBirdAPI.Data.Constants;
+using TopicalBirdAPI.Data.DTO.NestDTO;
 using TopicalBirdAPI.Helpers;
 using TopicalBirdAPI.Migrations;
 using TopicalBirdAPI.Models;
@@ -69,20 +69,9 @@ namespace TopicalBirdAPI.Controllers
                 .Skip(skipCount)
                 .Take(limit)
                 .Include(n => n.Moderator)
-                .Select(n => new NestResponse {
-                    Id = n.Id,
-                    Icon = n.Icon,
-                    Description = n.Description,
-                    DisplayName = n.DisplayName,
-                    CreatedAt = n.CreatedAt,
-                    Title = n.Title,
-                    Moderator = new UserResponse {
-                        Id = n.Moderator.Id,
-                        DisplayName = n.Moderator.DisplayName,
-                        Icon = n.Moderator.Icon,
-                    },
-                    Posts = null
-                }).ToListAsync();
+                .Include(n => n.Posts)
+                .Select(n => NestResponse.FromNest(n, false, false))
+                .ToListAsync();
 
             return Ok(new
             {
@@ -122,22 +111,8 @@ namespace TopicalBirdAPI.Controllers
                 .Include(n => n.Moderator);
 
             var nests = await query
-            .Select(n => new NestResponse
-            {
-                Id = n.Id,
-                Icon = n.Icon,
-                Description = n.Description,
-                DisplayName = n.DisplayName,
-                CreatedAt = n.CreatedAt,
-                Title = n.Title,
-                Moderator = new UserResponse
-                {
-                    Id = n.Moderator.Id,
-                    DisplayName = n.Moderator.DisplayName,
-                    Icon = n.Moderator.Icon,
-                },
-                Posts = null
-            }).ToListAsync();
+            .Select(n => NestResponse.FromNest(n, false, false))
+            .ToListAsync();
 
             return Ok(new
             {
@@ -152,13 +127,10 @@ namespace TopicalBirdAPI.Controllers
             });
         }
 
-        /// <summary>
-        /// Retrieves a list of Nests moderated by logged in user.
-        /// </summary>
-        /// <returns>List of nests that user moderates.</returns>
+
         [HttpGet("me")]
         [Authorize]
-        public async Task<IActionResult> GetMyNests()
+        public async Task<IActionResult> GetMyNests(bool withPosts = false)
         {
             var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             if (currentUser == null)
@@ -168,23 +140,10 @@ namespace TopicalBirdAPI.Controllers
 
             var nests = await _context.Nests
                 .Include(n => n.Moderator)
+                .Include(n => n.Posts)
                 .Where(n => n.ModeratorId == currentUser.Id)
-                .Select(n => new NestResponse
-                {
-                    Id = n.Id,
-                    Icon = n.Icon,
-                    Description = n.Description,
-                    DisplayName = n.DisplayName,
-                    CreatedAt = n.CreatedAt,
-                    Title = n.Title,
-                    Moderator = new UserResponse
-                    {
-                        Id = n.Moderator.Id,
-                        DisplayName = n.Moderator.DisplayName,
-                        Icon = n.Moderator.Icon
-                    },
-                    Posts = null,
-                }).ToListAsync();
+                .Select(n => NestResponse.FromNest(n, withPosts, currentUser.IsAdmin))
+                .ToListAsync();
 
             return Ok(new { nests });
         }
@@ -202,7 +161,7 @@ namespace TopicalBirdAPI.Controllers
                 return NotFound(new { message = ErrorMessages.NestNotFound });
             }
 
-            return Ok(new { nest = NestResponse.FromNest(nest) });
+            return Ok(new { nest = NestResponse.FromNest(nest, true) });
         }
 
         [HttpGet("title/{title}")]
@@ -269,11 +228,11 @@ namespace TopicalBirdAPI.Controllers
 
                 _context.Nests.Add(newNest);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetSingleNestById), new { id = newNest.Id }, new { message = SuccessMessages.NestCreated });
+                return Ok(new { message = SuccessMessages.NestCreated, nest = NestResponse.FromNest(newNest, false, currentUser.IsAdmin) });
             }
             catch (InvalidDataException idx)
             {
-                // _logger.LogInformation("Failed to create nest. Errors: {@Errors}", idx.Message);
+                _logger.LogWarning("Failed to create nest. User Error. Errors: {@Errors}", idx.Message);
                 return BadRequest(new { message = idx.Message });
             }
             catch (Exception ex)
@@ -282,7 +241,7 @@ namespace TopicalBirdAPI.Controllers
                 {
                     FileUploadHelper.DeleteFile(iconPath);
                 }
-                _logger.LogError("Failed to create nest. Errors: {@Errors}", ex.Message);
+                _logger.LogCritical("Failed to create nest. Errors: {@Errors}", ex.Message);
                 return StatusCode(500, new { message = ErrorMessages.InternalServerError });
             }
 
@@ -335,7 +294,7 @@ namespace TopicalBirdAPI.Controllers
 
                 _context.Nests.Update(nest);
                 await _context.SaveChangesAsync();
-                return Ok(new { message = SuccessMessages.NestUpdated, nest = NestResponse.FromNest(nest) });
+                return Ok(new { message = SuccessMessages.NestUpdated, nest = NestResponse.FromNest(nest, false, currentUser.IsAdmin) });
             }
             catch (InvalidDataException idx)
             {
@@ -348,7 +307,7 @@ namespace TopicalBirdAPI.Controllers
                 {
                     FileUploadHelper.DeleteFile(iconPath);
                 }
-                _logger.LogError("Failed to create nest. Errors: {@Errors}", ex.Message);
+                _logger.LogCritical("Failed to create nest. Errors: {@Errors}", ex.Message);
                 return StatusCode(500, new { message = ErrorMessages.InternalServerError });
             }
         }

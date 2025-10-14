@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TopicalBirdAPI.DTO
+namespace TopicalBirdAPI.Data.DTO.NestDTO
 {
     public class UpdateNestRequest
     {
