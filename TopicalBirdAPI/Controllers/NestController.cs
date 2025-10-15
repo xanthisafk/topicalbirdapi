@@ -53,7 +53,6 @@ namespace TopicalBirdAPI.Controllers
             int skipCount = (pageNo - 1) * limit;
 
             var baseQuery = _context.Nests
-                // Filter based on the search query
                 .Where(n => n.Title.ToLower().Contains(searchQuery) || n.Description.ToLower().Contains(searchQuery));
 
             int totalCount = await baseQuery.CountAsync();

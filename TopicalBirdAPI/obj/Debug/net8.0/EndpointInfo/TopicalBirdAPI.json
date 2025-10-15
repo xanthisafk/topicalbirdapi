@@ -5,6 +5,181 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/Auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "Email",
+                  "Handle",
+                  "Password"
+                ],
+                "type": "object",
+                "properties": {
+                  "Email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "Password": {
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "Handle": {
+                    "maxLength": 50,
+                    "type": "string"
+                  },
+                  "DisplayName": {
+                    "maxLength": 100,
+                    "type": "string"
+                  },
+                  "Icon": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Email": {
+                  "style": "form"
+                },
+                "Password": {
+                  "style": "form"
+                },
+                "Handle": {
+                  "style": "form"
+                },
+                "DisplayName": {
+                  "style": "form"
+                },
+                "Icon": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "Email",
+                  "Password"
+                ],
+                "type": "object",
+                "properties": {
+                  "Email": {
+                    "type": "string"
+                  },
+                  "Password": {
+                    "type": "string"
+                  },
+                  "RememberMe": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "encoding": {
+                "Email": {
+                  "style": "form"
+                },
+                "Password": {
+                  "style": "form"
+                },
+                "RememberMe": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/password": {
+      "patch": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "ConfirmNewPassword",
+                  "NewPassword",
+                  "OldPassword"
+                ],
+                "type": "object",
+                "properties": {
+                  "OldPassword": {
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "NewPassword": {
+                    "type": "string",
+                    "format": "password"
+                  },
+                  "ConfirmNewPassword": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              },
+              "encoding": {
+                "OldPassword": {
+                  "style": "form"
+                },
+                "NewPassword": {
+                  "style": "form"
+                },
+                "ConfirmNewPassword": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Comments/get/{postId}": {
       "get": {
         "tags": [
@@ -574,181 +749,6 @@
         }
       }
     },
-    "/api/Users/register": {
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "required": [
-                  "Email",
-                  "Handle",
-                  "Password"
-                ],
-                "type": "object",
-                "properties": {
-                  "Email": {
-                    "type": "string",
-                    "format": "email"
-                  },
-                  "Password": {
-                    "type": "string",
-                    "format": "password"
-                  },
-                  "Handle": {
-                    "maxLength": 50,
-                    "type": "string"
-                  },
-                  "DisplayName": {
-                    "maxLength": 100,
-                    "type": "string"
-                  },
-                  "Icon": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              },
-              "encoding": {
-                "Email": {
-                  "style": "form"
-                },
-                "Password": {
-                  "style": "form"
-                },
-                "Handle": {
-                  "style": "form"
-                },
-                "DisplayName": {
-                  "style": "form"
-                },
-                "Icon": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Users/login": {
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "required": [
-                  "Email",
-                  "Password"
-                ],
-                "type": "object",
-                "properties": {
-                  "Email": {
-                    "type": "string"
-                  },
-                  "Password": {
-                    "type": "string"
-                  },
-                  "RememberMe": {
-                    "type": "boolean"
-                  }
-                }
-              },
-              "encoding": {
-                "Email": {
-                  "style": "form"
-                },
-                "Password": {
-                  "style": "form"
-                },
-                "RememberMe": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Users/logout": {
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Users/password": {
-      "patch": {
-        "tags": [
-          "Users"
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "required": [
-                  "ConfirmNewPassword",
-                  "NewPassword",
-                  "OldPassword"
-                ],
-                "type": "object",
-                "properties": {
-                  "OldPassword": {
-                    "type": "string",
-                    "format": "password"
-                  },
-                  "NewPassword": {
-                    "type": "string",
-                    "format": "password"
-                  },
-                  "ConfirmNewPassword": {
-                    "type": "string",
-                    "format": "password"
-                  }
-                }
-              },
-              "encoding": {
-                "OldPassword": {
-                  "style": "form"
-                },
-                "NewPassword": {
-                  "style": "form"
-                },
-                "ConfirmNewPassword": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Users/me": {
       "get": {
         "tags": [
@@ -907,7 +907,7 @@
       }
     },
     "/api/Users/ban/{id}": {
-      "put": {
+      "patch": {
         "tags": [
           "Users"
         ],
@@ -930,7 +930,7 @@
       }
     },
     "/api/Users/unban/{id}": {
-      "put": {
+      "patch": {
         "tags": [
           "Users"
         ],
@@ -953,7 +953,7 @@
       }
     },
     "/api/Users/promote/{id}": {
-      "put": {
+      "patch": {
         "tags": [
           "Users"
         ],

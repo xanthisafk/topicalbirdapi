@@ -1,5 +1,103 @@
 [
   {
+    "ContainingType": "TopicalBirdAPI.Controllers.AuthController",
+    "Method": "LogInToTopicalbird",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "RememberMe",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.AuthController",
+    "Method": "LogOutFromTopicalbird",
+    "RelativePath": "api/Auth/logout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.AuthController",
+    "Method": "LogOutFromTopicalbird",
+    "RelativePath": "api/Auth/password",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "OldPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "NewPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ConfirmNewPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.AuthController",
+    "Method": "RegisterToTopicalbird",
+    "RelativePath": "api/Auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Handle",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "DisplayName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Icon",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "TopicalBirdAPI.Controllers.CommentsController",
     "Method": "CreateComment",
     "RelativePath": "api/Comments/add/{postId}",
@@ -359,7 +457,7 @@
     "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
     "Method": "BanUser",
     "RelativePath": "api/Users/ban/{id}",
-    "HttpMethod": "PUT",
+    "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -421,42 +519,6 @@
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
-    "Method": "LogInToTopicalbird",
-    "RelativePath": "api/Users/login",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Email",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Password",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "RememberMe",
-        "Type": "System.Boolean",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
-    "Method": "LogOutFromTopicalbird",
-    "RelativePath": "api/Users/logout",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
     "Method": "GetCurrentUser",
     "RelativePath": "api/Users/me",
     "HttpMethod": "GET",
@@ -467,35 +529,9 @@
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
-    "Method": "LogOutFromTopicalbird",
-    "RelativePath": "api/Users/password",
-    "HttpMethod": "PATCH",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "OldPassword",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "NewPassword",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "ConfirmNewPassword",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
     "Method": "PromoteToAdmin",
     "RelativePath": "api/Users/promote/{id}",
-    "HttpMethod": "PUT",
+    "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -503,42 +539,6 @@
         "Name": "id",
         "Type": "System.Guid",
         "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
-    "Method": "RegisterToTopicalbird",
-    "RelativePath": "api/Users/register",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Email",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Password",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Handle",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "DisplayName",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Icon",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -563,7 +563,7 @@
     "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
     "Method": "UnbanUser",
     "RelativePath": "api/Users/unban/{id}",
-    "HttpMethod": "PUT",
+    "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
