@@ -69,7 +69,7 @@ namespace TopicalBirdAPI.Controllers
                 .Take(limit)
                 .Include(n => n.Moderator)
                 .Include(n => n.Posts)
-                .Select(n => NestResponse.FromNest(n, false, false))
+                .Select(n => NestResponse.FromNest(n, false))
                 .ToListAsync();
 
             return Ok(new
@@ -110,7 +110,7 @@ namespace TopicalBirdAPI.Controllers
                 .Include(n => n.Moderator);
 
             var nests = await query
-            .Select(n => NestResponse.FromNest(n, false, false))
+            .Select(n => NestResponse.FromNest(n, false))
             .ToListAsync();
 
             return Ok(new
@@ -129,7 +129,7 @@ namespace TopicalBirdAPI.Controllers
 
         [HttpGet("me")]
         [Authorize]
-        public async Task<IActionResult> GetMyNests(bool withPosts = false)
+        public async Task<IActionResult> GetMyNests()
         {
             var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             if (currentUser == null)
@@ -141,7 +141,7 @@ namespace TopicalBirdAPI.Controllers
                 .Include(n => n.Moderator)
                 .Include(n => n.Posts)
                 .Where(n => n.ModeratorId == currentUser.Id)
-                .Select(n => NestResponse.FromNest(n, withPosts, currentUser.IsAdmin))
+                .Select(n => NestResponse.FromNest(n, currentUser.IsAdmin))
                 .ToListAsync();
 
             return Ok(new { nests });
@@ -227,7 +227,7 @@ namespace TopicalBirdAPI.Controllers
 
                 _context.Nests.Add(newNest);
                 await _context.SaveChangesAsync();
-                return Ok(new { message = SuccessMessages.NestCreated, nest = NestResponse.FromNest(newNest, false, currentUser.IsAdmin) });
+                return Ok(new { message = SuccessMessages.NestCreated, nest = NestResponse.FromNest(newNest, currentUser.IsAdmin) });
             }
             catch (InvalidDataException idx)
             {
@@ -293,7 +293,7 @@ namespace TopicalBirdAPI.Controllers
 
                 _context.Nests.Update(nest);
                 await _context.SaveChangesAsync();
-                return Ok(new { message = SuccessMessages.NestUpdated, nest = NestResponse.FromNest(nest, false, currentUser.IsAdmin) });
+                return Ok(new { message = SuccessMessages.NestUpdated, nest = NestResponse.FromNest(nest, currentUser.IsAdmin) });
             }
             catch (InvalidDataException idx)
             {

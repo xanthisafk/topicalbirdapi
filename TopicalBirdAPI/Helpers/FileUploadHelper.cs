@@ -56,12 +56,15 @@ namespace TopicalBirdAPI.Helpers
 
         public static bool DeleteFile(string filePath)
         {
-            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+            var fullPath = Path.Combine("wwwroot", filePath.TrimStart('/')); // ???
+            bool stringIsNull = string.IsNullOrEmpty(fullPath);
+            bool fileExists = File.Exists(fullPath);
+            if (stringIsNull || !fileExists)
             {
                 return false;
             }
 
-            File.Delete(filePath);
+            File.Delete(fullPath);
             return true;
         }
     }

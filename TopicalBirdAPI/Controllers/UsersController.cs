@@ -29,6 +29,24 @@ namespace TopicalBirdAPI.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
+            if (currentUser == null || !currentUser.IsAdmin)
+            {
+                return StatusCode(403, new { message = ErrorMessages.ForbiddenAction });
+            }
+
+            var users = await _userManager.Users
+                .AsQueryable()
+                .Select(u => UserResponse.FromUser(u, true))
+                .ToListAsync();
+
+            return Ok(new { users });
+        }
+
         [HttpGet("me")]
         [Authorize]
         public async Task<IActionResult> GetCurrentUser()
@@ -114,11 +132,15 @@ namespace TopicalBirdAPI.Controllers
             return Ok(new { users });
         }
 
-        // PUT api/users/{id}
-        [HttpPut("update/{id:guid}")]
+        // PATCH api/users/{id}
+        [HttpPatch("update/{id:guid}")]
         [Authorize]
         public async Task<IActionResult> UpdateUser(Guid id, [FromForm] UpdateUserRequest dto)
         {
+            if (dto.DisplayName == null && dto.Icon == null)
+            {
+                return BadRequest(new { message = ErrorMessages.InvalidRequest });
+            }
             var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             if (currentUser == null)
             {
@@ -138,19 +160,12 @@ namespace TopicalBirdAPI.Controllers
                 return StatusCode(403, new { message = ErrorMessages.ForbiddenAction });
             }
 
-            if (!string.IsNullOrWhiteSpace(dto.Handle))
-            {
-                return BadRequest(new { message = ErrorMessages.UserHandleChange });
-            }
-
             targetUser.DisplayName = dto.DisplayName ?? targetUser.DisplayName;
-            targetUser.Handle = dto.Handle;
 
-            string iconPath = "/content/assets/defaults/pp_256.png";
+            string iconPath = targetUser.Icon ?? "/content/assets/defaults/pp_256.png";
             string originalIcon = targetUser.Icon ?? "";
             try
             {
-
                 if (dto.Icon != null)
                 {
                     var userFolder = Path.Combine("wwwroot/content/uploads/users", targetUser.Id.ToString().ToLower().Replace("-", "_"));
@@ -159,7 +174,11 @@ namespace TopicalBirdAPI.Controllers
                     {
                         iconPath = temp;
                     }
+                } else
+                {
+                    iconPath = originalIcon;
                 }
+                
                 targetUser.Icon = iconPath;
 
                 var result = await _userManager.UpdateAsync(targetUser);
@@ -308,24 +327,5 @@ namespace TopicalBirdAPI.Controllers
             return Ok(new { message = SuccessMessages.UserUpdated });
 
         }
-
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
-            if (currentUser == null || !currentUser.IsAdmin)
-            {
-                return StatusCode(403, new { message = ErrorMessages.ForbiddenAction });
-            }
-
-            var users = await _userManager.Users
-                .AsQueryable()
-                .Select(u => UserResponse.FromUser(u, true))
-                .ToListAsync();
-
-            return Ok(new {users});
-        }
-
     }
 }

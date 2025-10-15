@@ -256,13 +256,7 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "withPosts",
-        "Type": "System.Boolean",
-        "IsRequired": false
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -340,15 +334,57 @@
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
-    "Method": "GetPostsByVote",
-    "RelativePath": "api/Posts",
+    "Method": "GetSinglePost",
+    "RelativePath": "api/Posts/{postId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "asc",
-        "Type": "System.Boolean",
+        "Name": "postId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
+    "Method": "DeletePostViaId",
+    "RelativePath": "api/Posts/delete/{postId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "postId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
+    "Method": "GetPostsOfNestViaTitle",
+    "RelativePath": "api/Posts/nest",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nestTitle",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageNo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
         "IsRequired": false
       }
     ],
@@ -356,49 +392,7 @@
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
-    "Method": "GetPostById",
-    "RelativePath": "api/Posts/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "TopicalBirdAPI.Models.Posts",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
-    "Method": "GetPostsByNest",
-    "RelativePath": "api/Posts/nest/{nestId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "nestId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
-    "Method": "CreatePost",
+    "Method": "CreateNewPost",
     "RelativePath": "api/Posts/new",
     "HttpMethod": "POST",
     "IsController": true,
@@ -415,13 +409,18 @@
         "IsRequired": false
       },
       {
-        "Name": "NestId",
-        "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Name": "NestTitle",
+        "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "MediaItems",
-        "Type": "System.Collections.Generic.List\u00601[[TopicalBirdAPI.Data.DTO.PostDTO.CreatePostMediaItem, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Name": "Images",
+        "Type": "System.Collections.Generic.List\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Alts",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       }
     ],
@@ -429,8 +428,29 @@
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
-    "Method": "GetPostsByUser",
-    "RelativePath": "api/Posts/user/{userId}",
+    "Method": "UpdatePostViaId",
+    "RelativePath": "api/Posts/update/{postId}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "postId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "Content",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
+    "Method": "GetPostsOfUserViaId",
+    "RelativePath": "api/Posts/user/id/{userId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -439,6 +459,42 @@
         "Name": "userId",
         "Type": "System.Guid",
         "IsRequired": true
+      },
+      {
+        "Name": "pageNo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
+    "Method": "GetPostsOfUserViaHandle",
+    "RelativePath": "api/Posts/user/username",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userHandle",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageNo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -579,7 +635,7 @@
     "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
     "Method": "UpdateUser",
     "RelativePath": "api/Users/update/{id}",
-    "HttpMethod": "PUT",
+    "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -590,11 +646,6 @@
       },
       {
         "Name": "DisplayName",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Handle",
         "Type": "System.String",
         "IsRequired": false
       },

@@ -411,16 +411,6 @@
         "tags": [
           "Nest"
         ],
-        "parameters": [
-          {
-            "name": "withPosts",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -594,6 +584,7 @@
               "schema": {
                 "required": [
                   "Content",
+                  "NestTitle",
                   "Title"
                 ],
                 "type": "object",
@@ -605,14 +596,20 @@
                   "Content": {
                     "type": "string"
                   },
-                  "NestId": {
-                    "type": "string",
-                    "format": "uuid"
+                  "NestTitle": {
+                    "type": "string"
                   },
-                  "MediaItems": {
+                  "Images": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/CreatePostMediaItem"
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "Alts": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
                     }
                   }
                 }
@@ -624,10 +621,13 @@
                 "Content": {
                   "style": "form"
                 },
-                "NestId": {
+                "NestTitle": {
                   "style": "form"
                 },
-                "MediaItems": {
+                "Images": {
+                  "style": "form"
+                },
+                "Alts": {
                   "style": "form"
                 }
               }
@@ -641,18 +641,19 @@
         }
       }
     },
-    "/api/Posts": {
+    "/api/Posts/{postId}": {
       "get": {
         "tags": [
           "Posts"
         ],
         "parameters": [
           {
-            "name": "asc",
-            "in": "query",
+            "name": "postId",
+            "in": "path",
+            "required": true,
             "schema": {
-              "type": "boolean",
-              "default": true
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -663,7 +664,46 @@
         }
       }
     },
-    "/api/Posts/user/{userId}": {
+    "/api/Posts/nest": {
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "parameters": [
+          {
+            "name": "nestTitle",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Posts/user/id/{userId}": {
       "get": {
         "tags": [
           "Posts"
@@ -677,28 +717,23 @@
               "type": "string",
               "format": "uuid"
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Posts/nest/{nestId}": {
-      "get": {
-        "tags": [
-          "Posts"
-        ],
-        "parameters": [
+          },
           {
-            "name": "nestId",
-            "in": "path",
-            "required": true,
+            "name": "pageNo",
+            "in": "query",
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
             }
           }
         ],
@@ -709,14 +744,53 @@
         }
       }
     },
-    "/api/Posts/{id}": {
+    "/api/Posts/user/username": {
       "get": {
         "tags": [
           "Posts"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "userHandle",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Posts/update/{postId}": {
+      "patch": {
+        "tags": [
+          "Posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
             "in": "path",
             "required": true,
             "schema": {
@@ -725,26 +799,64 @@
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Posts"
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Content": {
+                    "maxLength": 10000,
+                    "type": "string"
+                  }
                 }
               },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Posts"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Posts"
+              "encoding": {
+                "Content": {
+                  "style": "form"
                 }
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Posts/delete/{postId}": {
+      "delete": {
+        "tags": [
+          "Posts"
+        ],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -850,7 +962,7 @@
       }
     },
     "/api/Users/update/{id}": {
-      "put": {
+      "patch": {
         "tags": [
           "Users"
         ],
@@ -872,11 +984,6 @@
                 "type": "object",
                 "properties": {
                   "DisplayName": {
-                    "maxLength": 100,
-                    "type": "string"
-                  },
-                  "Handle": {
-                    "maxLength": 30,
                     "type": "string"
                   },
                   "Icon": {
@@ -887,9 +994,6 @@
               },
               "encoding": {
                 "DisplayName": {
-                  "style": "form"
-                },
-                "Handle": {
                   "style": "form"
                 },
                 "Icon": {
@@ -974,353 +1078,7 @@
           }
         }
       }
-    },
-    "/api/Users": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
     }
   },
-  "components": {
-    "schemas": {
-      "Comment": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "postId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "post": {
-            "$ref": "#/components/schemas/Posts"
-          },
-          "authorId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "author": {
-            "$ref": "#/components/schemas/Users"
-          },
-          "content": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "isDeleted": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreatePostMediaItem": {
-        "type": "object",
-        "properties": {
-          "image": {
-            "type": "string",
-            "format": "binary",
-            "nullable": true
-          },
-          "altText": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Media": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "postId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "post": {
-            "$ref": "#/components/schemas/Posts"
-          },
-          "contentUrl": {
-            "type": "string",
-            "nullable": true
-          },
-          "altText": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Nest": {
-        "required": [
-          "title"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "title": {
-            "maxLength": 100,
-            "minLength": 0,
-            "type": "string"
-          },
-          "displayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "icon": {
-            "type": "string",
-            "nullable": true
-          },
-          "moderatorId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "moderator": {
-            "$ref": "#/components/schemas/Users"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "posts": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Posts"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "PostVote": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "isUpvote": {
-            "type": "boolean"
-          },
-          "postId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "post": {
-            "$ref": "#/components/schemas/Posts"
-          },
-          "userId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "user": {
-            "$ref": "#/components/schemas/Users"
-          },
-          "voteValue": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "Posts": {
-        "required": [
-          "content",
-          "title"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "title": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "content": {
-            "minLength": 1,
-            "type": "string"
-          },
-          "authorId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "author": {
-            "$ref": "#/components/schemas/Users"
-          },
-          "nestId": {
-            "type": "string",
-            "format": "uuid",
-            "nullable": true
-          },
-          "nest": {
-            "$ref": "#/components/schemas/Nest"
-          },
-          "isDeleted": {
-            "type": "boolean"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "comments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Comment"
-            },
-            "nullable": true
-          },
-          "mediaItems": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Media"
-            },
-            "nullable": true
-          },
-          "votes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PostVote"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Users": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "userName": {
-            "type": "string",
-            "nullable": true
-          },
-          "normalizedUserName": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "normalizedEmail": {
-            "type": "string",
-            "nullable": true
-          },
-          "emailConfirmed": {
-            "type": "boolean"
-          },
-          "passwordHash": {
-            "type": "string",
-            "nullable": true
-          },
-          "securityStamp": {
-            "type": "string",
-            "nullable": true
-          },
-          "concurrencyStamp": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumberConfirmed": {
-            "type": "boolean"
-          },
-          "twoFactorEnabled": {
-            "type": "boolean"
-          },
-          "lockoutEnd": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "lockoutEnabled": {
-            "type": "boolean"
-          },
-          "accessFailedCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "handle": {
-            "type": "string",
-            "nullable": true
-          },
-          "displayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "icon": {
-            "type": "string",
-            "nullable": true
-          },
-          "isAdmin": {
-            "type": "boolean"
-          },
-          "isBanned": {
-            "type": "boolean"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "posts": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Posts"
-            },
-            "nullable": true
-          },
-          "nests": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Nest"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      }
-    }
-  }
+  "components": { }
 }
