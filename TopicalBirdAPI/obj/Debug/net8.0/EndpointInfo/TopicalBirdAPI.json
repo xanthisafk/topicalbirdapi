@@ -1,8 +1,9 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "TopicalBirdAPI",
-    "version": "1.0"
+    "title": "Topicalbird API",
+    "description": "Backend API for Topicalbird forums.",
+    "version": "v1"
   },
   "paths": {
     "/api/Auth/register": {
@@ -10,6 +11,8 @@
         "tags": [
           "Auth"
         ],
+        "summary": "Register a new user",
+        "description": "Sample request:\r\n            \r\n    POST /api/Auth/Register\r\n    Content-Type: multipart/form-data\r\n            \r\n    {\r\n       \"Email\": \"string\",\r\n       \"Password\": \"string\",\r\n       \"Handle\": \"string\",\r\n       \"DisplayName\": \"string\",\r\n       \"Icon\": \"file (e.g., image.png)\"\r\n    }",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -23,22 +26,27 @@
                 "properties": {
                   "Email": {
                     "type": "string",
+                    "description": "User email address",
                     "format": "email"
                   },
                   "Password": {
                     "type": "string",
+                    "description": "Must be at least 8 char long and must consist of uppercase, lowercase, special and numerical char.",
                     "format": "password"
                   },
                   "Handle": {
                     "maxLength": 50,
-                    "type": "string"
+                    "type": "string",
+                    "description": "Username. Case is ignored."
                   },
                   "DisplayName": {
                     "maxLength": 100,
-                    "type": "string"
+                    "type": "string",
+                    "description": "Display name. Case is kept."
                   },
                   "Icon": {
                     "type": "string",
+                    "description": "Avatar image. Allowed types: .JPG, .PNG, .WEBP, .GIF. Maximum 5MB.",
                     "format": "binary"
                   }
                 }
@@ -64,8 +72,45 @@
           }
         },
         "responses": {
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConflictResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseSuccessReponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -75,44 +120,57 @@
         "tags": [
           "Auth"
         ],
+        "summary": "Authenticates and logs a user into the application using email and password.",
+        "description": "Sample request:\r\n            \r\n    POST /api/Auth/Login\r\n    Content-Type: application/json\r\n            \r\n    {\r\n       \"Email\": \"user.name@example.com\",\r\n       \"Password\": \"P@sswOrd123\",\r\n       \"RememberMe\": false\r\n    }",
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
-                "required": [
-                  "Email",
-                  "Password"
-                ],
-                "type": "object",
-                "properties": {
-                  "Email": {
-                    "type": "string"
-                  },
-                  "Password": {
-                    "type": "string"
-                  },
-                  "RememberMe": {
-                    "type": "boolean"
-                  }
-                }
-              },
-              "encoding": {
-                "Email": {
-                  "style": "form"
-                },
-                "Password": {
-                  "style": "form"
-                },
-                "RememberMe": {
-                  "style": "form"
-                }
+                "$ref": "#/components/schemas/UserLoginRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginRequest"
               }
             }
           }
         },
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSuccessReponse"
+                }
+              }
+            }
           }
         }
       }
@@ -122,9 +180,28 @@
         "tags": [
           "Auth"
         ],
+        "summary": "Logs the current authenticated user out of the application.",
+        "description": "This endpoint requires authentication. It invalidates the user's session/cookie.\r\n            \r\nSample request:\r\n            \r\n    POST /api/Auth/Logout\r\n    // Request body is empty as no data is required.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSuccessReponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSuccessReponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSuccessReponse"
+                }
+              }
+            }
           }
         }
       }
@@ -134,46 +211,68 @@
         "tags": [
           "Auth"
         ],
+        "summary": "Changes the password for the currently authenticated user.",
+        "description": "This endpoint requires authentication.\r\n            \r\nSample request:\r\n            \r\n    PATCH /api/Auth/password\r\n    Content-Type: application/json\r\n            \r\n    OldPassword: \"P@sswOrd123\"\r\n    NewPassword: \"NewP@sswOrd456\"",
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
-                "required": [
-                  "ConfirmNewPassword",
-                  "NewPassword",
-                  "OldPassword"
-                ],
-                "type": "object",
-                "properties": {
-                  "OldPassword": {
-                    "type": "string",
-                    "format": "password"
-                  },
-                  "NewPassword": {
-                    "type": "string",
-                    "format": "password"
-                  },
-                  "ConfirmNewPassword": {
-                    "type": "string",
-                    "format": "password"
-                  }
-                }
-              },
-              "encoding": {
-                "OldPassword": {
-                  "style": "form"
-                },
-                "NewPassword": {
-                  "style": "form"
-                },
-                "ConfirmNewPassword": {
-                  "style": "form"
-                }
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
               }
             }
           }
         },
         "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "200": {
             "description": "OK"
           }
@@ -854,9 +953,28 @@
         "tags": [
           "Users"
         ],
+        "summary": "Gets all users.",
+        "description": "Admin only endpoint.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseListSuccessReponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -866,9 +984,27 @@
         "tags": [
           "Users"
         ],
+        "summary": "Gets the currently authenticated user's details.",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseSuccessReponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -878,10 +1014,12 @@
         "tags": [
           "Users"
         ],
+        "summary": "Gets a user's details by their unique ID.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
+            "description": "Id of user",
             "required": true,
             "schema": {
               "type": "string",
@@ -891,7 +1029,24 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseSuccessReponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -901,10 +1056,13 @@
         "tags": [
           "Users"
         ],
+        "summary": "Gets a user's details by their email address.",
+        "description": "Admin only endpoint.",
         "parameters": [
           {
             "name": "email",
             "in": "path",
+            "description": "Email address of user",
             "required": true,
             "schema": {
               "type": "string"
@@ -913,7 +1071,34 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseSuccessReponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -923,10 +1108,12 @@
         "tags": [
           "Users"
         ],
+        "summary": "Gets a user's details by their unique username/handle.",
         "parameters": [
           {
             "name": "username",
             "in": "path",
+            "description": "Username/Handle of user",
             "required": true,
             "schema": {
               "type": "string"
@@ -935,7 +1122,24 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseSuccessReponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -945,10 +1149,13 @@
         "tags": [
           "Users"
         ],
+        "summary": "Searches for users by matching query with Handle or DisplayName.",
+        "description": "Requires authentication.",
         "parameters": [
           {
             "name": "query",
             "in": "query",
+            "description": "Text to search",
             "schema": {
               "type": "string"
             }
@@ -956,7 +1163,14 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseListSuccessReponse"
+                }
+              }
+            }
           }
         }
       }
@@ -966,10 +1180,13 @@
         "tags": [
           "Users"
         ],
+        "summary": "Updates an authenticated user's details (DisplayName and/or Icon).",
+        "description": "Sample request:\r\n\r\n     PATCH api/Users/update/3fa85f64-5717-4562-b3fc-2c963f66afa6\r\n     Accepts: multipart/form-data\r\n     \r\n     {\r\n         DisplayName = string,\r\n         Icon = File\r\n     }",
         "parameters": [
           {
             "name": "id",
             "in": "path",
+            "description": "Id of user",
             "required": true,
             "schema": {
               "type": "string",
@@ -984,11 +1201,15 @@
                 "type": "object",
                 "properties": {
                   "DisplayName": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The new public display name for the user.",
+                    "example": "Shruti Thakur"
                   },
                   "Icon": {
                     "type": "string",
-                    "format": "binary"
+                    "description": "The new profile image file for the user. Maximum 5MB. Only images and GIFs allowed.",
+                    "format": "binary",
+                    "example": "photo.png"
                   }
                 }
               },
@@ -1005,7 +1226,64 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseSuccessReponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -1015,10 +1293,13 @@
         "tags": [
           "Users"
         ],
+        "summary": "Bans a user by ID.",
+        "description": "Admin only endpoint.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
+            "description": "Id of user getting banned",
             "required": true,
             "schema": {
               "type": "string",
@@ -1028,7 +1309,64 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSuccessReponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -1038,10 +1376,13 @@
         "tags": [
           "Users"
         ],
+        "summary": "Unbans a user by ID.",
+        "description": "Admin only endpoint.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
+            "description": "Id of user getting unbanned",
             "required": true,
             "schema": {
               "type": "string",
@@ -1051,7 +1392,54 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSuccessReponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -1061,10 +1449,13 @@
         "tags": [
           "Users"
         ],
+        "summary": "Promotes a user to an admin.",
+        "description": "Admin only endpoint.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
+            "description": "Id of user getting promoted",
             "required": true,
             "schema": {
               "type": "string",
@@ -1074,11 +1465,311 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSuccessReponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     }
   },
-  "components": { }
+  "components": {
+    "schemas": {
+      "ChangePasswordRequest": {
+        "required": [
+          "confirmNewPassword",
+          "newPassword",
+          "oldPassword"
+        ],
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The user's current password. This is required for security verification.",
+            "format": "password",
+            "example": "P@sswOrd123"
+          },
+          "newPassword": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The desired new password for the user's account.",
+            "format": "password",
+            "example": "NewP@ssw0rd456"
+          },
+          "confirmNewPassword": {
+            "minLength": 1,
+            "type": "string",
+            "description": "A confirmation of the new password, which must match the value in the TopicalBirdAPI.Data.DTO.AuthDTO.ChangePasswordRequest.NewPassword field.",
+            "format": "password",
+            "example": "NewP@ssw0rd456"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Data Transfer Object (DTO) used for requesting a password change."
+      },
+      "ConflictResponse": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "The fully qualified type name of the variable or resource that is in conflict.",
+            "nullable": true,
+            "example": "System.String"
+          },
+          "variable": {
+            "type": "string",
+            "description": "The name of the variable, parameter, or property that caused the conflict.",
+            "nullable": true,
+            "example": "Username"
+          },
+          "message": {
+            "type": "string",
+            "description": "A descriptive message detailing what may have caused the conflict.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents an API response structure used to indicate a 409 Conflict error.\r\nIt provides details about the resource or variable that caused the conflict."
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A brief, high-level summary of the error.",
+            "nullable": true,
+            "example": "Validation Failed"
+          },
+          "description": {
+            "type": "string",
+            "description": "General description or additional details for the error.",
+            "nullable": true
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Dictionary of field-specific errors, typically used for **400 Bad Request** (Validation).\r\nKey is the field name, Value is an array of error messages.",
+            "nullable": true
+          },
+          "referenceCode": {
+            "type": "string",
+            "description": "A unique identifier generated by the server for internal logging and traceability. \r\nThis code can be provided to support for quicker issue resolution.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Standardized response object for all API error statuses.\r\nThis structure is used for consistent error reporting across the application."
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "StringSuccessReponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A descriptive message about the success of the operation.",
+            "nullable": true,
+            "example": "Operation completed successfully."
+          },
+          "content": {
+            "type": "string",
+            "description": "The payload or data content returned by the successful operation. This can be null.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a successful API response, optionally containing data of a specified type.\r\nThis structure is commonly used for consistent response formatting."
+      },
+      "UserLoginRequest": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The email address of the user. This is used as the primary identifier for login.",
+            "format": "email",
+            "example": "user.name@example.com"
+          },
+          "password": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The user's password.",
+            "format": "password",
+            "example": "P@sswOrd123"
+          },
+          "rememberMe": {
+            "type": "boolean",
+            "description": "A flag indicating whether the system should remember the user's login session. Defaults to false.",
+            "example": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Data Transfer Object (DTO) used to submit user credentials for login authentication."
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "handle": {
+            "type": "string",
+            "nullable": true
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "isAdmin": {
+            "type": "boolean"
+          },
+          "isBanned": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserResponseListSuccessReponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A descriptive message about the success of the operation.",
+            "nullable": true,
+            "example": "Operation completed successfully."
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserResponse"
+            },
+            "description": "The payload or data content returned by the successful operation. This can be null.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a successful API response, optionally containing data of a specified type.\r\nThis structure is commonly used for consistent response formatting."
+      },
+      "UserResponseSuccessReponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A descriptive message about the success of the operation.",
+            "nullable": true,
+            "example": "Operation completed successfully."
+          },
+          "content": {
+            "$ref": "#/components/schemas/UserResponse"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a successful API response, optionally containing data of a specified type.\r\nThis structure is commonly used for consistent response formatting."
+      }
+    }
+  }
 }

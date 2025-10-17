@@ -10,6 +10,9 @@ using TopicalBirdAPI.Models;
 
 namespace TopicalBirdAPI.Controllers
 {
+    /// <summary>
+    /// Post comment manipulation
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class CommentsController : ControllerBase

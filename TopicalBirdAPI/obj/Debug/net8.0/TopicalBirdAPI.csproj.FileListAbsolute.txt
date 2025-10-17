@@ -143,3 +143,5 @@ F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\refint\To
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\TopicalBirdAPI.pdb
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\TopicalBirdAPI.genruntimeconfig.cache
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\ref\TopicalBirdAPI.dll
+F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\bin\Debug\net8.0\TopicalBirdAPI.xml
+F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\TopicalBirdAPI.xml
