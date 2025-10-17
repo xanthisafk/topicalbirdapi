@@ -76,6 +76,16 @@
             Post comment manipulation
             </summary>
         </member>
+        <member name="M:TopicalBirdAPI.Controllers.PostsController.GetLatestPosts(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets latest posts, optionally filtered by a specific Nest.
+            </summary>
+            <param name="nest">Title of the Nest where posts will be fetched. Optional.</param>
+            <param name="pageNo">Page number to fetch. Defaults to 1.</param>
+            <param name="limit">Amount of posts that will be returned per page. Maximum is 50. Defaults to 20.</param>
+            <returns>A paged list of the latest posts.</returns>
+            <response code="200">Returns the paged list of posts.</response>
+        </member>
         <member name="M:TopicalBirdAPI.Controllers.UsersController.GetAllUsers">
             <summary>
             Gets all users.

@@ -431,6 +431,40 @@
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
+    "Method": "GetLatestPosts",
+    "RelativePath": "api/Posts/latest",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nest",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageNo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
     "Method": "GetPostsOfNestViaTitle",
     "RelativePath": "api/Posts/nest",
     "HttpMethod": "GET",

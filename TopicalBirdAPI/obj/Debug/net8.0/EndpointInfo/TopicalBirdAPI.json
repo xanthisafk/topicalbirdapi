@@ -882,6 +882,56 @@
         }
       }
     },
+    "/api/Posts/latest": {
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Gets latest posts, optionally filtered by a specific Nest.",
+        "parameters": [
+          {
+            "name": "nest",
+            "in": "query",
+            "description": "Title of the Nest where posts will be fetched. Optional.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "description": "Page number to fetch. Defaults to 1.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Amount of posts that will be returned per page. Maximum is 50. Defaults to 20.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the paged list of posts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectSuccessReponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Posts/update/{postId}": {
       "patch": {
         "tags": [
@@ -1620,6 +1670,23 @@
         },
         "additionalProperties": false,
         "description": "Standardized response object for all API error statuses.\r\nThis structure is used for consistent error reporting across the application."
+      },
+      "ObjectSuccessReponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A descriptive message about the success of the operation.",
+            "nullable": true,
+            "example": "Operation completed successfully."
+          },
+          "content": {
+            "description": "The payload or data content returned by the successful operation. This can be null.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a successful API response, optionally containing data of a specified type.\r\nThis structure is commonly used for consistent response formatting."
       },
       "ProblemDetails": {
         "type": "object",

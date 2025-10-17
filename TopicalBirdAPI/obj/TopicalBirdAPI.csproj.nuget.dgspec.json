@@ -1,25 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "F:\\Projects\\TopicalBird\\TopicalBirdAPI\\TopicalBirdAPI\\TopicalBirdAPI.csproj": {}
+    "C:\\Users\\abhin\\Source\\Repos\\topicalbirdapi\\TopicalBirdAPI\\TopicalBirdAPI.csproj": {}
   },
   "projects": {
-    "F:\\Projects\\TopicalBird\\TopicalBirdAPI\\TopicalBirdAPI\\TopicalBirdAPI.csproj": {
+    "C:\\Users\\abhin\\Source\\Repos\\topicalbirdapi\\TopicalBirdAPI\\TopicalBirdAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Projects\\TopicalBird\\TopicalBirdAPI\\TopicalBirdAPI\\TopicalBirdAPI.csproj",
+        "projectUniqueName": "C:\\Users\\abhin\\Source\\Repos\\topicalbirdapi\\TopicalBirdAPI\\TopicalBirdAPI.csproj",
         "projectName": "TopicalBirdAPI",
-        "projectPath": "F:\\Projects\\TopicalBird\\TopicalBirdAPI\\TopicalBirdAPI\\TopicalBirdAPI.csproj",
-        "packagesPath": "C:\\Users\\Xanthis\\.nuget\\packages\\",
-        "outputPath": "F:\\Projects\\TopicalBird\\TopicalBirdAPI\\TopicalBirdAPI\\obj\\",
+        "projectPath": "C:\\Users\\abhin\\Source\\Repos\\topicalbirdapi\\TopicalBirdAPI\\TopicalBirdAPI.csproj",
+        "packagesPath": "C:\\Users\\abhin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\abhin\\Source\\Repos\\topicalbirdapi\\TopicalBirdAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Users\\Xanthis\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder",
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Xanthis\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Users\\Xanthis\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config",
+          "C:\\Users\\abhin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -47,7 +45,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -107,7 +105,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

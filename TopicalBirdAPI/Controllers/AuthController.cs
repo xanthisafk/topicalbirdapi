@@ -50,6 +50,7 @@ namespace TopicalBirdAPI.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(ConflictResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<UserResponse>))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorResponse))]
         [Produces("application/json")]
         [HttpPost("register")]
@@ -59,6 +60,12 @@ namespace TopicalBirdAPI.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ErrorResponse.CreateFromModelState(ModelState));
+            }
+
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
+            if (currentUser != null)
+            {
+                return StatusCode(403, ErrorResponse.Create(ErrorMessages.ForbiddenAction));
             }
 
             // Username already exists

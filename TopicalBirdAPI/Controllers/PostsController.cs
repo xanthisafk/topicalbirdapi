@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TopicalBirdAPI.Data;
+using TopicalBirdAPI.Data.API;
 using TopicalBirdAPI.Data.Constants;
+using TopicalBirdAPI.Data.DTO.PaginationDTO;
 using TopicalBirdAPI.Data.DTO.PostDTO;
+using TopicalBirdAPI.Data.DTO.UsersDTO;
 using TopicalBirdAPI.Helpers;
 using TopicalBirdAPI.Models;
 
@@ -212,6 +215,40 @@ namespace TopicalBirdAPI.Controllers
                 limit);
 
             return Ok(new { result.Pagination, Posts = result.Items });
+        }
+        /// <summary>
+        /// Gets latest posts, optionally filtered by a specific Nest.
+        /// </summary>
+        /// <param name="nest">Title of the Nest where posts will be fetched. Optional.</param>
+        /// <param name="pageNo">Page number to fetch. Defaults to 1.</param>
+        /// <param name="limit">Amount of posts that will be returned per page. Maximum is 50. Defaults to 20.</param>
+        /// <returns>A paged list of the latest posts.</returns>
+        /// <response code="200">Returns the paged list of posts.</response>
+        [HttpGet("latest")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<object>))]
+        [Produces("application/json")]
+        public async Task<IActionResult> GetLatestPosts(string nest = null, int pageNo = 1, int limit = 20)
+        {
+            var query = _context.Posts
+                .Include(p => p.Author)
+                .Include(p => p.Comments)
+                .Include(p => p.MediaItems)
+                .Include(p => p.Votes)
+                .Include(p => p.Nest)
+                .OrderByDescending(p => p.CreatedAt);
+
+            if (!string.IsNullOrEmpty(nest))
+            {
+                query =  query.Where(p => p.Nest.Title.ToLower() == nest.ToLower()).OrderByDescending(p => p.CreatedAt);
+            }
+
+                var result = await PaginationHelper.PaginateAsync(
+                query,
+                p => PostResponse.FromPost(p),
+                pageNo,
+                limit);
+
+            return Ok(SuccessReponse<object>.Create(null, new { result.Pagination, posts = result.Items }));
         }
 
         #endregion
