@@ -5,76 +5,106 @@
     </assembly>
     <members>
         <member name="M:TopicalBirdAPI.Controllers.AuthController.RegisterToTopicalbird(TopicalBirdAPI.Data.DTO.UsersDTO.CreateUserRequest)">
-             <summary>
-             Register a new user
-             </summary>
-             <remarks>
-             Sample request:
-            
-                 POST /api/Auth/Register
-                 Content-Type: multipart/form-data
-            
-                 {
-                    "Email": "string",
-                    "Password": "string",
-                    "Handle": "string",
-                    "DisplayName": "string",
-                    "Icon": "file (e.g., image.png)"
-                 }
-             </remarks>
+            <summary>
+            Register a new user
+            </summary>
         </member>
         <member name="M:TopicalBirdAPI.Controllers.AuthController.LogInToTopicalbird(TopicalBirdAPI.Data.DTO.AuthDTO.UserLoginRequest)">
-             <summary>
-             Authenticates and logs a user into the application using email and password.
-             </summary>
-             <remarks>
-             Sample request:
-            
-                 POST /api/Auth/Login
-                 Content-Type: application/json
-            
-                 {
-                    "Email": "user.name@example.com",
-                    "Password": "P@sswOrd123",
-                    "RememberMe": false
-                 }
-             </remarks>
+            <summary>
+            Login existing user
+            </summary>
         </member>
         <member name="M:TopicalBirdAPI.Controllers.AuthController.LogOutFromTopicalbird">
-             <summary>
-             Logs the current authenticated user out of the application.
-             </summary>
-             <remarks>
-             This endpoint requires authentication. It invalidates the user's session/cookie.
-            
-             Sample request:
-            
-                 POST /api/Auth/Logout
-                 // Request body is empty as no data is required.
-            
-             </remarks>
+            <summary>
+            Logout current user
+            </summary>
         </member>
         <member name="M:TopicalBirdAPI.Controllers.AuthController.ChangePassword(TopicalBirdAPI.Data.DTO.AuthDTO.ChangePasswordRequest)">
-             <summary>
-             Changes the password for the currently authenticated user.
-             </summary>
-             <remarks>
-             This endpoint requires authentication.
-            
-             Sample request:
-            
-                 PATCH /api/Auth/password
-                 Content-Type: application/json
-            
-                 OldPassword: "P@sswOrd123"
-                 NewPassword: "NewP@sswOrd456"
-            
-             </remarks>
+            <summary>
+            Change password
+            </summary>
+            <remarks>
+            This endpoint requires authentication.
+            </remarks>
         </member>
         <member name="T:TopicalBirdAPI.Controllers.CommentsController">
             <summary>
             Post comment manipulation
             </summary>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.NestController.SearchByQuery(System.String,System.Int32,System.Int32)">
+            <summary>
+            Search a nest
+            </summary>
+            <param name="query">Text to search</param>
+            <param name="pageNo">Page no. to get</param>
+            <param name="limit">Amount of results to get</param>
+            <returns></returns>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.NestController.GetPaginatedNests(System.Int32,System.Int32)">
+            <summary>
+            Get all nests
+            </summary>
+            <param name="pageNo">Search page number</param>
+            <param name="limit">Amount of results to return</param>
+            <returns>SuccessResponse</returns>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.NestController.GetMyNests">
+            <summary>
+            Get nests moderated by authenticated user
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.PostsController.CreateNewPost(TopicalBirdAPI.Data.DTO.PostDTO.CreatePostRequest)">
+            <summary>
+            Creates a new post for an authenticated user in a specified Nest (community).
+            </summary>
+            <param name="dto">The data transfer object containing the post details and optional media files.</param>
+            <returns>A response containing the created post details.</returns>
+            <response code="200">Returns the newly created post.</response>
+            <response code="400">If the model state is invalid or if media processing fails.</response>
+            <response code="401">If the user is not authenticated.</response>
+            <response code="404">If the specified Nest (community) is not found.</response>
+            <response code="500">If an unexpected server error occurs.</response>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.PostsController.GetSinglePost(System.Guid)">
+            <summary>
+            Retrieves a single post by its unique ID.
+            </summary>
+            <param name="postId">The unique identifier (GUID) of the post.</param>
+            <returns>A response containing the post details.</returns>
+            <response code="200">Returns the requested post.</response>
+            <response code="404">If the post is not found.</response>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.PostsController.GetPostsOfNestViaTitle(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets a paged list of posts belonging to a specific Nest (community).
+            </summary>
+            <param name="nestTitle">The title of the Nest where posts will be fetched.</param>
+            <param name="pageNo">Page number to fetch. Defaults to 1.</param>
+            <param name="limit">Amount of posts that will be returned per page. Maximum is 50. Defaults to 20.</param>
+            <returns>A paged list of posts from the Nest.</returns>
+            <response code="200">Returns the paged list of posts.</response>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.PostsController.GetPostsOfUserViaId(System.Guid,System.Int32,System.Int32)">
+            <summary>
+            Gets a paged list of posts created by a specific user via their ID.
+            </summary>
+            <param name="userId">The unique identifier (GUID) of the user.</param>
+            <param name="pageNo">Page number to fetch. Defaults to 1.</param>
+            <param name="limit">Amount of posts that will be returned per page. Maximum is 50. Defaults to 20.</param>
+            <returns>A paged list of posts authored by the user.</returns>
+            <response code="200">Returns the paged list of posts.</response>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.PostsController.GetPostsOfUserViaHandle(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets a paged list of posts created by a specific user via their username/handle.
+            </summary>
+            <param name="userHandle">The username or handle of the user.</param>
+            <param name="pageNo">Page number to fetch. Defaults to 1.</param>
+            <param name="limit">Amount of posts that will be returned per page. Maximum is 50. Defaults to 20.</param>
+            <returns>A paged list of posts authored by the user.</returns>
+            <response code="200">Returns the paged list of posts.</response>
         </member>
         <member name="M:TopicalBirdAPI.Controllers.PostsController.GetLatestPosts(System.String,System.Int32,System.Int32)">
             <summary>
@@ -86,9 +116,45 @@
             <returns>A paged list of the latest posts.</returns>
             <response code="200">Returns the paged list of posts.</response>
         </member>
+        <member name="M:TopicalBirdAPI.Controllers.PostsController.GetPopularPosts(System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets popular posts, sorted by total votes and optionally filtered by a specific Nest.
+            </summary>
+            <param name="nest">Title of the Nest (community) where posts will be fetched. Optional.</param>
+            <param name="pageNo">Page number to fetch. Defaults to 1.</param>
+            <param name="limit">Amount of posts that will be returned per page. Maximum is 50. Defaults to 20.</param>
+            <returns>A paged list of the popular posts.</returns>
+            <response code="200">Returns the paged list of posts.</response>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.PostsController.UpdatePostViaId(System.Guid,TopicalBirdAPI.Data.DTO.PostDTO.PostUpdateRequest)">
+            <summary>
+            Updates the content of an existing post. Only the author can update a post.
+            </summary>
+            <param name="postId">The unique identifier (GUID) of the post to update.</param>
+            <param name="dto">The data transfer object containing the new content.</param>
+            <returns>A confirmation message.</returns>
+            <response code="200">If the post was successfully updated.</response>
+            <response code="204">If the post content was the same and no update was performed.</response>
+            <response code="400">If the model state is invalid.</response>
+            <response code="401">If the user is not authenticated.</response>
+            <response code="403">If the authenticated user is not the author of the post.</response>
+            <response code="404">If the post is not found.</response>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.PostsController.DeletePostViaId(System.Guid)">
+            <summary>
+            Deletes a post by its ID. Only the author or an Admin can delete a post.
+            </summary>
+            <param name="postId">The unique identifier (GUID) of the post to delete.</param>
+            <returns>A confirmation message or a 204 if the post was already deleted.</returns>
+            <response code="200">If the post was successfully deleted.</response>
+            <response code="204">If the post was not found (idempotent delete).</response>
+            <response code="401">If the user is not authenticated.</response>
+            <response code="403">If the authenticated user is not the author or an Admin.</response>
+            <response code="500">If a file cleanup or other server error occurs.</response>
+        </member>
         <member name="M:TopicalBirdAPI.Controllers.UsersController.GetAllUsers">
             <summary>
-            Gets all users.
+            Gets all users
             </summary>
             <remarks>
             Admin only endpoint.
@@ -96,18 +162,18 @@
         </member>
         <member name="M:TopicalBirdAPI.Controllers.UsersController.GetCurrentUser">
             <summary>
-            Gets the currently authenticated user's details.
+            Get authenticated user
             </summary>
         </member>
         <member name="M:TopicalBirdAPI.Controllers.UsersController.GetUserById(System.Guid)">
             <summary>
-            Gets a user's details by their unique ID.
+            Get user by ID
             </summary>
             <param name="id">Id of user</param>
         </member>
         <member name="M:TopicalBirdAPI.Controllers.UsersController.GetByEmail(System.String)">
             <summary>
-            Gets a user's details by their email address.
+            Get user by Email
             </summary>
             <param name="email">Email address of user</param>
             <remarks>
@@ -116,41 +182,34 @@
         </member>
         <member name="M:TopicalBirdAPI.Controllers.UsersController.GetByUsername(System.String)">
             <summary>
-            Gets a user's details by their unique username/handle.
+            Get user by username
             </summary>
             <param name="username">Username/Handle of user</param>
         </member>
         <member name="M:TopicalBirdAPI.Controllers.UsersController.GetBySearch(System.String)">
             <summary>
-            Searches for users by matching query with Handle or DisplayName.
+            Search for users
             </summary>
             <param name="query">Text to search</param>
             <remarks>
             Requires authentication.
+            
+            Matches query with Handle or DisplayName.
             </remarks>
         </member>
         <member name="M:TopicalBirdAPI.Controllers.UsersController.UpdateUser(System.Guid,TopicalBirdAPI.Data.DTO.UsersDTO.UpdateUserRequest)">
             <summary>
-            Updates an authenticated user's details (DisplayName and/or Icon).
+            Updates user details
             </summary>
             <param name="id">Id of user</param>
             <param name="dto">Data Transfer Object for UserUpdate</param>
             <remarks>
-            Sample request:
-            
-                 PATCH api/Users/update/3fa85f64-5717-4562-b3fc-2c963f66afa6
-                 Accepts: multipart/form-data
-                 
-                 {
-                     DisplayName = string,
-                     Icon = File
-                 }
-                 
+            DisplayName and Icon (Avatar)     
             </remarks>
         </member>
         <member name="M:TopicalBirdAPI.Controllers.UsersController.BanUser(System.Guid)">
             <summary>
-            Bans a user by ID.
+            Bans a user
             </summary>
             <param name="id">Id of user getting banned</param>
             <remarks>
@@ -159,7 +218,7 @@
         </member>
         <member name="M:TopicalBirdAPI.Controllers.UsersController.UnbanUser(System.Guid)">
             <summary>
-            Unbans a user by ID.
+            Unbans a user
             </summary>
             <param name="id">Id of user getting unbanned</param>
             <remarks>
@@ -168,7 +227,7 @@
         </member>
         <member name="M:TopicalBirdAPI.Controllers.UsersController.PromoteToAdmin(System.Guid)">
             <summary>
-            Promotes a user to an admin.
+            Promotes to an admin
             </summary>
             <param name="id">Id of user getting promoted</param>
             <remarks>
@@ -253,31 +312,31 @@
             <param name="modelState">The ModelStateDictionary containing validation errors.</param>
             <returns>An <see cref="T:TopicalBirdAPI.Data.API.ErrorResponse"/> populated with validation errors.</returns>
         </member>
-        <member name="T:TopicalBirdAPI.Data.API.SuccessReponse`1">
+        <member name="T:TopicalBirdAPI.Data.API.SuccessResponse`1">
             <summary>
             Represents a successful API response, optionally containing data of a specified type.
             This structure is commonly used for consistent response formatting.
             </summary>
             <typeparam name="T">The type of the data/content contained in the response.</typeparam>
         </member>
-        <member name="P:TopicalBirdAPI.Data.API.SuccessReponse`1.Message">
+        <member name="P:TopicalBirdAPI.Data.API.SuccessResponse`1.Message">
             <summary>
             A descriptive message about the success of the operation.
             </summary>
             <example>Operation completed successfully.</example>
         </member>
-        <member name="P:TopicalBirdAPI.Data.API.SuccessReponse`1.Content">
+        <member name="P:TopicalBirdAPI.Data.API.SuccessResponse`1.Content">
             <summary>
             The payload or data content returned by the successful operation. This can be null.
             </summary>
         </member>
-        <member name="M:TopicalBirdAPI.Data.API.SuccessReponse`1.Create(System.String,`0)">
+        <member name="M:TopicalBirdAPI.Data.API.SuccessResponse`1.Create(System.String,`0)">
             <summary>
-            Creates a new instance of the <see cref="T:TopicalBirdAPI.Data.API.SuccessReponse`1"/> class with a message and content.
+            Creates a new instance of the <see cref="T:TopicalBirdAPI.Data.API.SuccessResponse`1"/> class with a message and content.
             </summary>
             <param name="message">The message to include in the response.</param>
             <param name="Content">The content (data payload) to include in the response.</param>
-            <returns>A new <see cref="T:TopicalBirdAPI.Data.API.SuccessReponse`1"/> instance.</returns>
+            <returns>A new <see cref="T:TopicalBirdAPI.Data.API.SuccessResponse`1"/> instance.</returns>
         </member>
         <member name="T:TopicalBirdAPI.Data.DTO.AuthDTO.ChangePasswordRequest">
             <summary>

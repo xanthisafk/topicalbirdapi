@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using TopicalBirdAPI.Data;
+using TopicalBirdAPI.Data.API;
 using TopicalBirdAPI.Data.Constants;
 using TopicalBirdAPI.Data.DTO.NestDTO;
 using TopicalBirdAPI.Helpers;
@@ -13,6 +15,7 @@ namespace TopicalBirdAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class NestController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -26,18 +29,27 @@ namespace TopicalBirdAPI.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Search a nest
+        /// </summary>
+        /// <param name="query">Text to search</param>
+        /// <param name="pageNo">Page no. to get</param>
+        /// <param name="limit">Amount of results to get</param>
+        /// <returns></returns>
         [HttpGet("search/{query}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<object>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
         public async Task<IActionResult> SearchByQuery(string query, [FromQuery] int pageNo = 1, [FromQuery] int limit = 20)
-        {
+        {       
             string searchQuery = query.Trim().ToLower();
             if (string.IsNullOrWhiteSpace(searchQuery))
             {
-                return BadRequest(new { message = ErrorMessages.SearchNoQuery });
+                return BadRequest(ErrorResponse.Create(ErrorMessages.SearchNoQuery));
             }
 
             if (searchQuery.Length < 3)
             {
-                return BadRequest(new { message = ErrorMessages.QueryTooSmall });
+                return BadRequest(ErrorResponse.Create(ErrorMessages.QueryTooSmall));
             }
 
             if (pageNo < 1)
@@ -72,20 +84,28 @@ namespace TopicalBirdAPI.Controllers
                 .Select(n => NestResponse.FromNest(n, false))
                 .ToListAsync();
 
-            return Ok(new
-            {
-                pagination = new
-                {
-                    PageNumber = pageNo,
-                    Limit = limit,
-                    TotalItems = totalCount,
-                    TotalPages = totalPages
-                },
-                nests
-            });
+            return Ok(
+            
+                SuccessResponse<object>.Create(null, new {
+                    pagination = new
+                    {
+                        PageNumber = pageNo,
+                        Limit = limit,
+                        TotalItems = totalCount,
+                        TotalPages = totalPages
+                    },
+                    nests
+                })
+            );
         }
 
+        /// <summary>
+        /// Get all nests
+        /// </summary>
+        /// <param name="pageNo">Search page number</param>
+        /// <param name="limit">Amount of results to return</param>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<object>))]
         public async Task<IActionResult> GetPaginatedNests(int pageNo = 1, int limit = 20)
         {
             if (pageNo < 1)
@@ -113,28 +133,36 @@ namespace TopicalBirdAPI.Controllers
             .Select(n => NestResponse.FromNest(n, false))
             .ToListAsync();
 
-            return Ok(new
-            {
-                pagination = new
+            return Ok(
+
+                SuccessResponse<object>.Create(null, new
                 {
-                    PageNumber = pageNo,
-                    Limit = limit,
-                    TotalItems = totalCount,
-                    TotalPages = totalPages
-                },
-                nests
-            });
+                    pagination = new
+                    {
+                        PageNumber = pageNo,
+                        Limit = limit,
+                        TotalItems = totalCount,
+                        TotalPages = totalPages
+                    },
+                    nests
+                })
+            );
         }
 
-
+        
+        /// <summary>
+        /// Get nests moderated by authenticated user
+        /// </summary>
         [HttpGet("me")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<List<NestResponse>>))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorResponse))]
         public async Task<IActionResult> GetMyNests()
         {
             var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             if (currentUser == null)
             {
-                return Unauthorized(ErrorMessages.UnauthorizedAction);
+                return Unauthorized(ErrorResponse.Create(ErrorMessages.UnauthorizedAction));
             }
 
             var nests = await _context.Nests
@@ -144,12 +172,19 @@ namespace TopicalBirdAPI.Controllers
                 .Select(n => NestResponse.FromNest(n, currentUser.IsAdmin))
                 .ToListAsync();
 
-            return Ok(new { nests });
+            return Ok(SuccessResponse<List<NestResponse>>.Create("", nests));
         }
 
+        /// <summary>
+        /// Get nest by id
+        /// </summary>
+        /// <param name="id">Id of nest</param>
         [HttpGet("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<NestResponse>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
         public async Task<IActionResult> GetSingleNestById(Guid id)
         {
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             var nest = await _context.Nests
                 .Include(n => n.Moderator)
                 .Include(n => n.Posts)
@@ -160,7 +195,7 @@ namespace TopicalBirdAPI.Controllers
                 return NotFound(new { message = ErrorMessages.NestNotFound });
             }
 
-            return Ok(new { nest = NestResponse.FromNest(nest, true) });
+            return Ok(new { nest = NestResponse.FromNest(nest, currentUser != null && currentUser.IsAdmin) });
         }
 
         [HttpGet("title/{title}")]

@@ -293,3 +293,4 @@ C:\Users\abhin\Source\Repos\topicalbirdapi\TopicalBirdAPI\obj\Debug\net8.0\Topic
 C:\Users\abhin\Source\Repos\topicalbirdapi\TopicalBirdAPI\obj\Debug\net8.0\TopicalBirdAPI.pdb
 C:\Users\abhin\Source\Repos\topicalbirdapi\TopicalBirdAPI\obj\Debug\net8.0\TopicalBirdAPI.genruntimeconfig.cache
 C:\Users\abhin\Source\Repos\topicalbirdapi\TopicalBirdAPI\obj\Debug\net8.0\ref\TopicalBirdAPI.dll
+C:\Users\abhin\Source\Repos\topicalbirdapi\TopicalBirdAPI\bin\Debug\net8.0\Scalar.AspNetCore.dll

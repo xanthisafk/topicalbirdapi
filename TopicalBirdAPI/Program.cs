@@ -7,6 +7,7 @@ using System.Threading.RateLimiting;
 using TopicalBirdAPI.Data;
 using TopicalBirdAPI.Helpers;
 using TopicalBirdAPI.Models;
+using Scalar.AspNetCore;
 
 namespace TopicalBirdAPI
 {
@@ -82,6 +83,12 @@ namespace TopicalBirdAPI
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                     options.RoutePrefix = string.Empty;
                     options.InjectStylesheet("/css/swagger-custom.css");
+                });
+                app.MapSwagger("/openapi/{documentName}.json");
+                app.MapScalarApiReference("/docs", o =>
+                {
+                    o.WithTitle("Topicalbird API Documentation");
+
                 });
                 app.ApplyMigrations();
             }

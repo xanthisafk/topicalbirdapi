@@ -29,7 +29,7 @@
         "StatusCode": 401
       },
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "application/json"
         ],
@@ -47,11 +47,9 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
+          "application/json"
         ],
         "StatusCode": 200
       }
@@ -73,26 +71,24 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
         "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
+          "application/json"
         ],
         "StatusCode": 400
       },
       {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
         "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
+          "application/json"
         ],
         "StatusCode": 401
       },
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
         "StatusCode": 200
       }
     ]
@@ -147,11 +143,18 @@
         "StatusCode": 400
       },
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "application/json"
         ],
         "StatusCode": 200
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 403
       },
       {
         "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
@@ -265,7 +268,15 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.NestController",
@@ -379,7 +390,22 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      }
+    ]
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.NestController",
@@ -411,7 +437,22 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      }
+    ]
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
@@ -427,7 +468,41 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 401
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 403
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 500
+      }
+    ]
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
@@ -455,7 +530,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "application/json"
         ],
@@ -487,7 +562,15 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
@@ -523,7 +606,77 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 401
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
+    "Method": "GetPopularPosts",
+    "RelativePath": "api/Posts/popular",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nest",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageNo",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
@@ -544,7 +697,48 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[TopicalBirdAPI.Data.DTO.PostDTO.PostResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 204
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 401
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 403
+      },
+      {
+        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      }
+    ]
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
@@ -570,7 +764,15 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.PostsController",
@@ -596,7 +798,15 @@
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "TopicalBirdAPI.Controllers.UsersController",
@@ -608,7 +818,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[System.Collections.Generic.List\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.Collections.Generic.List\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "application/json"
         ],
@@ -639,7 +849,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "application/json"
         ],
@@ -698,7 +908,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "application/json"
         ],
@@ -736,7 +946,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "application/json"
         ],
@@ -767,7 +977,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "application/json"
         ],
@@ -792,7 +1002,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "application/json"
         ],
@@ -823,7 +1033,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "application/json"
         ],
@@ -882,7 +1092,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[System.Collections.Generic.List\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.Collections.Generic.List\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "application/json"
         ],
@@ -906,7 +1116,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "application/json"
         ],
@@ -968,7 +1178,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.SuccessReponse\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "application/json"
         ],
