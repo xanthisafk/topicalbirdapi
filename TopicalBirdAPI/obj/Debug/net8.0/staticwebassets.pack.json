@@ -1,0 +1,53 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\abhin\\Source\\Repos\\topicalbirdapi\\TopicalBirdAPI\\wwwroot\\content\\assets\\defaults\\api_logo.svg",
+      "PackagePath": "staticwebassets\\content\\assets\\defaults\\api_logo.svg"
+    },
+    {
+      "Id": "C:\\Users\\abhin\\Source\\Repos\\topicalbirdapi\\TopicalBirdAPI\\wwwroot\\content\\assets\\defaults\\nest_256.png",
+      "PackagePath": "staticwebassets\\content\\assets\\defaults\\nest_256.png"
+    },
+    {
+      "Id": "C:\\Users\\abhin\\Source\\Repos\\topicalbirdapi\\TopicalBirdAPI\\wwwroot\\content\\assets\\defaults\\pp_256.png",
+      "PackagePath": "staticwebassets\\content\\assets\\defaults\\pp_256.png"
+    },
+    {
+      "Id": "C:\\Users\\abhin\\Source\\Repos\\topicalbirdapi\\TopicalBirdAPI\\wwwroot\\content\\uploads\\nests\\ad4557c2_86ed_430c_9d6a_239f08fd7da0\\icon_638962907285964157.webp",
+      "PackagePath": "staticwebassets\\content\\uploads\\nests\\ad4557c2_86ed_430c_9d6a_239f08fd7da0\\icon_638962907285964157.webp"
+    },
+    {
+      "Id": "C:\\Users\\abhin\\Source\\Repos\\topicalbirdapi\\TopicalBirdAPI\\wwwroot\\content\\uploads\\posts\\60aebcc5_55e8_418b_88aa_e8a12633ebaf\\60aebcc5_55e8_418b_88aa_e8a12633ebaf_0_638962908608202983.webp",
+      "PackagePath": "staticwebassets\\content\\uploads\\posts\\60aebcc5_55e8_418b_88aa_e8a12633ebaf\\60aebcc5_55e8_418b_88aa_e8a12633ebaf_0_638962908608202983.webp"
+    },
+    {
+      "Id": "C:\\Users\\abhin\\Source\\Repos\\topicalbirdapi\\TopicalBirdAPI\\wwwroot\\content\\uploads\\users\\bd443738_2d0c_4e13_87be_1c8a8fda5705\\abhinav_638962905859429566.webp",
+      "PackagePath": "staticwebassets\\content\\uploads\\users\\bd443738_2d0c_4e13_87be_1c8a8fda5705\\abhinav_638962905859429566.webp"
+    },
+    {
+      "Id": "C:\\Users\\abhin\\Source\\Repos\\topicalbirdapi\\TopicalBirdAPI\\wwwroot\\css\\swagger-custom.css",
+      "PackagePath": "staticwebassets\\css\\swagger-custom.css"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.TopicalBirdAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.TopicalBirdAPI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.TopicalBirdAPI.props",
+      "PackagePath": "build\\TopicalBirdAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.TopicalBirdAPI.props",
+      "PackagePath": "buildMultiTargeting\\TopicalBirdAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.TopicalBirdAPI.props",
+      "PackagePath": "buildTransitive\\TopicalBirdAPI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

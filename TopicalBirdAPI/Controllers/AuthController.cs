@@ -15,6 +15,7 @@ namespace TopicalBirdAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class AuthController : ControllerBase
     {
         private readonly SignInManager<Users> _signInManager;
@@ -33,25 +34,11 @@ namespace TopicalBirdAPI.Controllers
         /// <summary>
         /// Register a new user
         /// </summary>
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///     POST /api/Auth/Register
-        ///     Content-Type: multipart/form-data
-        ///
-        ///     {
-        ///        "Email": "string",
-        ///        "Password": "string",
-        ///        "Handle": "string",
-        ///        "DisplayName": "string",
-        ///        "Icon": "file (e.g., image.png)"
-        ///     }
-        /// </remarks>
         [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(ConflictResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<UserResponse>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<UserResponse>))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorResponse))]
-        [Produces("application/json")]
         [HttpPost("register")]
         public async Task<IActionResult> RegisterToTopicalbird([FromForm] CreateUserRequest dto)
         {
@@ -59,6 +46,12 @@ namespace TopicalBirdAPI.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ErrorResponse.CreateFromModelState(ModelState));
+            }
+
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
+            if (currentUser != null && !currentUser.IsAdmin)
+            {
+                return StatusCode(403, ErrorResponse.Create(ErrorMessages.ForbiddenAction));
             }
 
             // Username already exists
@@ -111,7 +104,7 @@ namespace TopicalBirdAPI.Controllers
 
                 // User saved and logged
                 _logger.Info($"Created User. User: {user.Id}");
-                var response = SuccessReponse<UserResponse>.Create(SuccessMessages.UserCreated, UserResponse.FromUser(user, false));
+                var response = SuccessResponse<UserResponse>.Create(SuccessMessages.UserCreated, UserResponse.FromUser(user, false));
                 return Ok(response);
             }
 
@@ -135,25 +128,12 @@ namespace TopicalBirdAPI.Controllers
         }
 
         /// <summary>
-        /// Authenticates and logs a user into the application using email and password.
+        /// Login existing user
         /// </summary>
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///     POST /api/Auth/Login
-        ///     Content-Type: application/json
-        ///
-        ///     {
-        ///        "Email": "user.name@example.com",
-        ///        "Password": "P@sswOrd123",
-        ///        "RememberMe": false
-        ///     }
-        /// </remarks>
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorResponse))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<string>))]
-        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<string>))]
         public async Task<IActionResult> LogInToTopicalbird([FromBody] UserLoginRequest dto)
         {
             // Invalid data
@@ -173,7 +153,7 @@ namespace TopicalBirdAPI.Controllers
                     // Sign the user in
                     await _signInManager.SignInAsync(user, isPersistent: dto.RememberMe);
                     _logger.Info($"User logged in: {user.Id}");
-                    return Ok(SuccessReponse<string>.Create(SuccessMessages.UserSignIn, null));
+                    return Ok(SuccessResponse<string>.Create(SuccessMessages.UserSignIn, null));
                 }
             }
 
@@ -182,46 +162,28 @@ namespace TopicalBirdAPI.Controllers
         }
 
         /// <summary>
-        /// Logs the current authenticated user out of the application.
+        /// Logout current user
         /// </summary>
-        /// <remarks>
-        /// This endpoint requires authentication. It invalidates the user's session/cookie.
-        ///
-        /// Sample request:
-        ///
-        ///     POST /api/Auth/Logout
-        ///     // Request body is empty as no data is required.
-        ///
-        /// </remarks>
         [HttpPost("logout")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(SuccessReponse<string>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(SuccessResponse<string>))]
         public async Task<IActionResult> LogOutFromTopicalbird()
         {
             await _signInManager.SignOutAsync();
-            return Ok(SuccessReponse<string>.Create(SuccessMessages.UserSignOut, null));
+            return Ok(SuccessResponse<string>.Create(SuccessMessages.UserSignOut, null));
         }
 
         /// <summary>
-        /// Changes the password for the currently authenticated user.
+        /// Change password
         /// </summary>
         /// <remarks>
         /// This endpoint requires authentication.
-        ///
-        /// Sample request:
-        ///
-        ///     PATCH /api/Auth/password
-        ///     Content-Type: application/json
-        ///
-        ///     OldPassword: "P@sswOrd123"
-        ///     NewPassword: "NewP@sswOrd456"
-        ///
         /// </remarks>
         [HttpPatch("password")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorResponse))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<string>))]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest dto)
         {
             if (!ModelState.IsValid)
@@ -247,13 +209,13 @@ namespace TopicalBirdAPI.Controllers
 
                 if (result.Errors.Any(e => e.Code == "PasswordMismatch"))
                 {
-                    return BadRequest(new { message = ErrorMessages.InvalidPassword });
+                    return BadRequest(ErrorResponse.Create(ErrorMessages.InvalidCredentials));
                 }
                 string refCode = await _logger.IdError($"Failed to change password for user {currentUser.Id}", result.Errors);
                 return StatusCode(500, ErrorResponse.Create(ErrorMessages.InternalServerError, null, refCode));
             }
             await _signInManager.SignInAsync(currentUser, isPersistent: true);
-            return Ok(new { message = SuccessMessages.PasswordChanged });
+            return Ok(SuccessResponse<string>.Create(SuccessMessages.PasswordChanged, null));
         }
 
     }

@@ -7,6 +7,7 @@ using System.Threading.RateLimiting;
 using TopicalBirdAPI.Data;
 using TopicalBirdAPI.Helpers;
 using TopicalBirdAPI.Models;
+using Scalar.AspNetCore;
 
 namespace TopicalBirdAPI
 {
@@ -51,7 +52,7 @@ namespace TopicalBirdAPI
                 {
                     Version = "v1",
                     Title = "Topicalbird API",
-                    Description = "Backend API for Topicalbird forums."
+                    Description = "Backend API for Topicalbird forums.",
                 });
 
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -82,6 +83,17 @@ namespace TopicalBirdAPI
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                     options.RoutePrefix = string.Empty;
                     options.InjectStylesheet("/css/swagger-custom.css");
+                });
+                app.MapSwagger("/openapi/{documentName}.json");
+                app.MapScalarApiReference("/docs", o =>
+                {
+                    o.WithTitle("Topicalbird API Documentation");
+                    o.WithTheme(ScalarTheme.BluePlanet);
+                    o.HideModels = true;
+                    o.SortOperationsByMethod();
+                    o.SortTagsAlphabetically();
+                    o.DefaultHttpClient = new KeyValuePair<ScalarTarget, ScalarClient> (ScalarTarget.CSharp, ScalarClient.HttpClient);
+
                 });
                 app.ApplyMigrations();
             }

@@ -12,7 +12,6 @@
           "Auth"
         ],
         "summary": "Register a new user",
-        "description": "Sample request:\r\n            \r\n    POST /api/Auth/Register\r\n    Content-Type: multipart/form-data\r\n            \r\n    {\r\n       \"Email\": \"string\",\r\n       \"Password\": \"string\",\r\n       \"Handle\": \"string\",\r\n       \"DisplayName\": \"string\",\r\n       \"Icon\": \"file (e.g., image.png)\"\r\n    }",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -97,7 +96,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseSuccessReponse"
+                  "$ref": "#/components/schemas/UserResponseSuccessResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -120,8 +129,7 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Authenticates and logs a user into the application using email and password.",
-        "description": "Sample request:\r\n            \r\n    POST /api/Auth/Login\r\n    Content-Type: application/json\r\n            \r\n    {\r\n       \"Email\": \"user.name@example.com\",\r\n       \"Password\": \"P@sswOrd123\",\r\n       \"RememberMe\": false\r\n    }",
+        "summary": "Login existing user",
         "requestBody": {
           "content": {
             "application/json": {
@@ -167,7 +175,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StringSuccessReponse"
+                  "$ref": "#/components/schemas/StringSuccessResponse"
                 }
               }
             }
@@ -180,25 +188,14 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Logs the current authenticated user out of the application.",
-        "description": "This endpoint requires authentication. It invalidates the user's session/cookie.\r\n            \r\nSample request:\r\n            \r\n    POST /api/Auth/Logout\r\n    // Request body is empty as no data is required.",
+        "summary": "Logout current user",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/StringSuccessReponse"
-                }
-              },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StringSuccessReponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StringSuccessReponse"
+                  "$ref": "#/components/schemas/StringSuccessResponse"
                 }
               }
             }
@@ -211,8 +208,8 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Changes the password for the currently authenticated user.",
-        "description": "This endpoint requires authentication.\r\n            \r\nSample request:\r\n            \r\n    PATCH /api/Auth/password\r\n    Content-Type: application/json\r\n            \r\n    OldPassword: \"P@sswOrd123\"\r\n    NewPassword: \"NewP@sswOrd456\"",
+        "summary": "Change password",
+        "description": "This endpoint requires authentication.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -236,19 +233,9 @@
           "400": {
             "description": "Bad Request",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -256,48 +243,22 @@
           "401": {
             "description": "Unauthorized",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
           },
           "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Comments/get/{postId}": {
-      "get": {
-        "tags": [
-          "Comments"
-        ],
-        "parameters": [
-          {
-            "name": "postId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSuccessResponse"
+                }
+              }
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
@@ -307,10 +268,12 @@
         "tags": [
           "Comments"
         ],
+        "summary": "Create a new comment",
         "parameters": [
           {
             "name": "postId",
             "in": "path",
+            "description": "Post ID of post to comment on",
             "required": true,
             "schema": {
               "type": "string",
@@ -327,21 +290,15 @@
                 ],
                 "type": "object",
                 "properties": {
-                  "PostId": {
-                    "type": "string",
-                    "format": "uuid"
-                  },
                   "Content": {
                     "maxLength": 10000,
                     "minLength": 1,
-                    "type": "string"
+                    "type": "string",
+                    "description": "Content of comment. Min length: 1, Max len: 10,000."
                   }
                 }
               },
               "encoding": {
-                "PostId": {
-                  "style": "form"
-                },
                 "Content": {
                   "style": "form"
                 }
@@ -351,20 +308,80 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Returns created comment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResponseSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If provided data is invalid."
+          },
+          "401": {
+            "description": "If user is not logged in."
+          },
+          "404": {
+            "description": "If post is not found."
+          }
+        }
+      }
+    },
+    "/api/Comments/get/{postId}": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "summary": "Get all comment of post",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "The post ID to fetch",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the list of comments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResponseListSuccessResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the post is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/Comments/edit/{commentId}": {
-      "put": {
+      "patch": {
         "tags": [
           "Comments"
         ],
+        "summary": "Update a comment",
         "parameters": [
           {
             "name": "commentId",
             "in": "path",
+            "description": "Id of comment to update",
             "required": true,
             "schema": {
               "type": "string",
@@ -381,21 +398,15 @@
                 ],
                 "type": "object",
                 "properties": {
-                  "PostId": {
-                    "type": "string",
-                    "format": "uuid"
-                  },
                   "Content": {
                     "maxLength": 10000,
                     "minLength": 1,
-                    "type": "string"
+                    "type": "string",
+                    "description": "Content of comment. Min length: 1, Max len: 10,000."
                   }
                 }
               },
               "encoding": {
-                "PostId": {
-                  "style": "form"
-                },
                 "Content": {
                   "style": "form"
                 }
@@ -405,7 +416,23 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Returns the updated comment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResponseSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If provided data is incorrect."
+          },
+          "403": {
+            "description": "If user is not the comment author."
+          },
+          "404": {
+            "description": "If comment was not found."
           }
         }
       }
@@ -415,10 +442,12 @@
         "tags": [
           "Comments"
         ],
+        "summary": "Deletes a comment",
         "parameters": [
           {
             "name": "commentId",
             "in": "path",
+            "description": "Id of comment to delete",
             "required": true,
             "schema": {
               "type": "string",
@@ -428,191 +457,23 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Nest/search/{query}": {
-      "get": {
-        "tags": [
-          "Nest"
-        ],
-        "parameters": [
-          {
-            "name": "query",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "pageNo",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 1
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 20
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Nest": {
-      "get": {
-        "tags": [
-          "Nest"
-        ],
-        "parameters": [
-          {
-            "name": "pageNo",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 1
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 20
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Nest/me": {
-      "get": {
-        "tags": [
-          "Nest"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Nest/{id}": {
-      "get": {
-        "tags": [
-          "Nest"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Nest"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "Description": {
-                    "maxLength": 500,
-                    "type": "string"
-                  },
-                  "DisplayName": {
-                    "maxLength": 50,
-                    "type": "string"
-                  },
-                  "Icon": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              },
-              "encoding": {
-                "Description": {
-                  "style": "form"
-                },
-                "DisplayName": {
-                  "style": "form"
-                },
-                "Icon": {
-                  "style": "form"
+            "description": "Success message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSuccessResponse"
                 }
               }
             }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Nest/title/{title}": {
-      "get": {
-        "tags": [
-          "Nest"
-        ],
-        "parameters": [
-          {
-            "name": "title",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
+          },
+          "404": {
+            "description": "If comment is not found"
+          },
+          "403": {
+            "description": "If user isnt author or admin"
+          },
+          "401": {
+            "description": "If user int logged in"
           }
         }
       }
@@ -622,6 +483,7 @@
         "tags": [
           "Nest"
         ],
+        "summary": "Create a new nest",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -632,18 +494,22 @@
                 "type": "object",
                 "properties": {
                   "Title": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title of nest. Also used as slug"
                   },
                   "Description": {
                     "maxLength": 500,
-                    "type": "string"
+                    "type": "string",
+                    "description": "Description of Nest"
                   },
                   "DisplayName": {
                     "maxLength": 50,
-                    "type": "string"
+                    "type": "string",
+                    "description": "Display name of Nest"
                   },
                   "Icon": {
                     "type": "string",
+                    "description": "Icon or Logo of Nest. Only Images and GIF allowed. Max 5MB.",
                     "format": "binary"
                   }
                 }
@@ -667,7 +533,290 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Returns newly created nest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NestResponseSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If provided data is invalid."
+          },
+          "401": {
+            "description": "If user is not logged in"
+          },
+          "409": {
+            "description": "If nest already exists."
+          },
+          "500": {
+            "description": "If an unexpected error happens."
+          }
+        }
+      }
+    },
+    "/api/Nest/{id}": {
+      "get": {
+        "tags": [
+          "Nest"
+        ],
+        "summary": "Get nest by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of nest",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the nest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NestResponseSuccessResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If nest is not found."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Nest"
+        ],
+        "summary": "Updates nest data",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of nest to update",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Description": {
+                    "maxLength": 500,
+                    "type": "string"
+                  },
+                  "DisplayName": {
+                    "maxLength": 50,
+                    "type": "string"
+                  },
+                  "Icon": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Description": {
+                  "style": "form"
+                },
+                "DisplayName": {
+                  "style": "form"
+                },
+                "Icon": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns udpated nest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NestResponseSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If provided data is invalid."
+          },
+          "401": {
+            "description": "If user is not logged in"
+          },
+          "500": {
+            "description": "If an unexpected error happens."
+          }
+        }
+      }
+    },
+    "/api/Nest/title/{title}": {
+      "get": {
+        "tags": [
+          "Nest"
+        ],
+        "summary": "Get nest by nest title",
+        "parameters": [
+          {
+            "name": "title",
+            "in": "path",
+            "description": "Title of nest",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the nest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NestResponseSuccessResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If nest is not found."
+          }
+        }
+      }
+    },
+    "/api/Nest/search/{query}": {
+      "get": {
+        "tags": [
+          "Nest"
+        ],
+        "summary": "Search a nest",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "path",
+            "description": "Text to search",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "description": "Page no. to get",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Amount of results to get",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns pagination and list of nests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If the provided data is incorrect."
+          }
+        }
+      }
+    },
+    "/api/Nest": {
+      "get": {
+        "tags": [
+          "Nest"
+        ],
+        "summary": "Get all nests",
+        "parameters": [
+          {
+            "name": "pageNo",
+            "in": "query",
+            "description": "Search page number",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Amount of results to return",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns pagination and list of nests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If the provided data is incorrect."
+          }
+        }
+      }
+    },
+    "/api/Nest/me": {
+      "get": {
+        "tags": [
+          "Nest"
+        ],
+        "summary": "Get nests moderated by authenticated user",
+        "responses": {
+          "200": {
+            "description": "Returns list of nests moderated by user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NestResponseListSuccessResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The user is not logged in."
           }
         }
       }
@@ -677,6 +826,7 @@
         "tags": [
           "Posts"
         ],
+        "summary": "Creates a new post in nest.",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -735,7 +885,54 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Returns the newly created post.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If the model state is invalid or if media processing fails.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the user is not authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the specified Nest is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "If an unexpected server error occurs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -745,10 +942,12 @@
         "tags": [
           "Posts"
         ],
+        "summary": "Get a post by ID.",
         "parameters": [
           {
             "name": "postId",
             "in": "path",
+            "description": "The unique id of the post.",
             "required": true,
             "schema": {
               "type": "string",
@@ -758,7 +957,24 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Returns the requested post.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectSuccessResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the post is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -768,10 +984,12 @@
         "tags": [
           "Posts"
         ],
+        "summary": "Gets all posts for Nest",
         "parameters": [
           {
             "name": "nestTitle",
             "in": "query",
+            "description": "The title of the Nest.",
             "schema": {
               "type": "string"
             }
@@ -779,6 +997,7 @@
           {
             "name": "pageNo",
             "in": "query",
+            "description": "Page number to fetch. Defaults to 1.",
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -788,6 +1007,7 @@
           {
             "name": "limit",
             "in": "query",
+            "description": "Amount of posts that will be returned per page. Maximum is 50. Defaults to 20.",
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -797,7 +1017,14 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Returns the paged list of posts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectSuccessResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -807,10 +1034,12 @@
         "tags": [
           "Posts"
         ],
+        "summary": "Gets all posts from user ID",
         "parameters": [
           {
             "name": "userId",
             "in": "path",
+            "description": "The unique id of the user.",
             "required": true,
             "schema": {
               "type": "string",
@@ -820,6 +1049,7 @@
           {
             "name": "pageNo",
             "in": "query",
+            "description": "Page number to fetch. Defaults to 1.",
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -829,6 +1059,7 @@
           {
             "name": "limit",
             "in": "query",
+            "description": "Amount of posts that will be returned per page. Maximum is 50. Defaults to 20.",
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -838,7 +1069,14 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Returns the paged list of posts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectSuccessResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -848,10 +1086,12 @@
         "tags": [
           "Posts"
         ],
+        "summary": "Get all posts from username",
         "parameters": [
           {
             "name": "userHandle",
             "in": "query",
+            "description": "The username of the user.",
             "schema": {
               "type": "string"
             }
@@ -859,6 +1099,7 @@
           {
             "name": "pageNo",
             "in": "query",
+            "description": "Page number to fetch. Defaults to 1.",
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -868,6 +1109,7 @@
           {
             "name": "limit",
             "in": "query",
+            "description": "Amount of posts that will be returned per page. Maximum is 50. Defaults to 20.",
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -877,7 +1119,114 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Returns the paged list of posts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectSuccessResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Posts/latest": {
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Gets latest posts",
+        "parameters": [
+          {
+            "name": "nest",
+            "in": "query",
+            "description": "Title of the Nest where posts will be fetched. Optional.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "description": "Page number to fetch. Defaults to 1.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Amount of posts that will be returned per page. Maximum is 50. Defaults to 20.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the paged list of posts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectSuccessResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Posts/popular": {
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Get popular posts",
+        "parameters": [
+          {
+            "name": "nest",
+            "in": "query",
+            "description": "Title of the Nest where posts will be fetched. Optional.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageNo",
+            "in": "query",
+            "description": "Page number to fetch. Defaults to 1.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Amount of posts that will be returned per page. Maximum is 50. Defaults to 20.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the paged list of posts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectSuccessResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -887,10 +1236,12 @@
         "tags": [
           "Posts"
         ],
+        "summary": "Updates the content of an existing post.",
         "parameters": [
           {
             "name": "postId",
             "in": "path",
+            "description": "The unique id of the post to update.",
             "required": true,
             "schema": {
               "type": "string",
@@ -920,7 +1271,57 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "If the post was successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostResponseSuccessResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "If the post content was the same and no update was performed."
+          },
+          "400": {
+            "description": "If the model state is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the user is not authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the authenticated user is not the author of the post.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If the post is not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -930,10 +1331,12 @@
         "tags": [
           "Posts"
         ],
+        "summary": "Deletes a post by its ID.",
         "parameters": [
           {
             "name": "postId",
             "in": "path",
+            "description": "The unique identifier (GUID) of the post to delete.",
             "required": true,
             "schema": {
               "type": "string",
@@ -943,7 +1346,47 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "If the post was successfully deleted.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StringSuccessResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "If the post was not found (idempotent delete)."
+          },
+          "401": {
+            "description": "If the user is not authenticated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "If the authenticated user is not the author or an Admin.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "If a file cleanup or other server error occurs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -953,7 +1396,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Gets all users.",
+        "summary": "Gets all users",
         "description": "Admin only endpoint.",
         "responses": {
           "200": {
@@ -961,7 +1404,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseListSuccessReponse"
+                  "$ref": "#/components/schemas/UserResponseListSuccessResponse"
                 }
               }
             }
@@ -984,14 +1427,14 @@
         "tags": [
           "Users"
         ],
-        "summary": "Gets the currently authenticated user's details.",
+        "summary": "Get authenticated user",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseSuccessReponse"
+                  "$ref": "#/components/schemas/UserResponseSuccessResponse"
                 }
               }
             }
@@ -1014,7 +1457,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Gets a user's details by their unique ID.",
+        "summary": "Get user by ID",
         "parameters": [
           {
             "name": "id",
@@ -1033,7 +1476,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseSuccessReponse"
+                  "$ref": "#/components/schemas/UserResponseSuccessResponse"
                 }
               }
             }
@@ -1056,7 +1499,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Gets a user's details by their email address.",
+        "summary": "Get user by Email",
         "description": "Admin only endpoint.",
         "parameters": [
           {
@@ -1075,7 +1518,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseSuccessReponse"
+                  "$ref": "#/components/schemas/UserResponseSuccessResponse"
                 }
               }
             }
@@ -1108,7 +1551,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Gets a user's details by their unique username/handle.",
+        "summary": "Get user by username",
         "parameters": [
           {
             "name": "username",
@@ -1126,7 +1569,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseSuccessReponse"
+                  "$ref": "#/components/schemas/UserResponseSuccessResponse"
                 }
               }
             }
@@ -1149,8 +1592,8 @@
         "tags": [
           "Users"
         ],
-        "summary": "Searches for users by matching query with Handle or DisplayName.",
-        "description": "Requires authentication.",
+        "summary": "Search for users",
+        "description": "Requires authentication.\r\n\r\nMatches query with Handle or DisplayName.",
         "parameters": [
           {
             "name": "query",
@@ -1167,7 +1610,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseListSuccessReponse"
+                  "$ref": "#/components/schemas/UserResponseListSuccessResponse"
                 }
               }
             }
@@ -1180,8 +1623,8 @@
         "tags": [
           "Users"
         ],
-        "summary": "Updates an authenticated user's details (DisplayName and/or Icon).",
-        "description": "Sample request:\r\n\r\n     PATCH api/Users/update/3fa85f64-5717-4562-b3fc-2c963f66afa6\r\n     Accepts: multipart/form-data\r\n     \r\n     {\r\n         DisplayName = string,\r\n         Icon = File\r\n     }",
+        "summary": "Updates user details",
+        "description": "DisplayName and Icon (Avatar)",
         "parameters": [
           {
             "name": "id",
@@ -1230,7 +1673,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseSuccessReponse"
+                  "$ref": "#/components/schemas/UserResponseSuccessResponse"
                 }
               }
             }
@@ -1293,7 +1736,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Bans a user by ID.",
+        "summary": "Bans a user",
         "description": "Admin only endpoint.",
         "parameters": [
           {
@@ -1313,7 +1756,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StringSuccessReponse"
+                  "$ref": "#/components/schemas/StringSuccessResponse"
                 }
               }
             }
@@ -1376,7 +1819,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Unbans a user by ID.",
+        "summary": "Unbans a user",
         "description": "Admin only endpoint.",
         "parameters": [
           {
@@ -1396,7 +1839,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StringSuccessReponse"
+                  "$ref": "#/components/schemas/StringSuccessResponse"
                 }
               }
             }
@@ -1449,7 +1892,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Promotes a user to an admin.",
+        "summary": "Promotes to an admin",
         "description": "Admin only endpoint.",
         "parameters": [
           {
@@ -1469,7 +1912,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StringSuccessReponse"
+                  "$ref": "#/components/schemas/StringSuccessResponse"
                 }
               }
             }
@@ -1563,6 +2006,71 @@
         "additionalProperties": false,
         "description": "Data Transfer Object (DTO) used for requesting a password change."
       },
+      "CommentResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the comment.",
+            "format": "uuid",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          },
+          "content": {
+            "type": "string",
+            "description": "The text content of the comment.",
+            "nullable": true,
+            "example": "This is a fantastic point! I completely agree."
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "The date and time when the comment was created.",
+            "format": "date-time",
+            "example": "2025-10-15T14:30:00Z"
+          },
+          "author": {
+            "$ref": "#/components/schemas/UserResponse"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Data Transfer Object (DTO) representing a single comment returned in an API response."
+      },
+      "CommentResponseListSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A descriptive message about the success of the operation.",
+            "nullable": true,
+            "example": "Operation completed successfully."
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentResponse"
+            },
+            "description": "The payload or data content returned by the successful operation. This can be null.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a successful API response, optionally containing data of a specified type.\r\nThis structure is commonly used for consistent response formatting."
+      },
+      "CommentResponseSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A descriptive message about the success of the operation.",
+            "nullable": true,
+            "example": "Operation completed successfully."
+          },
+          "content": {
+            "$ref": "#/components/schemas/CommentResponse"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a successful API response, optionally containing data of a specified type.\r\nThis structure is commonly used for consistent response formatting."
+      },
       "ConflictResponse": {
         "type": "object",
         "properties": {
@@ -1621,34 +2129,172 @@
         "additionalProperties": false,
         "description": "Standardized response object for all API error statuses.\r\nThis structure is used for consistent error reporting across the application."
       },
-      "ProblemDetails": {
+      "MediaResponse": {
         "type": "object",
         "properties": {
-          "type": {
+          "url": {
             "type": "string",
             "nullable": true
+          },
+          "alt": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "NestResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "icon": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
           },
           "title": {
             "type": "string",
             "nullable": true
           },
-          "status": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "detail": {
+          "moderator": {
+            "$ref": "#/components/schemas/UserResponse"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NestResponseListSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
             "type": "string",
-            "nullable": true
+            "description": "A descriptive message about the success of the operation.",
+            "nullable": true,
+            "example": "Operation completed successfully."
           },
-          "instance": {
-            "type": "string",
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NestResponse"
+            },
+            "description": "The payload or data content returned by the successful operation. This can be null.",
             "nullable": true
           }
         },
-        "additionalProperties": { }
+        "additionalProperties": false,
+        "description": "Represents a successful API response, optionally containing data of a specified type.\r\nThis structure is commonly used for consistent response formatting."
       },
-      "StringSuccessReponse": {
+      "NestResponseSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A descriptive message about the success of the operation.",
+            "nullable": true,
+            "example": "Operation completed successfully."
+          },
+          "content": {
+            "$ref": "#/components/schemas/NestResponse"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a successful API response, optionally containing data of a specified type.\r\nThis structure is commonly used for consistent response formatting."
+      },
+      "ObjectSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A descriptive message about the success of the operation.",
+            "nullable": true,
+            "example": "Operation completed successfully."
+          },
+          "content": {
+            "description": "The payload or data content returned by the successful operation. This can be null.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a successful API response, optionally containing data of a specified type.\r\nThis structure is commonly used for consistent response formatting."
+      },
+      "PostResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "author": {
+            "$ref": "#/components/schemas/UserResponse"
+          },
+          "nest": {
+            "$ref": "#/components/schemas/NestResponse"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "photos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MediaResponse"
+            },
+            "nullable": true
+          },
+          "votes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "comments": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PostResponseSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A descriptive message about the success of the operation.",
+            "nullable": true,
+            "example": "Operation completed successfully."
+          },
+          "content": {
+            "$ref": "#/components/schemas/PostResponse"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a successful API response, optionally containing data of a specified type.\r\nThis structure is commonly used for consistent response formatting."
+      },
+      "StringSuccessResponse": {
         "type": "object",
         "properties": {
           "message": {
@@ -1694,7 +2340,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "Data Transfer Object (DTO) used to submit user credentials for login authentication."
+        "description": "Helper class used to submit user credentials for login authentication."
       },
       "UserResponse": {
         "type": "object",
@@ -1733,7 +2379,7 @@
         },
         "additionalProperties": false
       },
-      "UserResponseListSuccessReponse": {
+      "UserResponseListSuccessResponse": {
         "type": "object",
         "properties": {
           "message": {
@@ -1754,7 +2400,7 @@
         "additionalProperties": false,
         "description": "Represents a successful API response, optionally containing data of a specified type.\r\nThis structure is commonly used for consistent response formatting."
       },
-      "UserResponseSuccessReponse": {
+      "UserResponseSuccessResponse": {
         "type": "object",
         "properties": {
           "message": {

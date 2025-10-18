@@ -3,7 +3,7 @@
 namespace TopicalBirdAPI.Data.DTO.AuthDTO
 {
     /// <summary>
-    /// Data Transfer Object (DTO) used to submit user credentials for login authentication.
+    /// Helper class used to submit user credentials for login authentication.
     /// </summary>
     public class UserLoginRequest
     {

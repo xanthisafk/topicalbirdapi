@@ -17,6 +17,7 @@ namespace TopicalBirdAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class UsersController : ControllerBase
     {
         private readonly UserManager<Users> _userManager;
@@ -31,16 +32,15 @@ namespace TopicalBirdAPI.Controllers
         }
 
         /// <summary>
-        /// Gets all users.
+        /// Gets all users
         /// </summary>
         /// <remarks>
         /// Admin only endpoint.
         /// </remarks>
         [HttpGet]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<List<UserResponse>>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<List<UserResponse>>))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ErrorResponse))]
-        [Produces("application/json")]
         public async Task<IActionResult> GetAllUsers()
         {
             // Check for admin privilege
@@ -56,17 +56,16 @@ namespace TopicalBirdAPI.Controllers
                 .Select(u => UserResponse.FromUser(u, true))
                 .ToListAsync();
 
-            return Ok(SuccessReponse<List<UserResponse>>.Create(SuccessMessages.OperationCompleted, users));
+            return Ok(SuccessResponse<List<UserResponse>>.Create(SuccessMessages.OperationCompleted, users));
         }
 
         /// <summary>
-        /// Gets the currently authenticated user's details.
+        /// Get authenticated user
         /// </summary>
         [HttpGet("me")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<UserResponse>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<UserResponse>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorResponse))]
-        [Produces("application/json")]
         public async Task<IActionResult> GetCurrentUser()
         {
             // Get current user
@@ -76,17 +75,16 @@ namespace TopicalBirdAPI.Controllers
                 return Unauthorized(ErrorResponse.Create(ErrorMessages.UnauthorizedAction));
             }
             // Return user data
-            return Ok(SuccessReponse<UserResponse>.Create(SuccessMessages.OperationCompleted, UserResponse.FromUser(currentUser, true)));
+            return Ok(SuccessResponse<UserResponse>.Create(SuccessMessages.OperationCompleted, UserResponse.FromUser(currentUser, true)));
         }
 
         /// <summary>
-        /// Gets a user's details by their unique ID.
+        /// Get user by ID
         /// </summary>
         /// <param name="id">Id of user</param>
         [HttpGet("get/id/{id:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<UserResponse>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<UserResponse>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
-        [Produces("application/json")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
             // Find target user
@@ -107,11 +105,11 @@ namespace TopicalBirdAPI.Controllers
             // Map and return user data
             UserResponse res = UserResponse.FromUser(targetUser, adminPrivilage);
 
-            return Ok(SuccessReponse<UserResponse>.Create(SuccessMessages.OperationCompleted, res));
+            return Ok(SuccessResponse<UserResponse>.Create(SuccessMessages.OperationCompleted, res));
         }
 
         /// <summary>
-        /// Gets a user's details by their email address.
+        /// Get user by Email
         /// </summary>
         /// <param name="email">Email address of user</param>
         /// <remarks>
@@ -119,10 +117,9 @@ namespace TopicalBirdAPI.Controllers
         /// </remarks>
         [HttpGet("get/email/{email}")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<UserResponse>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<UserResponse>))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
-        [Produces("application/json")]
         public async Task<IActionResult> GetByEmail(string email)
         {
             // Check for admin privilege
@@ -140,17 +137,16 @@ namespace TopicalBirdAPI.Controllers
             }
 
             // Return user data with admin privilege set to true
-            return Ok(SuccessReponse<UserResponse>.Create(SuccessMessages.OperationCompleted, UserResponse.FromUser(user, true)));
+            return Ok(SuccessResponse<UserResponse>.Create(SuccessMessages.OperationCompleted, UserResponse.FromUser(user, true)));
         }
 
         /// <summary>
-        /// Gets a user's details by their unique username/handle.
+        /// Get user by username
         /// </summary>
         /// <param name="username">Username/Handle of user</param>
         [HttpGet("get/username/{username}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<UserResponse>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<UserResponse>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
-        [Produces("application/json")]
         public async Task<IActionResult> GetByUsername(string username)
         {
             // Determine if current user has admin privilege
@@ -165,20 +161,21 @@ namespace TopicalBirdAPI.Controllers
             }
 
             // Return user data
-            return Ok(SuccessReponse<UserResponse>.Create(SuccessMessages.OperationCompleted, UserResponse.FromUser(user, admin)));
+            return Ok(SuccessResponse<UserResponse>.Create(SuccessMessages.OperationCompleted, UserResponse.FromUser(user, admin)));
         }
 
         /// <summary>
-        /// Searches for users by matching query with Handle or DisplayName.
+        /// Search for users
         /// </summary>
         /// <param name="query">Text to search</param>
         /// <remarks>
         /// Requires authentication.
+        /// 
+        /// Matches query with Handle or DisplayName.
         /// </remarks>
         [HttpGet("search")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<List<UserResponse>>))]
-        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<List<UserResponse>>))]
         public async Task<IActionResult> GetBySearch(string query)
         {
             // Determine if current user has admin privilege
@@ -192,35 +189,25 @@ namespace TopicalBirdAPI.Controllers
                 .ToListAsync();
 
             // Return search results
-            return Ok(SuccessReponse<List<UserResponse>>.Create(SuccessMessages.OperationCompleted, users));
+            return Ok(SuccessResponse<List<UserResponse>>.Create(SuccessMessages.OperationCompleted, users));
         }
 
         /// <summary>
-        /// Updates an authenticated user's details (DisplayName and/or Icon).
+        /// Updates user details
         /// </summary>
         /// <param name="id">Id of user</param>
         /// <param name="dto">Data Transfer Object for UserUpdate</param>
         /// <remarks>
-        /// Sample request:
-        /// 
-        ///      PATCH api/Users/update/3fa85f64-5717-4562-b3fc-2c963f66afa6
-        ///      Accepts: multipart/form-data
-        ///      
-        ///      {
-        ///          DisplayName = string,
-        ///          Icon = File
-        ///      }
-        ///      
+        /// DisplayName and Icon (Avatar)     
         /// </remarks>
         [HttpPatch("update/{id:guid}")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<UserResponse>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<UserResponse>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorResponse))]
-        [Produces("application/json")]
         public async Task<IActionResult> UpdateUser(Guid id, [FromForm] UpdateUserRequest dto)
         {
             // Invalid data check
@@ -281,7 +268,7 @@ namespace TopicalBirdAPI.Controllers
 
                 // Success response
                 return Ok(
-                    SuccessReponse<UserResponse>.Create(
+                    SuccessResponse<UserResponse>.Create(
                         SuccessMessages.UserUpdated,
                         UserResponse.FromUser(
                             targetUser, currentUser.IsAdmin)));
@@ -306,7 +293,7 @@ namespace TopicalBirdAPI.Controllers
         }
 
         /// <summary>
-        /// Bans a user by ID.
+        /// Bans a user
         /// </summary>
         /// <param name="id">Id of user getting banned</param>
         /// <remarks>
@@ -314,7 +301,7 @@ namespace TopicalBirdAPI.Controllers
         /// </remarks>
         [HttpPatch("ban/{id:guid}")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<string>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<string>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ErrorResponse))]
@@ -360,11 +347,11 @@ namespace TopicalBirdAPI.Controllers
                 return StatusCode(500, ErrorResponse.Create(ErrorMessages.InternalServerError, null, refCode));
             }
             // The existing code returned an ErrorResponse for success, changed to SuccessResponse
-            return Ok(SuccessReponse<string>.Create(SuccessMessages.UserBanned, null));
+            return Ok(SuccessResponse<string>.Create(SuccessMessages.UserBanned, null));
         }
 
         /// <summary>
-        /// Unbans a user by ID.
+        /// Unbans a user
         /// </summary>
         /// <param name="id">Id of user getting unbanned</param>
         /// <remarks>
@@ -372,7 +359,7 @@ namespace TopicalBirdAPI.Controllers
         /// </remarks>
         [HttpPatch("unban/{id:guid}")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<string>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<string>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ErrorResponse))]
@@ -418,11 +405,11 @@ namespace TopicalBirdAPI.Controllers
             }
 
             // Success response
-            return Ok(SuccessReponse<string>.Create(SuccessMessages.UserUnbanned, null));
+            return Ok(SuccessResponse<string>.Create(SuccessMessages.UserUnbanned, null));
         }
 
         /// <summary>
-        /// Promotes a user to an admin.
+        /// Promotes to an admin
         /// </summary>
         /// <param name="id">Id of user getting promoted</param>
         /// <remarks>
@@ -430,7 +417,7 @@ namespace TopicalBirdAPI.Controllers
         /// </remarks>
         [HttpPatch("promote/{id:guid}")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessReponse<string>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<string>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ErrorResponse))]
@@ -477,7 +464,7 @@ namespace TopicalBirdAPI.Controllers
             }
 
             // Success response
-            return Ok(SuccessReponse<string>.Create(SuccessMessages.UserUpdated, null));
+            return Ok(SuccessResponse<string>.Create(SuccessMessages.UserUpdated, null));
         }
     }
 }

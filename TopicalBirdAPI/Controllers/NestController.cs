@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using TopicalBirdAPI.Data;
+using TopicalBirdAPI.Data.API;
 using TopicalBirdAPI.Data.Constants;
 using TopicalBirdAPI.Data.DTO.NestDTO;
 using TopicalBirdAPI.Helpers;
@@ -11,33 +13,183 @@ using TopicalBirdAPI.Models;
 
 namespace TopicalBirdAPI.Controllers
 {
+    /// <summary>
+    /// Controls nest related actions
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class NestController : ControllerBase
     {
+        #region Constructor
         private readonly AppDbContext _context;
         private readonly UserManager<Users> _userManager;
-        private readonly ILogger<NestController> _logger;
+        private readonly LoggingHelper _logger;
 
-        public NestController(AppDbContext context, UserManager<Users> userManager, ILogger<NestController> logger)
+        public NestController(AppDbContext context, UserManager<Users> userManager, LoggingHelper logger)
         {
             _context = context;
             _userManager = userManager;
             _logger = logger;
         }
+        #endregion
 
-        [HttpGet("search/{query}")]
-        public async Task<IActionResult> SearchByQuery(string query, [FromQuery] int pageNo = 1, [FromQuery] int limit = 20)
+        #region CREATE Operations
+        /// <summary>
+        /// Create a new nest
+        /// </summary>
+        /// <param name="nestDto">DTO for creating new nest</param>
+        /// <response code="200">Returns newly created nest</response>
+        /// <response code="400">If provided data is invalid.</response>
+        /// <response code="401">If user is not logged in</response>
+        /// <response code="409">If nest already exists.</response>
+        /// <response code="500">If an unexpected error happens.</response>
+        [HttpPost("new")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<NestResponse>))]
+        [ProducesErrorResponseType(typeof(ErrorResponse))]
+        public async Task<IActionResult> CreateSingleNest([FromForm] CreateNestRequest nestDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ErrorResponse.CreateFromModelState(ModelState));
+            }
+
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
+            if (currentUser == null)
+            {
+                return Unauthorized(ErrorResponse.Create(ErrorMessages.UnauthorizedAction));
+            }
+
+            if ((await _context.Nests.FirstOrDefaultAsync(n => n.Title == nestDto.Title)) != null)
+            {
+                return Conflict(ErrorResponse.Create(ErrorMessages.NestTitleConflict));
+            }
+
+            Nest newNest = new Nest
+            {
+                Id = Guid.NewGuid(),
+                Title = nestDto.Title,
+                Description = nestDto.Description ?? "",
+                DisplayName = nestDto.DisplayName ?? nestDto.Title,
+                CreatedAt = DateTime.UtcNow,
+                Moderator = currentUser,
+                ModeratorId = currentUser.Id,
+            };
+            string iconPath = "/content/assets/defaults/nest_256.png";
+            try
+            {
+
+                if (nestDto.Icon != null)
+                {
+                    var nestFolder = Path.Combine("wwwroot/content/uploads/nests", newNest.Id.ToString().ToLower().Replace("-", "_"));
+                    var temp = await FileUploadHelper.SaveFile(nestDto.Icon, nestFolder, "icon");
+                    if (!string.IsNullOrEmpty(temp))
+                    {
+                        iconPath = temp;
+                    }
+                }
+                newNest.Icon = iconPath;
+
+                _context.Nests.Add(newNest);
+                await _context.SaveChangesAsync();
+                _logger.Info($"Created new nest: {newNest.Title}, id: {newNest.Id}");
+                ErrorResponse.Create(ErrorMessages.UnauthorizedAction);
+                return Ok(SuccessResponse<NestResponse>.Create(SuccessMessages.NestCreated, NestResponse.FromNest(newNest, currentUser.IsAdmin)));
+            }
+            catch (InvalidDataException idx)
+            {
+                string refCode = await _logger.Error("Failed to create nest.", idx);
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                if (iconPath != "/content/assets/defaults/nest_256.png")
+                {
+                    FileUploadHelper.DeleteFile(iconPath);
+                }
+                string refCode = await _logger.Crit("Failed to create nest", ex);
+                return StatusCode(500, ErrorResponse.Create(ErrorMessages.InternalServerError, null, refCode));
+            }
+        }
+        #endregion
+
+        #region READ Operations
+
+        /// <summary>
+        /// Get nest by id
+        /// </summary>
+        /// <param name="id">Id of nest</param>
+        /// <response code="200">Returns the nest</response>
+        /// <response code="404">If nest is not found.</response>
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<NestResponse>))]
+        [ProducesErrorResponseType(typeof(ErrorResponse))]
+        public async Task<IActionResult> GetSingleNestById(Guid id)
+        {
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
+            var nest = await _context.Nests
+                .Include(n => n.Moderator)
+                .Include(n => n.Posts)
+                .FirstOrDefaultAsync(n => n.Id == id);
+
+            if (nest == null)
+            {
+                return NotFound(ErrorResponse.Create(ErrorMessages.NestNotFound));
+            }
+
+            return Ok(SuccessResponse<NestResponse>.Create("", NestResponse.FromNest(nest, currentUser != null && currentUser.IsAdmin)));
+        }
+
+
+        /// <summary>
+        /// Get nest by nest title
+        /// </summary>
+        /// <param name="title">Title of nest</param>
+        /// <response code="200">Returns the nest</response>
+        /// <response code="404">If nest is not found.</response>
+        [HttpGet("title/{title}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<NestResponse>))]
+        [ProducesErrorResponseType(typeof(ErrorResponse))]
+        public async Task<IActionResult> GetSingleNestByTitle(string title)
+        {
+            var nest = await _context.Nests
+                .Include(n => n.Moderator)
+                .Include(n => n.Posts)
+                .FirstOrDefaultAsync(n => n.Title == title);
+
+            if (nest == null)
+            {
+                return NotFound(ErrorResponse.Create(ErrorMessages.NestNotFound));
+            }
+
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
+            return Ok(SuccessResponse<NestResponse>.Create("", NestResponse.FromNest(nest, currentUser != null && currentUser.IsAdmin)));
+        }
+
+
+        /// <summary>
+        /// Search a nest
+        /// </summary>
+        /// <param name="query">Text to search</param>
+        /// <param name="pageNo">Page no. to get</param>
+        /// <param name="limit">Amount of results to get</param>
+        /// <response code="200">Returns pagination and list of nests</response>
+        /// <response code="400">If the provided data is incorrect.</response>
+        [HttpGet("search/{query}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<object>))]
+        [ProducesErrorResponseType(typeof(ErrorResponse))]
+        public async Task<IActionResult> SearchByQuery(string query, [FromQuery] int pageNo = 1, [FromQuery] int limit = 20)
+        {       
             string searchQuery = query.Trim().ToLower();
             if (string.IsNullOrWhiteSpace(searchQuery))
             {
-                return BadRequest(new { message = ErrorMessages.SearchNoQuery });
+                return BadRequest(ErrorResponse.Create(ErrorMessages.SearchNoQuery));
             }
 
             if (searchQuery.Length < 3)
             {
-                return BadRequest(new { message = ErrorMessages.QueryTooSmall });
+                return BadRequest(ErrorResponse.Create(ErrorMessages.QueryTooSmall));
             }
 
             if (pageNo < 1)
@@ -72,20 +224,31 @@ namespace TopicalBirdAPI.Controllers
                 .Select(n => NestResponse.FromNest(n, false))
                 .ToListAsync();
 
-            return Ok(new
-            {
-                pagination = new
-                {
-                    PageNumber = pageNo,
-                    Limit = limit,
-                    TotalItems = totalCount,
-                    TotalPages = totalPages
-                },
-                nests
-            });
+            return Ok(
+            
+                SuccessResponse<object>.Create(null, new {
+                    pagination = new
+                    {
+                        PageNumber = pageNo,
+                        Limit = limit,
+                        TotalItems = totalCount,
+                        TotalPages = totalPages
+                    },
+                    nests
+                })
+            );
         }
 
+        /// <summary>
+        /// Get all nests
+        /// </summary>
+        /// <param name="pageNo">Search page number</param>
+        /// <param name="limit">Amount of results to return</param>
+        /// <response code="200">Returns pagination and list of nests</response>
+        /// <response code="400">If the provided data is incorrect.</response>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<object>))]
+        [ProducesErrorResponseType(typeof(ErrorResponse))]
         public async Task<IActionResult> GetPaginatedNests(int pageNo = 1, int limit = 20)
         {
             if (pageNo < 1)
@@ -113,28 +276,38 @@ namespace TopicalBirdAPI.Controllers
             .Select(n => NestResponse.FromNest(n, false))
             .ToListAsync();
 
-            return Ok(new
-            {
-                pagination = new
+            return Ok(
+
+                SuccessResponse<object>.Create(null, new
                 {
-                    PageNumber = pageNo,
-                    Limit = limit,
-                    TotalItems = totalCount,
-                    TotalPages = totalPages
-                },
-                nests
-            });
+                    pagination = new
+                    {
+                        PageNumber = pageNo,
+                        Limit = limit,
+                        TotalItems = totalCount,
+                        TotalPages = totalPages
+                    },
+                    nests
+                })
+            );
         }
 
 
+        /// <summary>
+        /// Get nests moderated by authenticated user
+        /// </summary>
+        /// <response code="200">Returns list of nests moderated by user</response>
+        /// <response code="401">The user is not logged in.</response>
         [HttpGet("me")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<List<NestResponse>>))]
+        [ProducesErrorResponseType(typeof(ErrorResponse))]
         public async Task<IActionResult> GetMyNests()
         {
             var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             if (currentUser == null)
             {
-                return Unauthorized(ErrorMessages.UnauthorizedAction);
+                return Unauthorized(ErrorResponse.Create(ErrorMessages.UnauthorizedAction));
             }
 
             var nests = await _context.Nests
@@ -144,132 +317,48 @@ namespace TopicalBirdAPI.Controllers
                 .Select(n => NestResponse.FromNest(n, currentUser.IsAdmin))
                 .ToListAsync();
 
-            return Ok(new { nests });
+            return Ok(SuccessResponse<List<NestResponse>>.Create("", nests));
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetSingleNestById(Guid id)
-        {
-            var nest = await _context.Nests
-                .Include(n => n.Moderator)
-                .Include(n => n.Posts)
-                .FirstOrDefaultAsync(n => n.Id == id);
+        #endregion
 
-            if (nest == null)
-            {
-                return NotFound(new { message = ErrorMessages.NestNotFound });
-            }
+        #region UPDATE Operations
 
-            return Ok(new { nest = NestResponse.FromNest(nest, true) });
-        }
-
-        [HttpGet("title/{title}")]
-        public async Task<IActionResult> GetSingleNestByTitle(string title)
-        {
-            var nest = await _context.Nests
-                .Include(n => n.Moderator)
-                .Include(n => n.Posts)
-                .FirstOrDefaultAsync(n => n.Title == title);
-
-            if (nest == null)
-            {
-                return NotFound(new { message = ErrorMessages.NestNotFound });
-            }
-
-            return Ok(new { nest = NestResponse.FromNest(nest) });
-        }
-
-
-        [HttpPost("new")]
+        /// <summary>
+        /// Updates nest data
+        /// </summary>
+        /// <param name="id">Id of nest to update</param>
+        /// <param name="newNest">DTO used to retrieve data in a contained way.</param>
+        /// <response code="200">Returns udpated nest</response>
+        /// <response code="400">If provided data is invalid.</response>
+        /// <response code="401">If user is not logged in</response>
+        /// <response code="500">If an unexpected error happens.</response>
+        [HttpPatch("{id:guid}")]
         [Authorize]
-        public async Task<IActionResult> CreateSingleNest([FromForm] CreateNestRequest nestDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
-            if (currentUser == null)
-            {
-                return Unauthorized(ErrorMessages.UnauthorizedAction);
-            }
-
-            if ((await _context.Nests.FirstOrDefaultAsync(n => n.Title == nestDto.Title)) != null)
-            {
-                return Conflict(new { message = ErrorMessages.NestTitleConflict });
-            }
-
-            Nest newNest = new Nest
-            {
-                Id = Guid.NewGuid(),
-                Title = nestDto.Title,
-                Description = nestDto.Description ?? "",
-                DisplayName = nestDto.DisplayName ?? nestDto.Title,
-                CreatedAt = DateTime.UtcNow,
-                Moderator = currentUser,
-                ModeratorId = currentUser.Id,
-            };
-            string iconPath = "/content/assets/defaults/nest_256.png";
-            try
-            {
-
-                if (nestDto.Icon != null)
-                {
-                    var nestFolder = Path.Combine("wwwroot/content/uploads/nests", newNest.Id.ToString().ToLower().Replace("-", "_"));
-                    var temp = await FileUploadHelper.SaveFile(nestDto.Icon, nestFolder, "icon");
-                    if (!string.IsNullOrEmpty(temp))
-                    {
-                        iconPath = temp;
-                    }
-                }
-                newNest.Icon = iconPath;
-
-                _context.Nests.Add(newNest);
-                await _context.SaveChangesAsync();
-                return Ok(new { message = SuccessMessages.NestCreated, nest = NestResponse.FromNest(newNest, currentUser.IsAdmin) });
-            }
-            catch (InvalidDataException idx)
-            {
-                _logger.LogWarning("Failed to create nest. User Error. Errors: {@Errors}", idx.Message);
-                return BadRequest(new { message = idx.Message });
-            }
-            catch (Exception ex)
-            {
-                if (iconPath != "/content/assets/defaults/nest_256.png")
-                {
-                    FileUploadHelper.DeleteFile(iconPath);
-                }
-                _logger.LogCritical("Failed to create nest. Errors: {@Errors}", ex.Message);
-                return StatusCode(500, new { message = ErrorMessages.InternalServerError });
-            }
-
-        }
-
-        [HttpPut("{id:guid}")]
-        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<NestResponse>))]
+        [ProducesErrorResponseType(typeof(ErrorResponse))]
         public async Task<IActionResult> UpdateNest(Guid id, [FromForm] UpdateNestRequest newNest)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ErrorResponse.CreateFromModelState(ModelState));
             }
 
             var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             if (currentUser == null)
             {
-                return Unauthorized(ErrorMessages.UnauthorizedAction);
+                return Unauthorized(ErrorResponse.Create(ErrorMessages.UnauthorizedAction));
             }
 
             var nest = await _context.Nests.Include(n => n.Moderator).FirstOrDefaultAsync(n => n.Id == id);
             if (nest == null)
             {
-                return NotFound(ErrorMessages.NestNotFound);
+                return NotFound(ErrorResponse.Create(ErrorMessages.NestNotFound));
             }
 
             if (currentUser.Id != nest.ModeratorId && !currentUser.IsAdmin)
             {
-                return Forbid(ErrorMessages.ForbiddenAction);
+                return StatusCode(403, ErrorResponse.Create(ErrorMessages.ForbiddenAction));
             }
 
             nest.Description = newNest.Description ?? nest.Description;
@@ -279,7 +368,6 @@ namespace TopicalBirdAPI.Controllers
             string originalPath = nest.Icon;
             try
             {
-
                 if (newNest.Icon != null)
                 {
                     var nestFolder = Path.Combine("wwwroot/content/uploads/nests", nest.Id.ToString().ToLower().Replace("-", "_"));
@@ -293,12 +381,13 @@ namespace TopicalBirdAPI.Controllers
 
                 _context.Nests.Update(nest);
                 await _context.SaveChangesAsync();
-                return Ok(new { message = SuccessMessages.NestUpdated, nest = NestResponse.FromNest(nest, currentUser.IsAdmin) });
+                _logger.Info($"Updated nest: {nest.Id} by {currentUser.Id}");
+                return Ok(SuccessResponse<NestResponse>.Create(SuccessMessages.NestUpdated, NestResponse.FromNest(nest, currentUser.IsAdmin)));
             }
             catch (InvalidDataException idx)
             {
-                _logger.LogWarning("Failed to create nest. Errors: {@Errors}", idx.Message);
-                return BadRequest(new { message = idx.Message });
+                string refCode = await _logger.Error("Failed to create nest.", idx);
+                return BadRequest(ErrorResponse.Create(ErrorMessages.InvalidRequest, idx.Message, refCode));
             }
             catch (Exception ex)
             {
@@ -306,9 +395,10 @@ namespace TopicalBirdAPI.Controllers
                 {
                     FileUploadHelper.DeleteFile(iconPath);
                 }
-                _logger.LogCritical("Failed to create nest. Errors: {@Errors}", ex.Message);
-                return StatusCode(500, new { message = ErrorMessages.InternalServerError });
+                string refCode = await _logger.Crit("Failed to create nest.", ex);
+                return StatusCode(500, ErrorResponse.Create(ErrorMessages.InternalServerError, null, refCode));
             }
         }
+        #endregion
     }
 }
