@@ -10,9 +10,6 @@ namespace TopicalBirdAPI.Models
         [Column("id")]
         public Guid Id { get; set; }
 
-        [Column("is_upvote")]
-        public bool IsUpvote { get; set; } = false;
-
         [ForeignKey("Post")]
         [Column("post_id")]
         public Guid PostId { get; set; }
@@ -29,5 +26,8 @@ namespace TopicalBirdAPI.Models
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
     }
 }

@@ -324,6 +324,36 @@
             Admin only endpoint.
             </remarks>
         </member>
+        <member name="T:TopicalBirdAPI.Controllers.VoteController">
+            <summary>
+            Controls votes
+            </summary>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.VoteController.#ctor(TopicalBirdAPI.Data.AppDbContext,Microsoft.AspNetCore.Identity.UserManager{TopicalBirdAPI.Models.Users},TopicalBirdAPI.Helpers.LoggingHelper)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.VoteController.CastVote(System.Guid,TopicalBirdAPI.Data.DTO.VoteDTO.CreateVoteRequest)">
+            <summary>
+            Casts a vote
+            </summary>
+            <param name="postId">Post that is getting the vote</param>
+            <param name="dto">Helper class for getting value from client</param>
+            <response code="200">Returns vote info. If delete, returns null.</response>
+            <response code="400">If provided data is invalid.</response>
+            <response code="401">If user is not logged in.</response>
+            <response code="404">If post is not found.</response>
+            <response code="409">If vote has not changed.</response>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.VoteController.GetScore(System.Guid)">
+            <summary>
+            Gets vote score of a post
+            </summary>
+            <param name="postId">Id of post to check vote of</param>
+            <response code="200">Returns the score of post,</response>
+            <response code="404">If post is not found</response>
+        </member>
         <member name="T:TopicalBirdAPI.Data.API.ConflictResponse">
             <summary>
             Represents an API response structure used to indicate a 409 Conflict error.
@@ -586,6 +616,16 @@
             </summary>
             <example>photo.png</example>
         </member>
+        <member name="T:TopicalBirdAPI.Data.DTO.VoteDTO.CreateVoteRequest">
+            <summary>
+            Helper function for creating vote
+            </summary>
+        </member>
+        <member name="P:TopicalBirdAPI.Data.DTO.VoteDTO.CreateVoteRequest.VoteValue">
+            <summary>
+            Score given. -1 for downvote, +1 for upvote, 0 to remove vote
+            </summary>
+        </member>
         <member name="T:TopicalBirdAPI.Migrations.InitIdentity">
             <inheritdoc />
         </member>
@@ -704,6 +744,18 @@
             <inheritdoc />
         </member>
         <member name="M:TopicalBirdAPI.Migrations.NewRegister.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:TopicalBirdAPI.Migrations.PostVoteUpdate">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.PostVoteUpdate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.PostVoteUpdate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.PostVoteUpdate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>

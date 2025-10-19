@@ -8,6 +8,7 @@ using TopicalBirdAPI.Data;
 using TopicalBirdAPI.Helpers;
 using TopicalBirdAPI.Models;
 using Scalar.AspNetCore;
+using Microsoft.Extensions.Logging.Configuration;
 
 namespace TopicalBirdAPI
 {
@@ -67,9 +68,7 @@ namespace TopicalBirdAPI
                 .AddApiEndpoints();
 
             // Logging
-            builder.Logging.ClearProviders();
-            builder.Logging.AddConsole();
-            builder.Logging.AddDebug();
+            builder.Logging.ClearProviders().AddConsole().AddDebug();
             builder.Services.AddSingleton<LoggingHelper>(); // CustomLogger
 
             var app = builder.Build();
@@ -81,11 +80,11 @@ namespace TopicalBirdAPI
                 app.UseSwaggerUI(options =>
                 {
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-                    options.RoutePrefix = string.Empty;
+                    options.RoutePrefix = "swagger";
                     options.InjectStylesheet("/css/swagger-custom.css");
                 });
                 app.MapSwagger("/openapi/{documentName}.json");
-                app.MapScalarApiReference("/docs", o =>
+                app.MapScalarApiReference("/", o =>
                 {
                     o.WithTitle("Topicalbird API Documentation");
                     o.WithTheme(ScalarTheme.BluePlanet);
@@ -93,6 +92,7 @@ namespace TopicalBirdAPI
                     o.SortOperationsByMethod();
                     o.SortTagsAlphabetically();
                     o.DefaultHttpClient = new KeyValuePair<ScalarTarget, ScalarClient> (ScalarTarget.CSharp, ScalarClient.HttpClient);
+                    o.Favicon = "/content/assets/defaults/api_logo.svg";
 
                 });
                 app.ApplyMigrations();

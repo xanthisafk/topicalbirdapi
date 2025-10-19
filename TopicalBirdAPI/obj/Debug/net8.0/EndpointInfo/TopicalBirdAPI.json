@@ -1969,6 +1969,121 @@
           }
         }
       }
+    },
+    "/api/{controller}/{postId}": {
+      "post": {
+        "tags": [
+          "Vote"
+        ],
+        "summary": "Casts a vote",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "Post that is getting the vote",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "controller",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Helper class for getting value from client",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVoteRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVoteRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVoteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns vote info. If delete, returns null.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoteResponseSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "If provided data is invalid."
+          },
+          "401": {
+            "description": "If user is not logged in."
+          },
+          "404": {
+            "description": "If post is not found."
+          },
+          "409": {
+            "description": "If vote has not changed."
+          }
+        }
+      }
+    },
+    "/api/{controller}/{postId}/score": {
+      "get": {
+        "tags": [
+          "Vote"
+        ],
+        "summary": "Gets vote score of a post",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "Id of post to check vote of",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "controller",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the score of post,",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectSuccessResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "If post is not found"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2094,6 +2209,23 @@
         },
         "additionalProperties": false,
         "description": "Represents an API response structure used to indicate a 409 Conflict error.\r\nIt provides details about the resource or variable that caused the conflict."
+      },
+      "CreateVoteRequest": {
+        "required": [
+          "voteValue"
+        ],
+        "type": "object",
+        "properties": {
+          "voteValue": {
+            "maxLength": 1,
+            "minLength": -1,
+            "type": "integer",
+            "description": "Score given. -1 for downvote, +1 for upvote, 0 to remove vote",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Helper function for creating vote"
       },
       "ErrorResponse": {
         "type": "object",
@@ -2411,6 +2543,38 @@
           },
           "content": {
             "$ref": "#/components/schemas/UserResponse"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a successful API response, optionally containing data of a specified type.\r\nThis structure is commonly used for consistent response formatting."
+      },
+      "VoteResponse": {
+        "type": "object",
+        "properties": {
+          "voteValue": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "post": {
+            "$ref": "#/components/schemas/PostResponse"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserResponse"
+          }
+        },
+        "additionalProperties": false
+      },
+      "VoteResponseSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A descriptive message about the success of the operation.",
+            "nullable": true,
+            "example": "Operation completed successfully."
+          },
+          "content": {
+            "$ref": "#/components/schemas/VoteResponse"
           }
         },
         "additionalProperties": false,
