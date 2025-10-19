@@ -29,17 +29,17 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installation
 
-1.  Clone the repository"
+1.  Clone the repository:
     ```bash
     git clone https://github.com/YourUsername/TopicalBirdAPI.git
     cd TopicalBirdAPI
     ```
 	
-2.  Update Database Connection""
+2.  Update Database Connection:
     Configure your connection string in `appsettings.json`.
 	Configure EF core in `program.cs` if you are using anything other than PostgreSQL.
 	
-3.  Apply Migrations and Run"
+3.  Apply Migrations and Run:
     ```bash
     dotnet ef database update
     dotnet run
