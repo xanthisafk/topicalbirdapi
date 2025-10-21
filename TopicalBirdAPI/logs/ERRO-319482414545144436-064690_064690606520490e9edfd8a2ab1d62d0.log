@@ -1,0 +1,11 @@
+---- DETAILED ERROR LOG ----
+TraceID: 06469060-6520-490e-9edf-d8a2ab1d62d0
+RefID: ERRO-319482414545144436-064690
+Date: 2025-10-19T15:01:49.0357477+05:30
+User Message: Unable to create a new user.
+--- Identity Errors ---
+- Code: PasswordRequiresNonAlphanumeric, Description: Passwords must have at least one non alphanumeric character.
+- Code: PasswordRequiresDigit, Description: Passwords must have at least one digit ('0'-'9').
+- Code: PasswordRequiresUpper, Description: Passwords must have at least one uppercase ('A'-'Z').
+----------------------------
+No exception object provided. Logging only the user message.

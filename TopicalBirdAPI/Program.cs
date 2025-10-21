@@ -40,7 +40,14 @@ namespace TopicalBirdAPI
             // Allow CORS
             builder.Services.AddCors(o => o.AddPolicy("MyCorsPolicy", corsBuilder =>
             {
-                corsBuilder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                corsBuilder.WithOrigins(
+                    "http://localhost:3000",
+                    "http://localhost:8888",
+                    "http://localhost:5173",
+                    "http://0.0.0.0:3000",
+                    "http://0.0.0.0:8888",
+                    "http://0.0.0.0:5173"
+                    ).AllowAnyHeader().AllowAnyMethod();
             }));
 
             // Add services to the container.
@@ -71,30 +78,34 @@ namespace TopicalBirdAPI
             builder.Logging.ClearProviders().AddConsole().AddDebug();
             builder.Services.AddSingleton<LoggingHelper>(); // CustomLogger
 
+            builder.Host.UseWindowsService();
+            builder.WebHost.UseUrls("http://0.0.0.0:9999");
+
             var app = builder.Build();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                options.RoutePrefix = "swagger";
+                options.InjectStylesheet("/css/swagger-custom.css");
+            });
+            app.MapSwagger("/openapi/{documentName}.json");
+            app.MapScalarApiReference("/", o =>
+            {
+                o.WithTitle("Topicalbird API Documentation");
+                o.WithTheme(ScalarTheme.BluePlanet);
+                o.HideModels = true;
+                o.SortOperationsByMethod();
+                o.SortTagsAlphabetically();
+                o.DefaultHttpClient = new KeyValuePair<ScalarTarget, ScalarClient>(ScalarTarget.CSharp, ScalarClient.HttpClient);
+                o.Favicon = "/content/assets/defaults/api_logo.svg";
+
+            });
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-                    options.RoutePrefix = "swagger";
-                    options.InjectStylesheet("/css/swagger-custom.css");
-                });
-                app.MapSwagger("/openapi/{documentName}.json");
-                app.MapScalarApiReference("/", o =>
-                {
-                    o.WithTitle("Topicalbird API Documentation");
-                    o.WithTheme(ScalarTheme.BluePlanet);
-                    o.HideModels = true;
-                    o.SortOperationsByMethod();
-                    o.SortTagsAlphabetically();
-                    o.DefaultHttpClient = new KeyValuePair<ScalarTarget, ScalarClient> (ScalarTarget.CSharp, ScalarClient.HttpClient);
-                    o.Favicon = "/content/assets/defaults/api_logo.svg";
-
-                });
                 app.ApplyMigrations();
             }
 

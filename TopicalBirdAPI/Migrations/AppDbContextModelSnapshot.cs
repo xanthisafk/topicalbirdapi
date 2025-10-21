@@ -271,6 +271,10 @@ namespace TopicalBirdAPI.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("post_id");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");

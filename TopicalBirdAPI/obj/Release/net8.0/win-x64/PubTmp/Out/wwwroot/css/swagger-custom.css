@@ -1,0 +1,16 @@
+﻿/* Hide the default SVG logo */
+.swagger-ui .topbar a.link svg {
+    display: none;
+}
+
+/* Set the new logo using a pseudo-element on the link */
+.swagger-ui .topbar a.link::before {
+    content: url('/content/assets/defaults/api_logo.svg');
+    display: block;
+    height: 64px;
+    width: 64px;
+    margin-left: 5px;
+    
+    background-size: contain;
+    background-repeat: no-repeat;
+}

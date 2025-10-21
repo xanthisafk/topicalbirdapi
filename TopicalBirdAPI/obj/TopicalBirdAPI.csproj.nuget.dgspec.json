@@ -71,6 +71,10 @@
               "target": "Package",
               "version": "[9.0.9, )"
             },
+            "Microsoft.Extensions.Hosting.WindowsServices": {
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
             "Npgsql": {
               "target": "Package",
               "version": "[9.0.3, )"

@@ -4,28 +4,47 @@
         <name>TopicalBirdAPI</name>
     </assembly>
     <members>
+        <member name="T:TopicalBirdAPI.Controllers.AuthController">
+            <summary>
+            controls authentication
+            </summary>
+        </member>
+        <member name="M:TopicalBirdAPI.Controllers.AuthController.#ctor(TopicalBirdAPI.Data.AppDbContext,Microsoft.AspNetCore.Identity.UserManager{TopicalBirdAPI.Models.Users},TopicalBirdAPI.Helpers.LoggingHelper,Microsoft.AspNetCore.Identity.SignInManager{TopicalBirdAPI.Models.Users})">
+            <summary>
+            Constructor
+            </summary>
+        </member>
         <member name="M:TopicalBirdAPI.Controllers.AuthController.RegisterToTopicalbird(TopicalBirdAPI.Data.DTO.UsersDTO.CreateUserRequest)">
             <summary>
             Register a new user
             </summary>
+            <response code="200">Returns the newly created user.</response>
+            <response code="400">If the data provided is not valid.</response>
+            <response code="403">If you are logged in.</response>
+            <response code="409">If username or email is already taken.</response>
+            <response code="500">If an unexpected error happens.</response>
         </member>
         <member name="M:TopicalBirdAPI.Controllers.AuthController.LogInToTopicalbird(TopicalBirdAPI.Data.DTO.AuthDTO.UserLoginRequest)">
             <summary>
             Login existing user
             </summary>
+            <response code="200">Logs the user in and sets the cookies.</response>
+            <response code="400">If the data provided is invalid.</response>
+            <response code="401">If email or password is incorrect.</response>
         </member>
         <member name="M:TopicalBirdAPI.Controllers.AuthController.LogOutFromTopicalbird">
             <summary>
             Logout current user
             </summary>
+            <response code="200">Confirms user has logged out.</response>
         </member>
         <member name="M:TopicalBirdAPI.Controllers.AuthController.ChangePassword(TopicalBirdAPI.Data.DTO.AuthDTO.ChangePasswordRequest)">
             <summary>
             Change password
             </summary>
-            <remarks>
-            This endpoint requires authentication.
-            </remarks>
+            <response code="200">Returns confirmation of password change</response>
+            <response code="400">If the data provided is invalid.</response>
+            <response code="401">If the user is not logged in.</response>
         </member>
         <member name="T:TopicalBirdAPI.Controllers.CommentsController">
             <summary>
@@ -756,6 +775,18 @@
             <inheritdoc />
         </member>
         <member name="M:TopicalBirdAPI.Migrations.PostVoteUpdate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:TopicalBirdAPI.Migrations.PostVoteUpdate2">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.PostVoteUpdate2.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.PostVoteUpdate2.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.PostVoteUpdate2.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>
