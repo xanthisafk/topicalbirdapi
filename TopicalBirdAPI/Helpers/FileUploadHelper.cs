@@ -16,7 +16,8 @@ namespace TopicalBirdAPI.Helpers
                 return string.Empty;
             }
 
-            if (file.Length > MAX_SIZE_BYTES) {
+            if (file.Length > MAX_SIZE_BYTES)
+            {
                 throw new InvalidDataException("File size too big");
             }
 

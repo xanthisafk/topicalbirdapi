@@ -5,9 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using TopicalBirdAPI.Data;
 using TopicalBirdAPI.Data.API;
 using TopicalBirdAPI.Data.Constants;
-using TopicalBirdAPI.Data.DTO.PaginationDTO;
 using TopicalBirdAPI.Data.DTO.PostDTO;
-using TopicalBirdAPI.Data.DTO.UsersDTO;
 using TopicalBirdAPI.Helpers;
 using TopicalBirdAPI.Models;
 
@@ -113,7 +111,7 @@ namespace TopicalBirdAPI.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                
+
                 await transaction.CommitAsync();
 
                 _logger.Info($"New post created. {post.Id}");
@@ -254,7 +252,7 @@ namespace TopicalBirdAPI.Controllers
                 .Include(p => p.MediaItems)
                 .Include(p => p.Votes)
                 .Include(p => p.Nest)
-                .Where(p => string.Equals(p.Author.Handle, userHandle, StringComparison.InvariantCultureIgnoreCase));
+                .Where(p => p.Author.Handle.ToLower() == userHandle.ToLower());
 
             var result = await PaginationHelper.PaginateAsync(
                 query,
@@ -288,7 +286,9 @@ namespace TopicalBirdAPI.Controllers
 
             if (!string.IsNullOrEmpty(nest))
             {
-                query = query.Where(p => string.Equals(p.Nest.Title, nest, StringComparison.InvariantCultureIgnoreCase)).OrderByDescending(p => p.CreatedAt);
+                var nestLower = nest.ToLower();
+                query = query.Where(p => p.Nest.Title.ToLower() == nestLower)
+                             .OrderByDescending(p => p.CreatedAt);
             }
 
             var result = await PaginationHelper.PaginateAsync(
@@ -323,8 +323,9 @@ namespace TopicalBirdAPI.Controllers
 
             if (!string.IsNullOrEmpty(nest))
             {
-                query = query.Where(p => string.Equals(p.Nest.Title, nest, StringComparison.InvariantCultureIgnoreCase))
-                    .OrderByDescending(p => p.Votes.Sum(v => v.VoteValue));
+                var nestLower = nest.ToLower();
+                query = query.Where(p => p.Nest.Title.ToLower() == nestLower)
+                             .OrderByDescending(p => p.Votes.Sum(v => v.VoteValue));
             }
 
             var result = await PaginationHelper.PaginateAsync(

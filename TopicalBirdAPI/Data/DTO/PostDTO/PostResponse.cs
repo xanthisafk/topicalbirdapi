@@ -15,10 +15,10 @@ namespace TopicalBirdAPI.Data.DTO.PostDTO
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public List<MediaResponse>? Photos { get; set; }
-        public int Votes {  get; set; }
+        public int Votes { get; set; }
         public int Comments { get; set; }
 
-        public  static PostResponse FromPost(Posts p)
+        public static PostResponse FromPost(Posts p)
         {
             int upvotes, downvotes;
             upvotes = p.Votes?.Where(v => v.VoteValue == 1).Count() ?? 0;

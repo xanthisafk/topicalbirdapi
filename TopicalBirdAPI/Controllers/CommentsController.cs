@@ -114,7 +114,7 @@ namespace TopicalBirdAPI.Controllers
                 .Select(c => CommentResponse.FromComment(c))
                 .ToListAsync();
 
-            return Ok(SuccessResponse<List<CommentResponse>>.Create("",comments));
+            return Ok(SuccessResponse<List<CommentResponse>>.Create("", comments));
         }
 
         #endregion
@@ -132,7 +132,7 @@ namespace TopicalBirdAPI.Controllers
         /// <response code="404">If comment was not found.</response>
         [HttpPatch("edit/{commentId:guid}")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(SuccessResponse<CommentResponse>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<CommentResponse>))]
         [ProducesErrorResponseType(typeof(ErrorResponse))]
         public async Task<IActionResult> UpdateCommentContent(Guid commentId, [FromForm] CreateCommentRequest commentDto)
         {

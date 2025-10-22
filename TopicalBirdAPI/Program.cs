@@ -1,14 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
 using System.Reflection;
 using System.Threading.RateLimiting;
 using TopicalBirdAPI.Data;
 using TopicalBirdAPI.Helpers;
 using TopicalBirdAPI.Models;
-using Scalar.AspNetCore;
-using Microsoft.Extensions.Logging.Configuration;
 
 namespace TopicalBirdAPI
 {
@@ -47,7 +45,10 @@ namespace TopicalBirdAPI
                     "http://0.0.0.0:3000",
                     "http://0.0.0.0:8888",
                     "http://0.0.0.0:5173"
-                    ).AllowAnyHeader().AllowAnyMethod();
+                    )
+                 .AllowAnyHeader()
+                 .AllowAnyMethod()
+                 .AllowCredentials();
             }));
 
             // Add services to the container.
@@ -98,7 +99,7 @@ namespace TopicalBirdAPI
                 o.HideModels = true;
                 o.SortOperationsByMethod();
                 o.SortTagsAlphabetically();
-                o.DefaultHttpClient = new KeyValuePair<ScalarTarget, ScalarClient>(ScalarTarget.CSharp, ScalarClient.HttpClient);
+                o.DefaultHttpClient = new KeyValuePair<ScalarTarget, ScalarClient>(ScalarTarget.JavaScript, ScalarClient.Axios);
                 o.Favicon = "/content/assets/defaults/api_logo.svg";
 
             });
@@ -110,7 +111,9 @@ namespace TopicalBirdAPI
             }
 
             app.UseHttpsRedirection();
+
             app.UseCors("MyCorsPolicy"); // apply the CORS policy
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

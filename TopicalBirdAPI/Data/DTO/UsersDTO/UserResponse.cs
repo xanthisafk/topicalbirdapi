@@ -6,7 +6,7 @@ namespace TopicalBirdAPI.Data.DTO.UsersDTO
     {
         public Guid Id { get; set; }
         public string DisplayName { get; set; }
-        public string Handle {  get; set; }
+        public string Handle { get; set; }
         public string Icon { get; set; }
         public DateTime? CreatedAt { get; set; }
         public string Email { get; set; }

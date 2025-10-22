@@ -1,5 +1,4 @@
-﻿using System; // Added 'using System;' for Guid and DateTime
-using TopicalBirdAPI.Data.DTO.UsersDTO;
+﻿using TopicalBirdAPI.Data.DTO.UsersDTO;
 using TopicalBirdAPI.Models;
 
 namespace TopicalBirdAPI.Data.DTO.CommentDTO

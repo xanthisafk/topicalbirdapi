@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TopicalBirdAPI.Data.DTO.UsersDTO
+﻿namespace TopicalBirdAPI.Data.DTO.UsersDTO
 {
     /// <summary>
     /// Represents the data required to update a user's profile.

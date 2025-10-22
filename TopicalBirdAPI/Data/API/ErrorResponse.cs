@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Linq; // Need to add System.Linq for Where and Select
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace TopicalBirdAPI.Data.API
 {

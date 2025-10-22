@@ -1,5 +1,4 @@
-﻿using TopicalBirdAPI.Data.DTO.PostDTO;
-using TopicalBirdAPI.Data.DTO.UsersDTO;
+﻿using TopicalBirdAPI.Data.DTO.UsersDTO;
 using TopicalBirdAPI.Models;
 
 namespace TopicalBirdAPI.Data.DTO.NestDTO

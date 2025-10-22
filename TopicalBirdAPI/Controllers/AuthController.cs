@@ -169,7 +169,7 @@ namespace TopicalBirdAPI.Controllers
                     // Sign the user in
                     await _signInManager.SignInAsync(user, isPersistent: dto.RememberMe);
                     _logger.Info($"User logged in: {user.Id}");
-                    return Ok(SuccessResponse<string>.Create(SuccessMessages.UserSignIn, null));
+                    return Ok(SuccessResponse<UserResponse>.Create(SuccessMessages.UserSignIn, UserResponse.FromUser(user, user.IsAdmin)));
                 }
             }
 
@@ -183,7 +183,7 @@ namespace TopicalBirdAPI.Controllers
         /// <response code="200">Confirms user has logged out.</response>
         [HttpPost("logout")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(SuccessResponse<string>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<string>))]
         public async Task<IActionResult> LogOutFromTopicalbird()
         {
             await _signInManager.SignOutAsync();

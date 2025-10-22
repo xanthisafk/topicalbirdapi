@@ -6,7 +6,7 @@ namespace TopicalBirdAPI.Data.DTO.NestDTO
     {
         [MaxLength(500)]
         public string? Description { get; set; }
-        
+
         [MaxLength(50)]
         public string? DisplayName { get; set; }
 

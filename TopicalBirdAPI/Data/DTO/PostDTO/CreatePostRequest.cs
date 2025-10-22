@@ -10,7 +10,7 @@ namespace TopicalBirdAPI.Data.DTO.PostDTO
 
         [Required(ErrorMessage = "Content is required.", AllowEmptyStrings = true)]
         public string Content { get; set; } = string.Empty;
-        
+
         [Required(ErrorMessage = "Nest name is required.")]
         public string NestTitle { get; set; }
 
@@ -20,7 +20,7 @@ namespace TopicalBirdAPI.Data.DTO.PostDTO
         public List<CreatePostMediaItem> MediaItems()
         {
             List<CreatePostMediaItem> items = [];
-            for (int i=0; i<Images.Count; i++)
+            for (int i = 0; i < Images.Count; i++)
             {
                 items.Add(new CreatePostMediaItem
                 {

@@ -1,6 +1,6 @@
 ﻿namespace TopicalBirdAPI.Data.Constants
 {
-    
+
     public static class ErrorMessages
     {
         // Auth

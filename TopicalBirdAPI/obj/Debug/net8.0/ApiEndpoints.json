@@ -1,68 +1,5 @@
 [
   {
-    "ContainingType": "TopicalBirdAPI.Controllers.VoteController",
-    "Method": "CastVote",
-    "RelativePath": "api/{controller}/{postId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "postId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "dto",
-        "Type": "TopicalBirdAPI.Data.DTO.VoteDTO.CreateVoteRequest",
-        "IsRequired": true
-      },
-      {
-        "Name": "controller",
-        "Type": "",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[TopicalBirdAPI.Data.DTO.VoteDTO.VoteResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "TopicalBirdAPI.Controllers.VoteController",
-    "Method": "GetScore",
-    "RelativePath": "api/{controller}/{postId}/score",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "postId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "controller",
-        "Type": "",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
     "ContainingType": "TopicalBirdAPI.Controllers.AuthController",
     "Method": "LogInToTopicalbird",
     "RelativePath": "api/Auth/login",
@@ -134,20 +71,6 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 400
-      },
-      {
-        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 401
-      },
-      {
         "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "application/json"
@@ -192,39 +115,11 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "TopicalBirdAPI.Data.API.ConflictResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 409
-      },
-      {
-        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 400
-      },
-      {
         "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "application/json"
         ],
         "StatusCode": 200
-      },
-      {
-        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 403
-      },
-      {
-        "Type": "TopicalBirdAPI.Data.API.ErrorResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 500
       }
     ]
   },
@@ -1343,6 +1238,59 @@
           "application/json"
         ],
         "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.VoteController",
+    "Method": "CastVote",
+    "RelativePath": "api/Vote/{postId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "postId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "TopicalBirdAPI.Data.DTO.VoteDTO.CreateVoteRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[TopicalBirdAPI.Data.DTO.VoteDTO.VoteResponse, TopicalBirdAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "TopicalBirdAPI.Controllers.VoteController",
+    "Method": "GetScore",
+    "RelativePath": "api/Vote/{postId}/score",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "postId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "TopicalBirdAPI.Data.API.SuccessResponse\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
       }
     ]
   }

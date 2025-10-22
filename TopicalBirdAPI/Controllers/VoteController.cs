@@ -16,7 +16,7 @@ namespace TopicalBirdAPI.Controllers
     /// Controls votes
     /// </summary>
     [ApiController]
-    [Route("api/{controller}")]
+    [Route("api/[controller]")]
     [Produces("application/json")]
     public class VoteController : Controller
     {

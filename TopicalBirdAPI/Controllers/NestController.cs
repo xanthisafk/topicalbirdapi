@@ -2,13 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using TopicalBirdAPI.Data;
 using TopicalBirdAPI.Data.API;
 using TopicalBirdAPI.Data.Constants;
 using TopicalBirdAPI.Data.DTO.NestDTO;
 using TopicalBirdAPI.Helpers;
-using TopicalBirdAPI.Migrations;
 using TopicalBirdAPI.Models;
 
 namespace TopicalBirdAPI.Controllers
@@ -180,7 +178,7 @@ namespace TopicalBirdAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<object>))]
         [ProducesErrorResponseType(typeof(ErrorResponse))]
         public async Task<IActionResult> SearchByQuery(string query, [FromQuery] int pageNo = 1, [FromQuery] int limit = 20)
-        {       
+        {
             string searchQuery = query.Trim().ToLower();
             if (string.IsNullOrWhiteSpace(searchQuery))
             {
@@ -225,8 +223,9 @@ namespace TopicalBirdAPI.Controllers
                 .ToListAsync();
 
             return Ok(
-            
-                SuccessResponse<object>.Create(null, new {
+
+                SuccessResponse<object>.Create(null, new
+                {
                     pagination = new
                     {
                         PageNumber = pageNo,

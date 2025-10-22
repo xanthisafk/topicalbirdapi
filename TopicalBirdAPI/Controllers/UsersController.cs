@@ -2,15 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.ComponentModel;
 using TopicalBirdAPI.Data;
 using TopicalBirdAPI.Data.API;
 using TopicalBirdAPI.Data.Constants;
-using TopicalBirdAPI.Data.DTO.AuthDTO;
 using TopicalBirdAPI.Data.DTO.UsersDTO;
 using TopicalBirdAPI.Helpers;
-using TopicalBirdAPI.Migrations;
 using TopicalBirdAPI.Models;
 
 namespace TopicalBirdAPI.Controllers

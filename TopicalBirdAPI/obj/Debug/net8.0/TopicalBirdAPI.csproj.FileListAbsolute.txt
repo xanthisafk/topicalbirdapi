@@ -320,3 +320,4 @@ F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\TopicalBi
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\TopicalBirdAPI.pdb
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\TopicalBirdAPI.genruntimeconfig.cache
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\ref\TopicalBirdAPI.dll
+F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
