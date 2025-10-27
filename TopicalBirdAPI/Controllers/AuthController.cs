@@ -25,18 +25,21 @@ namespace TopicalBirdAPI.Controllers
         private readonly UserManager<Users> _userManager;
         private readonly AppDbContext _context;
         private readonly LoggingHelper _logger;
+        public readonly IWebHostEnvironment _env;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AuthController(AppDbContext ctx, UserManager<Users> userManager, LoggingHelper logger, SignInManager<Users> signInManager)
+        public AuthController(AppDbContext ctx, UserManager<Users> userManager, LoggingHelper logger, SignInManager<Users> signInManager, IWebHostEnvironment env)
         {
             _userManager = userManager;
             _context = ctx;
             _logger = logger;
             _signInManager = signInManager;
+            _env = env;
         }
         #endregion
+
 
         #region CREATE Operations
 
@@ -182,7 +185,6 @@ namespace TopicalBirdAPI.Controllers
         /// </summary>
         /// <response code="200">Confirms user has logged out.</response>
         [HttpPost("logout")]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<string>))]
         public async Task<IActionResult> LogOutFromTopicalbird()
         {

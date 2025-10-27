@@ -10,3 +10,5 @@ wwwroot\content\uploads\users\0199c8ab_d573_7e0d_9e4b_034b5d00114a\icon_63896161
 wwwroot\content\uploads\users\0e156086_d586_45c4_8219_e66652dceb2c\icon_638960729108801927.webp
 wwwroot\content\uploads\users\30822df1_4151_4970_8895_cad24d18a565\icon_638962051321374111.webp
 wwwroot\css\swagger-custom.css
+wwwroot\content\uploads\users\052969ff_d30d_4130_b6fc_99e08a840a54\quantassential_638971217594738222.webp
+wwwroot\content\uploads\users\3f283d57_20e4_4adb_84c5_cdca4c8dbcee\quantassential_638971216815729605.webp

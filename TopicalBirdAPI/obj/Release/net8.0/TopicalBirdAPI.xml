@@ -9,7 +9,7 @@
             controls authentication
             </summary>
         </member>
-        <member name="M:TopicalBirdAPI.Controllers.AuthController.#ctor(TopicalBirdAPI.Data.AppDbContext,Microsoft.AspNetCore.Identity.UserManager{TopicalBirdAPI.Models.Users},TopicalBirdAPI.Helpers.LoggingHelper,Microsoft.AspNetCore.Identity.SignInManager{TopicalBirdAPI.Models.Users})">
+        <member name="M:TopicalBirdAPI.Controllers.AuthController.#ctor(TopicalBirdAPI.Data.AppDbContext,Microsoft.AspNetCore.Identity.UserManager{TopicalBirdAPI.Models.Users},TopicalBirdAPI.Helpers.LoggingHelper,Microsoft.AspNetCore.Identity.SignInManager{TopicalBirdAPI.Models.Users},Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
             Constructor
             </summary>
