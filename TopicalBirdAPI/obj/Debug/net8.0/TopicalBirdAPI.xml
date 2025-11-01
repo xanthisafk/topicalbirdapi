@@ -801,5 +801,29 @@
         <member name="M:TopicalBirdAPI.Migrations.UpdateTimeToUTCNow.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:TopicalBirdAPI.Migrations.ErrorAndWarningFixes">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.ErrorAndWarningFixes.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.ErrorAndWarningFixes.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.ErrorAndWarningFixes.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:TopicalBirdAPI.Migrations.CascadeUpdate">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.CascadeUpdate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.CascadeUpdate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.CascadeUpdate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

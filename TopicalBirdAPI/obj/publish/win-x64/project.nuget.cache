@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "I/UWbIAdH20=",
+  "dgSpecHash": "mONz7StkG4g=",
   "success": true,
   "projectFilePath": "F:\\Projects\\TopicalBird\\TopicalBirdAPI\\TopicalBirdAPI\\TopicalBirdAPI.csproj",
   "expectedPackageFiles": [
@@ -43,6 +43,9 @@
     "C:\\Users\\Xanthis\\.nuget\\packages\\microsoft.extensions.dependencymodel\\9.0.9\\microsoft.extensions.dependencymodel.9.0.9.nupkg.sha512",
     "C:\\Users\\Xanthis\\.nuget\\packages\\microsoft.extensions.diagnostics\\9.0.10\\microsoft.extensions.diagnostics.9.0.10.nupkg.sha512",
     "C:\\Users\\Xanthis\\.nuget\\packages\\microsoft.extensions.diagnostics.abstractions\\9.0.10\\microsoft.extensions.diagnostics.abstractions.9.0.10.nupkg.sha512",
+    "C:\\Users\\Xanthis\\.nuget\\packages\\microsoft.extensions.diagnostics.healthchecks\\8.0.21\\microsoft.extensions.diagnostics.healthchecks.8.0.21.nupkg.sha512",
+    "C:\\Users\\Xanthis\\.nuget\\packages\\microsoft.extensions.diagnostics.healthchecks.abstractions\\8.0.21\\microsoft.extensions.diagnostics.healthchecks.abstractions.8.0.21.nupkg.sha512",
+    "C:\\Users\\Xanthis\\.nuget\\packages\\microsoft.extensions.diagnostics.healthchecks.entityframeworkcore\\8.0.21\\microsoft.extensions.diagnostics.healthchecks.entityframeworkcore.8.0.21.nupkg.sha512",
     "C:\\Users\\Xanthis\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\9.0.10\\microsoft.extensions.fileproviders.abstractions.9.0.10.nupkg.sha512",
     "C:\\Users\\Xanthis\\.nuget\\packages\\microsoft.extensions.fileproviders.physical\\9.0.10\\microsoft.extensions.fileproviders.physical.9.0.10.nupkg.sha512",
     "C:\\Users\\Xanthis\\.nuget\\packages\\microsoft.extensions.filesystemglobbing\\9.0.10\\microsoft.extensions.filesystemglobbing.9.0.10.nupkg.sha512",

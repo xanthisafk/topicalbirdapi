@@ -169,3 +169,6 @@ F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Release\net8.0\win-x64
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Release\net8.0\win-x64\TopicalBirdAPI.pdb
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Release\net8.0\win-x64\TopicalBirdAPI.genruntimeconfig.cache
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Release\net8.0\win-x64\ref\TopicalBirdAPI.dll
+F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\bin\Release\net8.0\win-x64\Microsoft.Extensions.Diagnostics.HealthChecks.dll
+F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\bin\Release\net8.0\win-x64\Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll
+F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\bin\Release\net8.0\win-x64\Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll

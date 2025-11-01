@@ -485,7 +485,7 @@ namespace TopicalBirdAPI.Migrations
                     b.HasOne("TopicalBirdAPI.Models.Users", "Author")
                         .WithMany()
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("TopicalBirdAPI.Models.Posts", "Post")
                         .WithMany("Comments")
@@ -502,7 +502,7 @@ namespace TopicalBirdAPI.Migrations
                     b.HasOne("TopicalBirdAPI.Models.Posts", "Post")
                         .WithMany("MediaItems")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Post");
                 });
@@ -512,7 +512,7 @@ namespace TopicalBirdAPI.Migrations
                     b.HasOne("TopicalBirdAPI.Models.Users", "Moderator")
                         .WithMany("Nests")
                         .HasForeignKey("ModeratorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Moderator");

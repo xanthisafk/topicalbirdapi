@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using System.Reflection;
@@ -39,6 +41,14 @@ namespace TopicalBirdAPI
             // Database Context
             builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("PSQL")));
+
+            builder.Services.AddHealthChecks()
+                .AddCheck("api", () => HealthCheckResult.Healthy("API is healthy."))
+                .AddDbContextCheck<AppDbContext>(
+                    name: "database",
+                    failureStatus: HealthStatus.Unhealthy,
+                    tags: new[] { "database" }
+                );
 
             // Allow CORS
             builder.Services.AddCors(o => o.AddPolicy("MyCorsPolicy", corsBuilder =>
@@ -114,6 +124,11 @@ namespace TopicalBirdAPI
             {
                 app.ApplyMigrations();
             }
+
+            app.MapHealthChecks("/health", new HealthCheckOptions()
+            {
+                ResponseWriter = HealthCheckResponseWriter.Write
+            });
 
             app.UseHttpsRedirection();
 

@@ -321,3 +321,6 @@ F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\TopicalBi
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\TopicalBirdAPI.genruntimeconfig.cache
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\ref\TopicalBirdAPI.dll
 F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.HealthChecks.dll
+F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll
+F:\Projects\TopicalBird\TopicalBirdAPI\TopicalBirdAPI\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll

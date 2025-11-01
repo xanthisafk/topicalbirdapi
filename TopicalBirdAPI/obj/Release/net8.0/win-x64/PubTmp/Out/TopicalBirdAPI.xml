@@ -813,5 +813,17 @@
         <member name="M:TopicalBirdAPI.Migrations.ErrorAndWarningFixes.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:TopicalBirdAPI.Migrations.CascadeUpdate">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.CascadeUpdate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.CascadeUpdate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.CascadeUpdate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

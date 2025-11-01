@@ -46,7 +46,7 @@ namespace TopicalBirdAPI.Data
                 .HasOne(n => n.Moderator)
                 .WithMany(u => u.Nests)
                 .HasForeignKey(n => n.ModeratorId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.SetNull);
 
             // Comment -> Post
             builder.Entity<Comment>()
@@ -60,14 +60,14 @@ namespace TopicalBirdAPI.Data
                 .HasOne(c => c.Author)
                 .WithMany()
                 .HasForeignKey(c => c.AuthorId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.SetNull);
 
             // Media -> Post
             builder.Entity<Media>()
                 .HasOne(m => m.Post)
                 .WithMany(p => p.MediaItems)
                 .HasForeignKey(m => m.PostId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.SetNull); // to cleanup files on disk later
 
             // PostVote -> Post
             builder.Entity<PostVote>()
