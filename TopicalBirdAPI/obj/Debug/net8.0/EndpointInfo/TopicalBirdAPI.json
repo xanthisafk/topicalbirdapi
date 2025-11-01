@@ -2088,6 +2088,14 @@
           },
           "author": {
             "$ref": "#/components/schemas/UserResponse"
+          },
+          "isAdmin": {
+            "type": "boolean",
+            "description": "The commentor is admin of this app"
+          },
+          "isModerator": {
+            "type": "boolean",
+            "description": "The user is moderator of this site"
           }
         },
         "additionalProperties": false,

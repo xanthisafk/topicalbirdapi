@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TopicalBirdAPI.Data.Constants;
 
 namespace TopicalBirdAPI.Data.DTO.AuthDTO
 {
@@ -11,17 +12,17 @@ namespace TopicalBirdAPI.Data.DTO.AuthDTO
         /// The email address of the user. This is used as the primary identifier for login.
         /// </summary>
         /// <example>user.name@example.com</example>
-        [Required]
-        [EmailAddress] // Added for better validation/clarity in Swagger
-        public string Email { get; set; }
+        [Required(ErrorMessage = ErrorMessages.FieldRequired + "Email")]
+        [EmailAddress(ErrorMessage = ErrorMessages.UserMalformedEmail)]
+        public string Email { get; set; } = string.Empty;
 
         /// <summary>
         /// The user's password.
         /// </summary>
         /// <example>P@sswOrd123</example>
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
+        [Required(ErrorMessage = ErrorMessages.FieldRequired + "Password")]
+        [DataType(DataType.Password, ErrorMessage = ErrorMessages.UserMalformedPassword)]
+        public string Password { get; set; } = string.Empty;
 
         /// <summary>
         /// A flag indicating whether the system should remember the user's login session. Defaults to false.

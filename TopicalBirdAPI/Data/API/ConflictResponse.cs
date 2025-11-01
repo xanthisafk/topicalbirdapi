@@ -10,13 +10,13 @@
         /// The fully qualified type name of the variable or resource that is in conflict.
         /// </summary>
         /// <example>System.String</example>
-        public string Type { get; set; }
+        public string Type { get; set; } = string.Empty;
 
         /// <summary>
         /// The name of the variable, parameter, or property that caused the conflict.
         /// </summary>
         /// <example>Username</example>
-        public string Variable { get; set; }
+        public string Variable { get; set; } = string.Empty;
 
         /// <summary>
         /// A descriptive message detailing what may have caused the conflict.

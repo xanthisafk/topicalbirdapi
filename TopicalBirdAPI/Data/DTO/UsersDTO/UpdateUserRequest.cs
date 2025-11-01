@@ -1,4 +1,7 @@
-﻿namespace TopicalBirdAPI.Data.DTO.UsersDTO
+﻿using System.ComponentModel.DataAnnotations;
+using TopicalBirdAPI.Data.Constants;
+
+namespace TopicalBirdAPI.Data.DTO.UsersDTO
 {
     /// <summary>
     /// Represents the data required to update a user's profile.
@@ -9,6 +12,7 @@
         /// The new public display name for the user.
         /// </summary>
         /// <example>Shruti Thakur</example>
+        [MaxLength(100, ErrorMessage = ErrorMessages.DisplayNameTooLarge)]
         public string? DisplayName { get; set; }
 
         /// <summary>

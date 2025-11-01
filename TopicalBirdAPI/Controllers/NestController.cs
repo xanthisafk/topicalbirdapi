@@ -203,7 +203,7 @@ namespace TopicalBirdAPI.Controllers
             int skipCount = (pageNo - 1) * limit;
 
             var baseQuery = _context.Nests
-                .Where(n => n.Title.ToLower().Contains(searchQuery) || n.Description.ToLower().Contains(searchQuery));
+                .Where(n => n.Title.ToLower().Contains(searchQuery) || (n.Description != null && n.Description.ToLower().Contains(searchQuery)));
 
             int totalCount = await baseQuery.CountAsync();
             int totalPages = (int)Math.Ceiling(totalCount / (double)limit);
@@ -224,7 +224,7 @@ namespace TopicalBirdAPI.Controllers
 
             return Ok(
 
-                SuccessResponse<object>.Create(null, new
+                SuccessResponse<object?>.Create(null, new
                 {
                     pagination = new
                     {

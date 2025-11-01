@@ -22,9 +22,9 @@ namespace TopicalBirdAPI.Models
         public bool IsBanned { get; set; } = false;
 
         [Column("created_at")]
-        public DateTime? CreatedAt { get; set; } = DateTime.Now;
+        public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public ICollection<Posts> Posts { get; set; }
-        public ICollection<Nest> Nests { get; set; }
+        public ICollection<Posts>? Posts { get; set; }
+        public ICollection<Nest>? Nests { get; set; }
     }
 }

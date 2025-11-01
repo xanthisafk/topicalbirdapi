@@ -21,7 +21,11 @@ namespace TopicalBirdAPI
             {
                 options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
                     RateLimitPartition.GetFixedWindowLimiter(
-                        partitionKey: httpContext.User.Identity?.Name ?? httpContext.Connection.RemoteIpAddress.ToString() ?? httpContext.Request.Headers.Host.ToString(),
+                        partitionKey:
+                            httpContext.User.Identity?.Name
+                            ?? httpContext.Connection.RemoteIpAddress?.ToString()
+                            ?? httpContext.Request.Headers.Host.ToString()
+                            ?? "unknown",
                         factory: partition => new FixedWindowRateLimiterOptions
                         {
                             AutoReplenishment = true,
@@ -30,6 +34,7 @@ namespace TopicalBirdAPI
                             Window = TimeSpan.FromMinutes(1)
                         }));
             });
+
 
             // Database Context
             builder.Services.AddDbContext<AppDbContext>(options =>
@@ -123,7 +128,7 @@ namespace TopicalBirdAPI
             app.UseStaticFiles();
 
             // Use Identity for User management
-            // app.MapIdentityApi<Users>();
+            // app.MapIdentityApi<Users>(); // Now using custom controller
 
 
             app.Run();

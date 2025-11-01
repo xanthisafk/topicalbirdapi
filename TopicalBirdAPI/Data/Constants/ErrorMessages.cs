@@ -1,7 +1,9 @@
 ﻿namespace TopicalBirdAPI.Data.Constants
 {
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public static class ErrorMessages
+
     {
         // Auth
         public const string UnauthorizedAction = "You need to be logged in to perform this action.";
@@ -9,21 +11,33 @@
         public const string ForbiddenAction = "You do not have permission to perform this action.";
         public const string InvalidCredentials = "Email or password was incorrect.";
         public const string InvalidPassword = "Given password is invalid.";
-        public const string UserMalformedPassword = "Password must be at least 8 characters long, contain a mix of uppercase and lowercase letters, at least one number, and at least one special symbol.";
+        public const string UserMalformedPassword = "Password must be at least 8 characters long, include one uppercase letter, one number, and one special character.";
+        public const string UserMalformedEmail = "Given email is not valid.";
+        public const string HandleTooLarge = "Username can only be 50 characters long.";
+        public const string DisplayNameTooLarge = "Display Name can only be 100 characters long.";
+
 
         // Comments
         public const string CommentNotFound = "Comment not found.";
         public const string CommentEmpty = "Comment cannot be empty.";
         public const string CommentPostMismatch = "Post ID in route does not match Post ID in body.";
+        public const string CommentTooLong = "Comment can't be larger than 10,000 characters.";
 
         // Posts
         public const string PostNotFound = "Post with given id not found.";
         public const string PostDeleted = "Post has been deleted.";
+        public const string PostTitleTooSmall = "Post title must be atleast 3 characters long.";
+        public const string PostTitleTooBig = "Post title can only be 500 characters long.";
+        public const string PostContentTooBig = "Post content can only be 10,000 characters long.";
 
         // Nests
         public const string NestNotFound = "Nest not found.";
         public const string NestTitleRequired = "Nest title is required.";
         public const string NestTitleConflict = "A nest with this title already exists.";
+        public const string NestTitleTooSmall = "Title must be atleast 3 characters long.";
+        public const string NestTitleTooBig = "Title can only be 50 characters long.";
+        public const string NestDescriptionTooLong = "Description can only be 500 characters long.";
+        
 
         // Users
         public const string UserNotFound = "User not found.";
@@ -58,6 +72,7 @@
 
 
         // General
+        public const string FieldRequired = "This field is required: ";
         public const string InvalidRequest = "Invalid request data.";
         public const string InternalServerError = "An unexpected error occurred. Please try again later.";
         public const string ResourceConflict = "The request conflicts with existing resource.";

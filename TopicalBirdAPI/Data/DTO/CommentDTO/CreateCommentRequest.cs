@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TopicalBirdAPI.Data.Constants;
 
 namespace TopicalBirdAPI.Data.DTO.CommentDTO
 {
@@ -10,7 +11,9 @@ namespace TopicalBirdAPI.Data.DTO.CommentDTO
         /// <summary>
         /// Content of comment. Min length: 1, Max len: 10,000.
         /// </summary>
-        [Required, MinLength(1), MaxLength(10000)]
-        public string Content { get; set; }
+        [Required(ErrorMessage = ErrorMessages.FieldRequired + "Content")]
+        [MinLength(1, ErrorMessage = ErrorMessages.CommentEmpty)]
+        [MaxLength(10000, ErrorMessage = ErrorMessages.CommentTooLong)]
+        public string Content { get; set; } = string.Empty;
     }
 }

@@ -494,12 +494,6 @@
             </summary>
             <example>NewP@ssw0rd456</example>
         </member>
-        <member name="P:TopicalBirdAPI.Data.DTO.AuthDTO.ChangePasswordRequest.ConfirmNewPassword">
-            <summary>
-            A confirmation of the new password, which must match the value in the <see cref="P:TopicalBirdAPI.Data.DTO.AuthDTO.ChangePasswordRequest.NewPassword"/> field.
-            </summary>
-            <example>NewP@ssw0rd456</example>
-        </member>
         <member name="T:TopicalBirdAPI.Data.DTO.AuthDTO.UserLoginRequest">
             <summary>
             Helper class used to submit user credentials for login authentication.
@@ -551,11 +545,17 @@
             The author of the comment, represented by a <see cref="T:TopicalBirdAPI.Data.DTO.UsersDTO.UserResponse"/> DTO.
             </summary>
         </member>
-        <member name="M:TopicalBirdAPI.Data.DTO.CommentDTO.CommentResponse.FromComment(TopicalBirdAPI.Models.Comment)">
+        <member name="P:TopicalBirdAPI.Data.DTO.CommentDTO.CommentResponse.Role">
+            <summary>
+            The commentor is admin of this app, moderator of nest or a regular user
+            </summary>
+        </member>
+        <member name="M:TopicalBirdAPI.Data.DTO.CommentDTO.CommentResponse.FromComment(TopicalBirdAPI.Models.Comment,TopicalBirdAPI.Models.Nest)">
             <summary>
             Creates a <see cref="T:TopicalBirdAPI.Data.DTO.CommentDTO.CommentResponse"/> DTO from a <see cref="T:TopicalBirdAPI.Models.Comment"/> model.
             </summary>
             <param name="cmt">The Comment model object to convert.</param>
+            <param name="nest">The nest in which the post exists</param>
             <returns>A fully populated <see cref="T:TopicalBirdAPI.Data.DTO.CommentDTO.CommentResponse"/> instance.</returns>
         </member>
         <member name="T:TopicalBirdAPI.Data.DTO.CommentDTO.CreateCommentRequest">
@@ -787,6 +787,18 @@
             <inheritdoc />
         </member>
         <member name="M:TopicalBirdAPI.Migrations.PostVoteUpdate2.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:TopicalBirdAPI.Migrations.UpdateTimeToUTCNow">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.UpdateTimeToUTCNow.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.UpdateTimeToUTCNow.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TopicalBirdAPI.Migrations.UpdateTimeToUTCNow.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
     </members>

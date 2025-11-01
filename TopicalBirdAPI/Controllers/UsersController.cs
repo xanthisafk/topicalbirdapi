@@ -180,7 +180,7 @@ namespace TopicalBirdAPI.Controllers
 
             // Search for users
             var users = await _context.Users
-                .Where(u => u.Handle.Contains(query) || u.DisplayName.Contains(query))
+                .Where(u => u.Handle.Contains(query) || (u.DisplayName != null && u.DisplayName.Contains(query)))
                 .Select(u => UserResponse.FromUser(u, admin))
                 .ToListAsync();
 

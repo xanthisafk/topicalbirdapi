@@ -21,10 +21,10 @@ namespace TopicalBirdAPI.Models
         public Users? Author { get; set; }
 
         [Column("content")]
-        public string Content { get; set; }
+        public string Content { get; set; } = string.Empty;
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Column("is_deleted")]
         public bool IsDeleted { get; set; }

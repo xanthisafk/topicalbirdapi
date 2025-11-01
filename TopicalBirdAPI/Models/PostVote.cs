@@ -13,12 +13,12 @@ namespace TopicalBirdAPI.Models
         [ForeignKey("Post")]
         [Column("post_id")]
         public Guid PostId { get; set; }
-        public Posts Post { get; set; }
+        public Posts? Post { get; set; }
 
         [ForeignKey("User")]
         [Column("user_id")]
         public Guid UserId { get; set; }
-        public Users User { get; set; }
+        public Users? User { get; set; }
 
         // +1 for upvote, -1 for downvote
         [Column("vote_value")]

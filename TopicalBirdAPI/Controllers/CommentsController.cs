@@ -58,7 +58,7 @@ namespace TopicalBirdAPI.Controllers
             var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             if (currentUser == null) return Unauthorized(ErrorResponse.Create(ErrorMessages.UnauthorizedAction));
 
-            var post = await _context.Posts.FindAsync(postId);
+            var post = await _context.Posts.Include(p => p.Nest).FirstOrDefaultAsync(p => p.Id == postId);
             if (post == null)
             {
                 return NotFound(ErrorResponse.Create(ErrorMessages.PostNotFound));
@@ -83,7 +83,7 @@ namespace TopicalBirdAPI.Controllers
             _logger.Info($"Created a new comment: {cmt.Id}, Post: {cmt.PostId}");
             await _context.Entry(cmt).Reference(c => c.Author).LoadAsync();
 
-            var response = CommentResponse.FromComment(cmt);
+            var response = CommentResponse.FromComment(cmt, post.Nest);
             return Ok(SuccessResponse<CommentResponse>.Create(SuccessMessages.CommentCreated, response));
         }
         #endregion
@@ -102,8 +102,8 @@ namespace TopicalBirdAPI.Controllers
         [ProducesErrorResponseType(typeof(ErrorResponse))]
         public async Task<IActionResult> GetAllCommentsOfPostById(Guid postId)
         {
-            var postExists = await _context.Posts.AnyAsync(p => p.Id == postId);
-            if (!postExists)
+            var post = await _context.Posts.Include(p => p.Nest).FirstOrDefaultAsync(p => p.Id == postId);
+            if (post == null)
             {
                 return NotFound(ErrorResponse.Create(ErrorMessages.PostNotFound));
             }
@@ -111,7 +111,7 @@ namespace TopicalBirdAPI.Controllers
             var comments = await _context.Comments
                 .Where(c => c.PostId == postId && !c.IsDeleted)
                 .Include(c => c.Author)
-                .Select(c => CommentResponse.FromComment(c))
+                .Select(c => CommentResponse.FromComment(c, post.Nest))
                 .ToListAsync();
 
             return Ok(SuccessResponse<List<CommentResponse>>.Create("", comments));
@@ -155,15 +155,26 @@ namespace TopicalBirdAPI.Controllers
             {
                 return StatusCode(403, ErrorResponse.Create(ErrorMessages.ForbiddenAction));
             }
+            var post = await _context.Posts.Include(p => p.Nest).FirstOrDefaultAsync(p => p.Id == cmt.PostId);
+            if (post == null)
+            {
+                var code = await _logger.Error("Post not found, but comment exists", null);
+                return StatusCode(500, ErrorResponse.Create(ErrorMessages.InternalServerError, null, code));
+            }
 
-            cmt.Content = commentDto.Content;
+                cmt.Content = commentDto.Content;
             _context.Comments.Update(cmt);
             await _context.SaveChangesAsync();
 
             _logger.Info("Updated comment: {cmt.Id}, author: {cmt.AuthorId} by user: {currentUser.Id}.");
 
+            
+
             await _context.Entry(cmt).Reference(c => c.Author).LoadAsync();
-            var response = CommentResponse.FromComment(cmt);
+            await _context.Entry(cmt).Reference(c => c.Post).LoadAsync();
+
+
+            var response = CommentResponse.FromComment(cmt, post.Nest);
             return Ok(SuccessResponse<CommentResponse>.Create(SuccessMessages.CommentCreated, response));
         }
         #endregion

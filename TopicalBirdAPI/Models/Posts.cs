@@ -12,11 +12,11 @@ namespace TopicalBirdAPI.Models
 
         [Required]
         [Column("title")]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         [Required]
         [Column("content")]
-        public string Content { get; set; }
+        public string Content { get; set; } = string.Empty;
 
         [ForeignKey("Author")]
         [Column("author_id")]

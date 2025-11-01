@@ -11,7 +11,7 @@
         /// A descriptive message about the success of the operation.
         /// </summary>
         /// <example>Operation completed successfully.</example>
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         /// <summary>
         /// The payload or data content returned by the successful operation. This can be null.
@@ -24,7 +24,7 @@
         /// <param name="message">The message to include in the response.</param>
         /// <param name="Content">The content (data payload) to include in the response.</param>
         /// <returns>A new <see cref="SuccessResponse{T}"/> instance.</returns>
-        public static SuccessResponse<T> Create(string message, T? Content)
+        public static SuccessResponse<T> Create(string? message, T? Content)
         {
             return new SuccessResponse<T> { Message = message, Content = Content };
         }

@@ -2,7 +2,7 @@
 {
     public class PagedResult<T>
     {
-        public PaginationMetadata Pagination { get; set; }
-        public IEnumerable<T> Items { get; set; }
+        public PaginationMetadata? Pagination { get; set; }
+        public IEnumerable<T>? Items { get; set; }
     }
 }

@@ -8,11 +8,11 @@ namespace TopicalBirdAPI.Data.DTO.PostDTO
     public class PostResponse
     {
         public Guid Id { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
-        public UserResponse Author { get; set; }
-        public NestResponse Nest { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
+        public UserResponse? Author { get; set; }
+        public NestResponse? Nest { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.MinValue;
         public DateTime? UpdatedAt { get; set; }
         public List<MediaResponse>? Photos { get; set; }
         public int Votes { get; set; }
@@ -25,6 +25,11 @@ namespace TopicalBirdAPI.Data.DTO.PostDTO
             downvotes = p.Votes?.Where(v => v.VoteValue == -1).Count() ?? 0;
             var photos = p.MediaItems?.Select(MediaResponse.FromMedia).ToList();
 
+            ArgumentNullException.ThrowIfNull(p.Author, nameof(p.Author));
+            ArgumentNullException.ThrowIfNull(p.Nest, nameof(p.Nest));
+            ArgumentNullException.ThrowIfNull(p.Comments, nameof(p.Comments));
+
+
             return new PostResponse
             {
                 Id = p.Id,
@@ -36,7 +41,7 @@ namespace TopicalBirdAPI.Data.DTO.PostDTO
                 UpdatedAt = p.UpdatedAt,
                 Photos = photos,
                 Votes = upvotes - downvotes,
-                Comments = p.Comments.Count()
+                Comments = p.Comments.Count
             };
         }
     }

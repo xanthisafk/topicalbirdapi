@@ -12,7 +12,7 @@ namespace TopicalBirdAPI.Data.API
         /// A brief, high-level summary of the error.
         /// </summary>
         /// <example>Validation Failed</example>
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
 
         /// <summary>
         /// General description or additional details for the error.

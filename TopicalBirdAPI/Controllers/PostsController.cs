@@ -98,7 +98,8 @@ namespace TopicalBirdAPI.Controllers
                     for (int i = 0; i < media.Count; i++)
                     {
                         var item = media[i];
-                        string mediaPath = await FileUploadHelper.SaveFile(media[i].Image, postsFolder, $"{postGuid}_{i}");
+                        ArgumentNullException.ThrowIfNull(item.Image);
+                        string mediaPath = await FileUploadHelper.SaveFile(item.Image, postsFolder, $"{postGuid}_{i}");
                         mediaItems.Add(new Media
                         {
                             PostId = post.Id,
@@ -194,7 +195,7 @@ namespace TopicalBirdAPI.Controllers
                 .Include(p => p.MediaItems)
                 .Include(p => p.Votes)
                 .Include(p => p.Nest)
-                .Where(p => p.Nest.Title == nestTitle);
+                .Where(p => p.Nest != null && p.Nest.Title == nestTitle);
 
             var result = await PaginationHelper.PaginateAsync(
                 query,
@@ -223,7 +224,7 @@ namespace TopicalBirdAPI.Controllers
                 .Include(p => p.MediaItems)
                 .Include(p => p.Votes)
                 .Include(p => p.Nest)
-                .Where(p => p.Author.Id == userId);
+                .Where(p => p.Author != null && p.Author.Id == userId);
 
             var result = await PaginationHelper.PaginateAsync(
                 query,
@@ -252,7 +253,7 @@ namespace TopicalBirdAPI.Controllers
                 .Include(p => p.MediaItems)
                 .Include(p => p.Votes)
                 .Include(p => p.Nest)
-                .Where(p => p.Author.Handle.ToLower() == userHandle.ToLower());
+                .Where(p => p.Author != null && p.Author.Handle.ToLower() == userHandle.ToLower());
 
             var result = await PaginationHelper.PaginateAsync(
                 query,
@@ -273,7 +274,7 @@ namespace TopicalBirdAPI.Controllers
         /// <response code="200">Returns the paged list of posts.</response>
         [HttpGet("latest")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<object>))]
-        public async Task<IActionResult> GetLatestPosts(string nest = null, int pageNo = 1, int limit = 20)
+        public async Task<IActionResult> GetLatestPosts(string? nest = null, int pageNo = 1, int limit = 20)
         {
             var query = _context.Posts
                 .Include(p => p.Author)
@@ -287,7 +288,7 @@ namespace TopicalBirdAPI.Controllers
             if (!string.IsNullOrEmpty(nest))
             {
                 var nestLower = nest.ToLower();
-                query = query.Where(p => p.Nest.Title.ToLower() == nestLower)
+                query = query.Where(p => p.Nest != null && p.Nest.Title.ToLower() == nestLower)
                              .OrderByDescending(p => p.CreatedAt);
             }
 
@@ -310,7 +311,7 @@ namespace TopicalBirdAPI.Controllers
         /// <response code="200">Returns the paged list of posts.</response>
         [HttpGet("popular")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<object>))]
-        public async Task<IActionResult> GetPopularPosts(string nest = null, int pageNo = 1, int limit = 20)
+        public async Task<IActionResult> GetPopularPosts(string? nest = null, int pageNo = 1, int limit = 20)
         {
             var query = _context.Posts
                 .Include(p => p.Author)
@@ -318,14 +319,14 @@ namespace TopicalBirdAPI.Controllers
                 .Include(p => p.MediaItems)
                 .Include(p => p.Votes)
                 .Include(p => p.Nest)
-                .OrderByDescending(p => p.Votes.Sum(v => v.VoteValue))
-                .AsQueryable(); // Start as IQueryable for flexibility
+                .OrderByDescending(p => (p.Votes != null ? p.Votes.Sum(v => v.VoteValue) : 0))
+                .AsQueryable();
 
             if (!string.IsNullOrEmpty(nest))
             {
                 var nestLower = nest.ToLower();
-                query = query.Where(p => p.Nest.Title.ToLower() == nestLower)
-                             .OrderByDescending(p => p.Votes.Sum(v => v.VoteValue));
+                query = query.Where(p => p.Nest != null && p.Nest.Title.ToLower() == nestLower)
+                             .OrderByDescending(p => (p.Votes != null ? p.Votes.Sum(v => v.VoteValue) : 0));
             }
 
             var result = await PaginationHelper.PaginateAsync(
@@ -386,7 +387,7 @@ namespace TopicalBirdAPI.Controllers
                 return StatusCode(403, new { message = ErrorMessages.ForbiddenAction });
             }
 
-            if (post.Content == dto.Content)
+            if (post.Content == dto.Content || string.IsNullOrWhiteSpace(dto.Content))
             {
                 return NoContent();
             }

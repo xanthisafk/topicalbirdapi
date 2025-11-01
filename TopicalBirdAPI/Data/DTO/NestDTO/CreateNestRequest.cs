@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TopicalBirdAPI.Data.Constants;
 
 namespace TopicalBirdAPI.Data.DTO.NestDTO
 {
@@ -11,19 +12,21 @@ namespace TopicalBirdAPI.Data.DTO.NestDTO
         /// <summary>
         /// Title of nest. Also used as slug
         /// </summary>
-        [Required]
-        public string Title { get; set; }
+        [Required(ErrorMessage = ErrorMessages.FieldRequired + "Nest Title")]
+        [MinLength(3, ErrorMessage = ErrorMessages.NestTitleTooSmall)]
+        [MaxLength(50, ErrorMessage = ErrorMessages.NestTitleTooBig)]
+        public string Title { get; set; } = string.Empty;
 
         /// <summary>
         /// Description of Nest
         /// </summary>
-        [MaxLength(500)]
+        [MaxLength(500, ErrorMessage = ErrorMessages.NestDescriptionTooLong)]
         public string Description { get; set; } = string.Empty;
 
         /// <summary>
         /// Display name of Nest
         /// </summary>
-        [MaxLength(50)]
+        [MaxLength(100, ErrorMessage = ErrorMessages.DisplayNameTooLarge)]
         public string DisplayName { get; set; } = string.Empty;
 
         /// <summary>
