@@ -1,3 +1,6 @@
 .vs/
 TopicalBirdAPI/wwwroot/content/uploads/
 TopicalBirdGUI/
+TopicalBirdAPI/bin
+TopicalBirdAPI/obj
+TopicalBirdAPI/logs
