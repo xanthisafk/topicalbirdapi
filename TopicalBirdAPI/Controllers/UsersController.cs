@@ -244,7 +244,7 @@ namespace TopicalBirdAPI.Controllers
                 if (dto.Icon != null)
                 {
                     var userFolder = Path.Combine("wwwroot/content/uploads/users", targetUser.Id.ToString().ToLower().Replace("-", "_"));
-                    var temp = await FileUploadHelper.SaveFile(dto.Icon, userFolder, "icon");
+                    var temp = await FileUploadHelper.SaveFile(dto.Icon, userFolder, currentUser.Handle.ToLower());
                     if (!string.IsNullOrEmpty(temp))
                     {
                         iconPath = temp;
