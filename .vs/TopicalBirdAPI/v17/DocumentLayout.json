@@ -146,7 +146,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 329,
-          "SelectedChildIndex": 13,
+          "SelectedChildIndex": 12,
           "Children": [
             {
               "$type": "Bookmark",
@@ -155,18 +155,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Data\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "TopicalBirdAPI\\Data\\AppDbContext.cs",
-              "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Data\\AppDbContext.cs",
-              "RelativeToolTip": "TopicalBirdAPI\\Data\\AppDbContext.cs",
-              "ViewState": "AgIAAFkAAAAAAAAAAAAuwGYAAAA8AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-01T08:43:11.606Z"
             },
             {
               "$type": "Document",
@@ -298,10 +286,22 @@
               "RelativeDocumentMoniker": "TopicalBirdAPI\\Controllers\\UsersController.cs",
               "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Controllers\\UsersController.cs",
               "RelativeToolTip": "TopicalBirdAPI\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAAN4AAAAAAAAAAAAewPYAAABzAAAAAAAAAA==",
+              "ViewState": "AgIAANgAAAAAAAAAAAAewPYAAABzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-22T08:16:10.762Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "TopicalBirdAPI\\Data\\AppDbContext.cs",
+              "ToolTip": "F:\\Projects\\topicalbird\\TopicalBirdAPI\\TopicalBirdAPI\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "TopicalBirdAPI\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAAFkAAAAAAAAAAAAuwGYAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-01T08:43:11.606Z"
             },
             {
               "$type": "Document",
