@@ -1,5 +1,6 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
+using System.Text;
 
 namespace TopicalBirdAPI.Helpers
 {
@@ -32,6 +33,11 @@ namespace TopicalBirdAPI.Helpers
                 throw new InvalidDataException("File was not a recognized image format.");
             }
 
+            if (file.ContentType == "image/webp" && await IsAnimatedWebP(file))
+            {
+                throw new InvalidDataException("Animated WEBP files are not supported.");
+            }
+
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
@@ -53,6 +59,19 @@ namespace TopicalBirdAPI.Helpers
             }
 
             return filePath.Replace("\\", "/").Replace("wwwroot", "");
+        }
+
+        private static async Task<bool> IsAnimatedWebP(IFormFile file)
+        {
+            byte[] header = new byte[64];
+            using var stream = file.OpenReadStream();
+            int bytesRead = await stream.ReadAsync(header, 0, header.Length);
+
+            if (bytesRead < 20)
+                return false;
+
+            string headerText = Encoding.ASCII.GetString(header);
+            return headerText.Contains("ANIM", StringComparison.Ordinal);
         }
 
         public static bool DeleteFile(string filePath)
