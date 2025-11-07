@@ -319,6 +319,52 @@ namespace TopicalBirdAPI.Controllers
             return Ok(SuccessResponse<List<NestResponse>>.Create("", nests));
         }
 
+        /// <summary>
+        /// Get nests by username
+        /// </summary>
+        /// <param name="handle">Username of user</param>
+        [HttpGet("user/{handle}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<List<NestResponse>>))]
+        [ProducesErrorResponseType(typeof(ErrorResponse))]
+        public async Task<IActionResult> GetNestsByUsername(string handle)
+        {
+            var user = await _context.Users.Include(u => u.Nests).FirstOrDefaultAsync(u => u.Handle == handle);
+            if (user == null)
+            {
+                return NotFound(ErrorResponse.Create(ErrorMessages.UserNotFound, null, null));
+            }
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
+            if (user.Nests == null)
+            {
+                return Ok(new SuccessResponse<List<NestResponse>>());
+            }
+            var response = user.Nests.Select(n => NestResponse.FromNest(n, currentUser?.IsAdmin ?? false)).ToList();
+            return Ok(SuccessResponse<List<NestResponse>>.Create(null, response));
+        }
+
+        /// <summary>
+        /// Get nests by Id
+        /// </summary>
+        /// <param name="id">Id of user</param>
+        [HttpGet("user/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<List<NestResponse>>))]
+        [ProducesErrorResponseType(typeof(ErrorResponse))]
+        public async Task<IActionResult> GetNestsByUserId(Guid id)
+        {
+            var user = await _context.Users.Include(u => u.Nests).FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound(ErrorResponse.Create(ErrorMessages.UserNotFound, null, null));
+            }
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
+            if (user.Nests == null)
+            {
+                return Ok(new SuccessResponse<List<NestResponse>>());
+            }
+            var response = user.Nests.Select(n => NestResponse.FromNest(n, currentUser?.IsAdmin ?? false)).ToList();
+            return Ok(SuccessResponse<List<NestResponse>>.Create(null, response));
+        }
+
         #endregion
 
         #region UPDATE Operations
