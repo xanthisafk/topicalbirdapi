@@ -10,7 +10,6 @@ namespace TopicalBirdAPI.Data.DTO.PostDTO
         [MaxLength(500, ErrorMessage = ErrorMessages.PostTitleTooBig)]
         public string Title { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = ErrorMessages.FieldRequired + "Content", AllowEmptyStrings = true)]
         [MaxLength(10000, ErrorMessage = ErrorMessages.PostContentTooBig)]
         public string Content { get; set; } = string.Empty;
 
