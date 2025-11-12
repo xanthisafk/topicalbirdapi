@@ -116,7 +116,7 @@ namespace TopicalBirdAPI.Controllers
 
             await _context.SaveChangesAsync();
             _logger.Info($"User {currentUser.Handle} casted {dto.VoteValue} vote on {post.Id}");
-            return Ok(SuccessResponse<VoteResponse>.Create(responseMessage, dto.VoteValue == 0 ? null : VoteResponse.FromVote(vote)));
+            return Ok(SuccessResponse<string>.Create(responseMessage, responseMessage));
         }
 
         #endregion
