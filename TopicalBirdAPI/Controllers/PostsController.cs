@@ -116,7 +116,7 @@ namespace TopicalBirdAPI.Controllers
                 await transaction.CommitAsync();
 
                 _logger.Info($"New post created. {post.Id}");
-                return Ok(SuccessResponse<PostResponse>.Create(SuccessMessages.PostCreated, PostResponse.FromPost(post)));
+                return Ok(SuccessResponse<PostResponse>.Create(SuccessMessages.PostCreated, PostResponse.FromPost(post, currentUser)));
             }
             catch (InvalidDataException idx)
             {
@@ -169,12 +169,13 @@ namespace TopicalBirdAPI.Controllers
                 .Include(p => p.Nest)
                 .FirstOrDefaultAsync(p => p.Id == postId);
 
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             if (currentPost == null)
             {
-                return NotFound(new { message = ErrorMessages.PostNotFound });
+                return NotFound(ErrorResponse.Create(ErrorMessages.PostNotFound));
             }
 
-            return Ok(new { post = PostResponse.FromPost(currentPost) });
+            return Ok(SuccessResponse<PostResponse>.Create(null, PostResponse.FromPost(currentPost, currentUser)));
         }
 
         /// <summary>
@@ -195,11 +196,11 @@ namespace TopicalBirdAPI.Controllers
                 .Include(p => p.MediaItems)
                 .Include(p => p.Votes)
                 .Include(p => p.Nest)
-                .Where(p => p.Nest != null && p.Nest.Title == nestTitle);
-
+                .Where(p => !p.IsDeleted && p.Nest != null && p.Nest.Title == nestTitle);
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             var result = await PaginationHelper.PaginateAsync(
                 query,
-                p => PostResponse.FromPost(p),
+                p => PostResponse.FromPost(p, currentUser),
                 pageNo,
                 limit);
 
@@ -224,11 +225,12 @@ namespace TopicalBirdAPI.Controllers
                 .Include(p => p.MediaItems)
                 .Include(p => p.Votes)
                 .Include(p => p.Nest)
-                .Where(p => p.Author != null && p.Author.Id == userId);
+                .Where(p => !p.IsDeleted && p.Author != null && p.Author.Id == userId);
 
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             var result = await PaginationHelper.PaginateAsync(
                 query,
-                p => PostResponse.FromPost(p),
+                p => PostResponse.FromPost(p, currentUser),
                 pageNo,
                 limit);
 
@@ -253,11 +255,12 @@ namespace TopicalBirdAPI.Controllers
                 .Include(p => p.MediaItems)
                 .Include(p => p.Votes)
                 .Include(p => p.Nest)
-                .Where(p => p.Author != null && p.Author.Handle.ToLower() == userHandle.ToLower());
+                .Where(p => !p.IsDeleted && p.Author != null && p.Author.Handle.ToLower() == userHandle.ToLower());
 
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             var result = await PaginationHelper.PaginateAsync(
                 query,
-                p => PostResponse.FromPost(p),
+                p => PostResponse.FromPost(p, currentUser),
                 pageNo,
                 limit);
 
@@ -288,13 +291,13 @@ namespace TopicalBirdAPI.Controllers
             if (!string.IsNullOrEmpty(nest))
             {
                 var nestLower = nest.ToLower();
-                query = query.Where(p => p.Nest != null && p.Nest.Title.ToLower() == nestLower)
+                query = query.Where(p => !p.IsDeleted && p.Nest != null && p.Nest.Title.ToLower() == nestLower)
                              .OrderByDescending(p => p.CreatedAt);
             }
-
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             var result = await PaginationHelper.PaginateAsync(
                 query,
-                p => PostResponse.FromPost(p),
+                p => PostResponse.FromPost(p, currentUser),
                 pageNo,
                 limit);
 
@@ -325,13 +328,15 @@ namespace TopicalBirdAPI.Controllers
             if (!string.IsNullOrEmpty(nest))
             {
                 var nestLower = nest.ToLower();
-                query = query.Where(p => p.Nest != null && p.Nest.Title.ToLower() == nestLower)
+                query = query.Where(p => !p.IsDeleted && p.Nest != null && p.Nest.Title.ToLower() == nestLower)
                              .OrderByDescending(p => (p.Votes != null ? p.Votes.Sum(v => v.VoteValue) : 0));
             }
 
+            var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
+
             var result = await PaginationHelper.PaginateAsync(
             query,
-            p => PostResponse.FromPost(p),
+            p => PostResponse.FromPost(p, currentUser),
             pageNo,
             limit);
 
@@ -397,9 +402,8 @@ namespace TopicalBirdAPI.Controllers
 
             _context.Posts.Update(post);
             await _context.SaveChangesAsync();
-
             _logger.Info($"Post {postId} updated by user {currentUser.Id}.");
-            return Ok(SuccessResponse<PostResponse>.Create(SuccessMessages.PostUpdated, PostResponse.FromPost(post)));
+            return Ok(SuccessResponse<PostResponse>.Create(SuccessMessages.PostUpdated, PostResponse.FromPost(post, currentUser)));
         }
         #endregion
 
@@ -410,14 +414,12 @@ namespace TopicalBirdAPI.Controllers
         /// <param name="postId">The unique identifier (GUID) of the post to delete.</param>
         /// <returns>A confirmation message or a 204 if the post was already deleted.</returns>
         /// <response code="200">If the post was successfully deleted.</response>
-        /// <response code="204">If the post was not found (idempotent delete).</response>
         /// <response code="401">If the user is not authenticated.</response>
         /// <response code="403">If the authenticated user is not the author or an Admin.</response>
         /// <response code="500">If a file cleanup or other server error occurs.</response>
         [HttpDelete("delete/{postId:guid}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SuccessResponse<string>))]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ErrorResponse))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorResponse))]

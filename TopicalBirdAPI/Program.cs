@@ -19,23 +19,24 @@ namespace TopicalBirdAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Rate limit the API to 100 requests per minute
-            builder.Services.AddRateLimiter(options =>
-            {
-                options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
-                    RateLimitPartition.GetFixedWindowLimiter(
-                        partitionKey:
-                            httpContext.User.Identity?.Name
-                            ?? httpContext.Connection.RemoteIpAddress?.ToString()
-                            ?? httpContext.Request.Headers.Host.ToString()
-                            ?? "unknown",
-                        factory: partition => new FixedWindowRateLimiterOptions
-                        {
-                            AutoReplenishment = true,
-                            PermitLimit = 100,
-                            QueueLimit = 0,
-                            Window = TimeSpan.FromMinutes(1)
-                        }));
-            });
+            // Turned off to debug the CORS issue
+            //builder.Services.AddRateLimiter(options =>
+            //{
+            //    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+            //        RateLimitPartition.GetFixedWindowLimiter(
+            //            partitionKey:
+            //                httpContext.User.Identity?.Name
+            //                ?? httpContext.Connection.RemoteIpAddress?.ToString()
+            //                ?? httpContext.Request.Headers.Host.ToString()
+            //                ?? "unknown",
+            //            factory: partition => new FixedWindowRateLimiterOptions
+            //            {
+            //                AutoReplenishment = true,
+            //                PermitLimit = 100,
+            //                QueueLimit = 0,
+            //                Window = TimeSpan.FromMinutes(1)
+            //            }));
+            //});
 
 
             // Database Context
@@ -129,10 +130,11 @@ namespace TopicalBirdAPI
             {
                 ResponseWriter = HealthCheckResponseWriter.Write
             });
+            
+            app.UseCors("MyCorsPolicy"); // apply the CORS policy
 
             app.UseHttpsRedirection();
 
-            app.UseCors("MyCorsPolicy"); // apply the CORS policy
             app.UseAuthentication();
             app.UseAuthorization();
 

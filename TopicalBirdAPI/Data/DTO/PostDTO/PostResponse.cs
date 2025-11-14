@@ -15,14 +15,23 @@ namespace TopicalBirdAPI.Data.DTO.PostDTO
         public DateTime CreatedAt { get; set; } = DateTime.MinValue;
         public DateTime? UpdatedAt { get; set; }
         public List<MediaResponse>? Photos { get; set; }
+        public bool HasVoted { get; set; } = false;
+        public bool ByModerator { get; set; } = false;
+        public bool IsModerator { get; set; } = false;
         public int Votes { get; set; }
         public int Comments { get; set; }
 
-        public static PostResponse FromPost(Posts p)
+        public static PostResponse FromPost(Posts p, Users? currentUser = null)
         {
             int upvotes, downvotes;
             upvotes = p.Votes?.Where(v => v.VoteValue == 1).Count() ?? 0;
             downvotes = p.Votes?.Where(v => v.VoteValue == -1).Count() ?? 0;
+
+            bool hasVoted = currentUser != null && p.Votes?.FirstOrDefault(v => v.UserId == currentUser.Id) != null;
+            bool isModerator = currentUser != null && currentUser.Id == p.Nest?.ModeratorId;
+            bool byModerator = p.AuthorId == p.Nest?.ModeratorId;
+
+
             var photos = p.MediaItems?.Select(MediaResponse.FromMedia).ToList();
 
             ArgumentNullException.ThrowIfNull(p.Author, nameof(p.Author));
@@ -41,7 +50,10 @@ namespace TopicalBirdAPI.Data.DTO.PostDTO
                 UpdatedAt = p.UpdatedAt,
                 Photos = photos,
                 Votes = upvotes - downvotes,
-                Comments = p.Comments.Count
+                Comments = p.Comments.Where(c => !c.IsDeleted).ToList().Count,
+                ByModerator = byModerator,
+                IsModerator = isModerator,
+                HasVoted = hasVoted,
             };
         }
     }
