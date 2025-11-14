@@ -50,7 +50,7 @@ namespace TopicalBirdAPI.Data.DTO.PostDTO
                 UpdatedAt = p.UpdatedAt,
                 Photos = photos,
                 Votes = upvotes - downvotes,
-                Comments = p.Comments.Count,
+                Comments = p.Comments.Where(c => !c.IsDeleted).ToList().Count,
                 ByModerator = byModerator,
                 IsModerator = isModerator,
                 HasVoted = hasVoted,

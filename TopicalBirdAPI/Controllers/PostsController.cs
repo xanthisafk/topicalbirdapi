@@ -196,7 +196,7 @@ namespace TopicalBirdAPI.Controllers
                 .Include(p => p.MediaItems)
                 .Include(p => p.Votes)
                 .Include(p => p.Nest)
-                .Where(p => p.Nest != null && p.Nest.Title == nestTitle);
+                .Where(p => !p.IsDeleted && p.Nest != null && p.Nest.Title == nestTitle);
             var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             var result = await PaginationHelper.PaginateAsync(
                 query,
@@ -225,7 +225,7 @@ namespace TopicalBirdAPI.Controllers
                 .Include(p => p.MediaItems)
                 .Include(p => p.Votes)
                 .Include(p => p.Nest)
-                .Where(p => p.Author != null && p.Author.Id == userId);
+                .Where(p => !p.IsDeleted && p.Author != null && p.Author.Id == userId);
 
             var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             var result = await PaginationHelper.PaginateAsync(
@@ -255,7 +255,7 @@ namespace TopicalBirdAPI.Controllers
                 .Include(p => p.MediaItems)
                 .Include(p => p.Votes)
                 .Include(p => p.Nest)
-                .Where(p => p.Author != null && p.Author.Handle.ToLower() == userHandle.ToLower());
+                .Where(p => !p.IsDeleted && p.Author != null && p.Author.Handle.ToLower() == userHandle.ToLower());
 
             var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
             var result = await PaginationHelper.PaginateAsync(
@@ -291,7 +291,7 @@ namespace TopicalBirdAPI.Controllers
             if (!string.IsNullOrEmpty(nest))
             {
                 var nestLower = nest.ToLower();
-                query = query.Where(p => p.Nest != null && p.Nest.Title.ToLower() == nestLower)
+                query = query.Where(p => !p.IsDeleted && p.Nest != null && p.Nest.Title.ToLower() == nestLower)
                              .OrderByDescending(p => p.CreatedAt);
             }
             var currentUser = await UserHelper.GetCurrentUserAsync(User, _userManager);
@@ -328,7 +328,7 @@ namespace TopicalBirdAPI.Controllers
             if (!string.IsNullOrEmpty(nest))
             {
                 var nestLower = nest.ToLower();
-                query = query.Where(p => p.Nest != null && p.Nest.Title.ToLower() == nestLower)
+                query = query.Where(p => !p.IsDeleted && p.Nest != null && p.Nest.Title.ToLower() == nestLower)
                              .OrderByDescending(p => (p.Votes != null ? p.Votes.Sum(v => v.VoteValue) : 0));
             }
 
