@@ -8,6 +8,7 @@ using TopicalBirdAPI.Data.Constants;
 using TopicalBirdAPI.Data.DTO.AuthDTO;
 using TopicalBirdAPI.Data.DTO.UsersDTO;
 using TopicalBirdAPI.Helpers;
+using TopicalBirdAPI.Interface;
 using TopicalBirdAPI.Models;
 
 namespace TopicalBirdAPI.Controllers
@@ -23,6 +24,7 @@ namespace TopicalBirdAPI.Controllers
         #region Constructor
         private readonly SignInManager<Users> _signInManager;
         private readonly UserManager<Users> _userManager;
+        private readonly IFileHandler _files;
         private readonly AppDbContext _context;
         private readonly LoggingHelper _logger;
         public readonly IWebHostEnvironment _env;
@@ -30,13 +32,14 @@ namespace TopicalBirdAPI.Controllers
         /// <summary>
         /// Constructor
         /// </summary>
-        public AuthController(AppDbContext ctx, UserManager<Users> userManager, LoggingHelper logger, SignInManager<Users> signInManager, IWebHostEnvironment env)
+        public AuthController(AppDbContext ctx, UserManager<Users> userManager, LoggingHelper logger, SignInManager<Users> signInManager, IWebHostEnvironment env, IFileHandler files)
         {
             _userManager = userManager;
             _context = ctx;
             _logger = logger;
             _signInManager = signInManager;
             _env = env;
+            _files = files;
         }
         #endregion
 
@@ -98,7 +101,7 @@ namespace TopicalBirdAPI.Controllers
                 if (dto.Icon != null)
                 {
                     var userFolder = Path.Combine("wwwroot/content/uploads/users", user.Id.ToString().ToLower().Replace("-", "_"));
-                    var temp = await FileUploadHelper.SaveFile(dto.Icon, userFolder, user.Handle);
+                    var temp = await _files.SaveFile(dto.Icon, userFolder, user.Handle);
                     if (!string.IsNullOrEmpty(temp))
                     {
                         iconPath = temp;
@@ -134,7 +137,7 @@ namespace TopicalBirdAPI.Controllers
             {
                 if (iconPath != "/content/assets/defaults/pp_256.png")
                 {
-                    FileUploadHelper.DeleteFile(iconPath);
+                    _files.DeleteFile(iconPath);
                 }
                 string refCode = await _logger.Crit("Failed to create user.", ex);
                 return StatusCode(500, ErrorResponse.Create(ErrorMessages.InternalServerError, null, refCode));

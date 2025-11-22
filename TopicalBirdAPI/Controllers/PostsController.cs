@@ -7,6 +7,7 @@ using TopicalBirdAPI.Data.API;
 using TopicalBirdAPI.Data.Constants;
 using TopicalBirdAPI.Data.DTO.PostDTO;
 using TopicalBirdAPI.Helpers;
+using TopicalBirdAPI.Interface;
 using TopicalBirdAPI.Models;
 
 namespace TopicalBirdAPI.Controllers
@@ -20,12 +21,14 @@ namespace TopicalBirdAPI.Controllers
         private readonly AppDbContext _context;
         private readonly UserManager<Users> _userManager;
         private readonly LoggingHelper _logger;
+        private readonly IFileHandler _files;
 
-        public PostsController(AppDbContext context, UserManager<Users> userManager, LoggingHelper logger)
+        public PostsController(AppDbContext context, UserManager<Users> userManager, LoggingHelper logger, IFileHandler files)
         {
             _context = context;
             _userManager = userManager;
             _logger = logger;
+            _files = files;
         }
         #endregion
 
@@ -99,7 +102,7 @@ namespace TopicalBirdAPI.Controllers
                     {
                         var item = media[i];
                         ArgumentNullException.ThrowIfNull(item.Image);
-                        string mediaPath = await FileUploadHelper.SaveFile(item.Image, postsFolder, $"{postGuid}_{i}");
+                        string mediaPath = await _files.SaveFile(item.Image, postsFolder, $"{postGuid}_{i}");
                         mediaItems.Add(new Media
                         {
                             PostId = post.Id,
@@ -467,7 +470,7 @@ namespace TopicalBirdAPI.Controllers
                         foreach (var item in currentPost.MediaItems)
                         {
                             if (!string.IsNullOrEmpty(item.ContentUrl))
-                                FileUploadHelper.DeleteFile(item.ContentUrl);
+                                _files.DeleteFile(item.ContentUrl);
                         }
                     }
                 }

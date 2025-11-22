@@ -1,12 +1,13 @@
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using System.Reflection;
 using TopicalBirdAPI.Data;
 using TopicalBirdAPI.Helpers;
+using TopicalBirdAPI.Interface;
 using TopicalBirdAPI.Models;
 
 namespace TopicalBirdAPI
@@ -17,12 +18,20 @@ namespace TopicalBirdAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Services.AddSingleton<IFileHandler, LocalFileHandler>();
+            } else
+            {
+                builder.Services.AddSingleton<IFileHandler, CloudinaryFileHandler>();
+            }
+
             // -------------------------------------------------------------
             // Database
             // -------------------------------------------------------------
             var connString =
-                Environment.GetEnvironmentVariable("PSQL") ??
-                builder.Configuration.GetConnectionString("PSQL");
+                    Environment.GetEnvironmentVariable("PSQL") ??
+                    builder.Configuration.GetConnectionString("PSQL");
 
             Console.WriteLine($"Using database: {connString}");
 
