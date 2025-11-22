@@ -4,3 +4,9 @@ TopicalBirdGUI/
 TopicalBirdAPI/bin
 TopicalBirdAPI/obj
 TopicalBirdAPI/logs
+/TopicalBirdAPI/Properties/PublishProfiles/FolderProfile.pubxml.user
+/.vs/TopicalBirdAPI/v17/.futdcache.v2
+/.vs/TopicalBirdAPI/v17/.suo
+/.vs/TopicalBirdAPI/v17/DocumentLayout.json
+/.vs/TopicalBirdAPI/v17/DocumentLayout.backup.json
+/.vs/TopicalBirdAPI/DesignTimeBuild/.dtbcache.v2
