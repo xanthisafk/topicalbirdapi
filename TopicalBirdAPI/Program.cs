@@ -132,13 +132,7 @@ namespace TopicalBirdAPI
                 o.Favicon = "/content/assets/defaults/api_logo.svg";
             });
 
-            // -------------------------------------------------------------
-            // Development-only migration auto-apply
-            // -------------------------------------------------------------
-            if (app.Environment.IsDevelopment())
-            {
-                app.ApplyMigrations();
-            }
+            app.ApplyMigrations();
 
             // -------------------------------------------------------------
             // Middleware
