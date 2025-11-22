@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using System.Reflection;
-using System.Threading.RateLimiting;
 using TopicalBirdAPI.Data;
 using TopicalBirdAPI.Helpers;
 using TopicalBirdAPI.Models;
@@ -18,30 +17,17 @@ namespace TopicalBirdAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Rate limit the API to 100 requests per minute
-            // Turned off to debug the CORS issue
-            //builder.Services.AddRateLimiter(options =>
-            //{
-            //    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
-            //        RateLimitPartition.GetFixedWindowLimiter(
-            //            partitionKey:
-            //                httpContext.User.Identity?.Name
-            //                ?? httpContext.Connection.RemoteIpAddress?.ToString()
-            //                ?? httpContext.Request.Headers.Host.ToString()
-            //                ?? "unknown",
-            //            factory: partition => new FixedWindowRateLimiterOptions
-            //            {
-            //                AutoReplenishment = true,
-            //                PermitLimit = 100,
-            //                QueueLimit = 0,
-            //                Window = TimeSpan.FromMinutes(1)
-            //            }));
-            //});
+            // -------------------------------------------------------------
+            // Database
+            // -------------------------------------------------------------
+            var connString =
+                Environment.GetEnvironmentVariable("PSQL") ??
+                builder.Configuration.GetConnectionString("PSQL");
 
+            Console.WriteLine($"Using database: {connString}");
 
-            // Database Context
             builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("PSQL")));
+                options.UseNpgsql(connString));
 
             builder.Services.AddHealthChecks()
                 .AddCheck("api", () => HealthCheckResult.Healthy("API is healthy."))
@@ -51,59 +37,79 @@ namespace TopicalBirdAPI
                     tags: new[] { "database" }
                 );
 
-            // Allow CORS
-            builder.Services.AddCors(o => o.AddPolicy("MyCorsPolicy", corsBuilder =>
-            {
-                corsBuilder.WithOrigins(
-                    "http://localhost:3000",
-                    "http://localhost:8888",
-                    "http://localhost:5173",
-                    "http://0.0.0.0:3000",
-                    "http://0.0.0.0:8888",
-                    "http://0.0.0.0:5173",
-                    "https://topicalbirdapi.xanthis.xyz",
-                    "https://topicalbird.xanthis.xyz",
-                    "http://topicalbirdapi.xanthis.xyz",
-                    "http://topicalbird.xanthis.xyz"
-                    )
-                 .AllowAnyHeader()
-                 .AllowAnyMethod()
-                 .AllowCredentials();
-            }));
+            // -------------------------------------------------------------
+            // CORS
+            // -------------------------------------------------------------
+            builder.Services.AddCors(o =>
+                o.AddPolicy("MyCorsPolicy", corsBuilder =>
+                {
+                    corsBuilder
+                        .WithOrigins(
+                            "http://localhost:3000",
+                            "http://localhost:8888",
+                            "http://localhost:5173",
+                            "http://0.0.0.0:3000",
+                            "http://0.0.0.0:8888",
+                            "http://0.0.0.0:5173",
+                            "https://topicalbirdapi.xanthis.xyz",
+                            "https://topicalbird.xanthis.xyz",
+                            "http://topicalbirdapi.xanthis.xyz",
+                            "http://topicalbird.xanthis.xyz"
+                        )
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                }));
 
-            // Add services to the container.
+            // -------------------------------------------------------------
+            // Controllers & Swagger
+            // -------------------------------------------------------------
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddSwaggerGen(o =>
             {
                 o.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "Topicalbird API",
-                    Description = "Backend API for Topicalbird forums.",
+                    Description = "Backend API for Topicalbird forums."
                 });
 
+                // Include XML documentation (if available)
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 o.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
 
-            // Authentication
+            // -------------------------------------------------------------
+            // Authentication / Identity
+            // -------------------------------------------------------------
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+
             builder.Services.AddIdentityCore<Users>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddApiEndpoints();
 
+            // -------------------------------------------------------------
             // Logging
-            builder.Logging.ClearProviders().AddConsole().AddDebug();
-            builder.Services.AddSingleton<LoggingHelper>(); // CustomLogger
+            // -------------------------------------------------------------
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+            builder.Logging.AddDebug();
+            builder.Services.AddSingleton<LoggingHelper>();
 
-            var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+            // -------------------------------------------------------------
+            // Host settings (port binding for Docker/VPS)
+            // -------------------------------------------------------------
+            var port = Environment.GetEnvironmentVariable("PORT") ?? "9999";
             builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
             var app = builder.Build();
 
+            // -------------------------------------------------------------
+            // Swagger / Scalar UI
+            // -------------------------------------------------------------
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
@@ -111,7 +117,9 @@ namespace TopicalBirdAPI
                 options.RoutePrefix = "swagger";
                 options.InjectStylesheet("/css/swagger-custom.css");
             });
+
             app.MapSwagger("/openapi/{documentName}.json");
+
             app.MapScalarApiReference("/", o =>
             {
                 o.WithTitle("Topicalbird API Documentation");
@@ -119,38 +127,40 @@ namespace TopicalBirdAPI
                 o.HideModels = true;
                 o.SortOperationsByMethod();
                 o.SortTagsAlphabetically();
-                o.DefaultHttpClient = new KeyValuePair<ScalarTarget, ScalarClient>(ScalarTarget.JavaScript, ScalarClient.Axios);
+                o.DefaultHttpClient = new KeyValuePair<ScalarTarget, ScalarClient>(
+                    ScalarTarget.JavaScript, ScalarClient.Axios);
                 o.Favicon = "/content/assets/defaults/api_logo.svg";
-
             });
 
-            // Configure the HTTP request pipeline.
+            // -------------------------------------------------------------
+            // Development-only migration auto-apply
+            // -------------------------------------------------------------
             if (app.Environment.IsDevelopment())
             {
                 app.ApplyMigrations();
             }
 
-            app.MapHealthChecks("/health", new HealthCheckOptions()
+            // -------------------------------------------------------------
+            // Middleware
+            // -------------------------------------------------------------
+            app.MapHealthChecks("/health", new HealthCheckOptions
             {
                 ResponseWriter = HealthCheckResponseWriter.Write
             });
-            
-            app.UseCors("MyCorsPolicy"); // apply the CORS policy
+
+            app.UseCors("MyCorsPolicy");
 
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // API controllers
             app.MapControllers();
 
-            // Allow file hosting
+            // Static file hosting
             app.UseDefaultFiles();
             app.UseStaticFiles();
-
-            // Use Identity for User management
-            // app.MapIdentityApi<Users>(); // Now using custom controller
-
 
             app.Run();
         }
