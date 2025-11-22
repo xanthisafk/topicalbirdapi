@@ -60,7 +60,11 @@ namespace TopicalBirdAPI
                     "http://localhost:5173",
                     "http://0.0.0.0:3000",
                     "http://0.0.0.0:8888",
-                    "http://0.0.0.0:5173"
+                    "http://0.0.0.0:5173",
+                    "https://topicalbirdapi.xanthis.xyz",
+                    "https://topicalbird.xanthis.xyz",
+                    "http://topicalbirdapi.xanthis.xyz",
+                    "http://topicalbird.xanthis.xyz"
                     )
                  .AllowAnyHeader()
                  .AllowAnyMethod()
@@ -95,8 +99,8 @@ namespace TopicalBirdAPI
             builder.Logging.ClearProviders().AddConsole().AddDebug();
             builder.Services.AddSingleton<LoggingHelper>(); // CustomLogger
 
-            builder.Host.UseWindowsService();
-            builder.WebHost.UseUrls("http://0.0.0.0:9999");
+            var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+            builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
             var app = builder.Build();
 
