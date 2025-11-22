@@ -7,6 +7,7 @@ using TopicalBirdAPI.Data.API;
 using TopicalBirdAPI.Data.Constants;
 using TopicalBirdAPI.Data.DTO.NestDTO;
 using TopicalBirdAPI.Helpers;
+using TopicalBirdAPI.Interface;
 using TopicalBirdAPI.Models;
 
 namespace TopicalBirdAPI.Controllers
@@ -23,12 +24,14 @@ namespace TopicalBirdAPI.Controllers
         private readonly AppDbContext _context;
         private readonly UserManager<Users> _userManager;
         private readonly LoggingHelper _logger;
+        private readonly IFileHandler _files;
 
-        public NestController(AppDbContext context, UserManager<Users> userManager, LoggingHelper logger)
+        public NestController(AppDbContext context, UserManager<Users> userManager, LoggingHelper logger, IFileHandler files)
         {
             _context = context;
             _userManager = userManager;
             _logger = logger;
+            _files = files;
         }
         #endregion
 
@@ -81,7 +84,7 @@ namespace TopicalBirdAPI.Controllers
                 if (nestDto.Icon != null)
                 {
                     var nestFolder = Path.Combine("wwwroot/content/uploads/nests", newNest.Id.ToString().ToLower().Replace("-", "_"));
-                    var temp = await FileUploadHelper.SaveFile(nestDto.Icon, nestFolder, "icon");
+                    var temp = await _files.SaveFile(nestDto.Icon, nestFolder, "icon");
                     if (!string.IsNullOrEmpty(temp))
                     {
                         iconPath = temp;
@@ -104,7 +107,7 @@ namespace TopicalBirdAPI.Controllers
             {
                 if (iconPath != "/content/assets/defaults/nest_256.png")
                 {
-                    FileUploadHelper.DeleteFile(iconPath);
+                    _files.DeleteFile(iconPath);
                 }
                 string refCode = await _logger.Crit("Failed to create nest", ex);
                 return StatusCode(500, ErrorResponse.Create(ErrorMessages.InternalServerError, null, refCode));
@@ -416,7 +419,7 @@ namespace TopicalBirdAPI.Controllers
                 if (newNest.Icon != null)
                 {
                     var nestFolder = Path.Combine("wwwroot/content/uploads/nests", nest.Id.ToString().ToLower().Replace("-", "_"));
-                    var temp = await FileUploadHelper.SaveFile(newNest.Icon, nestFolder, "icon");
+                    var temp = await _files.SaveFile(newNest.Icon, nestFolder, "icon");
                     if (!string.IsNullOrEmpty(temp))
                     {
                         iconPath = temp;
@@ -438,7 +441,7 @@ namespace TopicalBirdAPI.Controllers
             {
                 if (iconPath != originalPath)
                 {
-                    FileUploadHelper.DeleteFile(iconPath);
+                    _files.DeleteFile(iconPath);
                 }
                 string refCode = await _logger.Crit("Failed to create nest.", ex);
                 return StatusCode(500, ErrorResponse.Create(ErrorMessages.InternalServerError, null, refCode));

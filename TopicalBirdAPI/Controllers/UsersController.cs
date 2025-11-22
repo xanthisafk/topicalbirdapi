@@ -7,6 +7,7 @@ using TopicalBirdAPI.Data.API;
 using TopicalBirdAPI.Data.Constants;
 using TopicalBirdAPI.Data.DTO.UsersDTO;
 using TopicalBirdAPI.Helpers;
+using TopicalBirdAPI.Interface;
 using TopicalBirdAPI.Models;
 
 namespace TopicalBirdAPI.Controllers
@@ -19,12 +20,14 @@ namespace TopicalBirdAPI.Controllers
         private readonly UserManager<Users> _userManager;
         private readonly AppDbContext _context;
         private readonly LoggingHelper _logger;
+        private readonly IFileHandler _files;
 
-        public UsersController(AppDbContext ctx, UserManager<Users> userManager, LoggingHelper logger)
+        public UsersController(AppDbContext ctx, UserManager<Users> userManager, LoggingHelper logger, IFileHandler files)
         {
             _userManager = userManager;
             _context = ctx;
             _logger = logger;
+            _files = files;
         }
 
         /// <summary>
@@ -244,7 +247,7 @@ namespace TopicalBirdAPI.Controllers
                 if (dto.Icon != null)
                 {
                     var userFolder = Path.Combine("wwwroot/content/uploads/users", targetUser.Id.ToString().ToLower().Replace("-", "_"));
-                    var temp = await FileUploadHelper.SaveFile(dto.Icon, userFolder, currentUser.Handle.ToLower());
+                    var temp = await _files.SaveFile(dto.Icon, userFolder, currentUser.Handle.ToLower());
                     if (!string.IsNullOrEmpty(temp))
                     {
                         iconPath = temp;
@@ -280,7 +283,7 @@ namespace TopicalBirdAPI.Controllers
                 // Clean up partially uploaded file on general error
                 if (iconPath != originalIcon && iconPath != "/content/assets/defaults/pp_256.png")
                 {
-                    FileUploadHelper.DeleteFile(iconPath);
+                    _files.DeleteFile(iconPath);
                 }
                 // Log critical error and return 500
                 string refKey = await _logger.Crit("Failed to update user.", ex);
